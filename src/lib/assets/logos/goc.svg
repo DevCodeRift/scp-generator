@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="currentColor">
+  <!-- Global Occult Coalition Logo - Shield with sword -->
+  <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" stroke-width="3"/>
+
+  <!-- Shield shape -->
+  <path d="M50 20 L75 35 L75 55 L50 80 L25 55 L25 35 Z" fill="none" stroke="currentColor" stroke-width="2.5"/>
+
+  <!-- Vertical sword -->
+  <line x1="50" y1="28" x2="50" y2="72" stroke="currentColor" stroke-width="3"/>
+
+  <!-- Sword crossguard -->
+  <line x1="40" y1="40" x2="60" y2="40" stroke="currentColor" stroke-width="3"/>
+
+  <!-- Sword pommel -->
+  <circle cx="50" cy="28" r="3" fill="currentColor"/>
+
+  <!-- Globe lines on shield -->
+  <ellipse cx="50" cy="55" rx="15" ry="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+  <path d="M50 47 Q55 55 50 63 Q45 55 50 47" fill="none" stroke="currentColor" stroke-width="1.5"/>
+</svg>

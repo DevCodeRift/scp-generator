@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="currentColor">
+  <!-- Chaos Insurgency Logo - Three connected circles with chaos symbol -->
+  <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" stroke-width="3"/>
+
+  <!-- Three interconnected circles -->
+  <circle cx="50" cy="30" r="12" fill="none" stroke="currentColor" stroke-width="2.5"/>
+  <circle cx="32" cy="60" r="12" fill="none" stroke="currentColor" stroke-width="2.5"/>
+  <circle cx="68" cy="60" r="12" fill="none" stroke="currentColor" stroke-width="2.5"/>
+
+  <!-- Connecting lines -->
+  <line x1="50" y1="42" x2="40" y2="52" stroke="currentColor" stroke-width="2.5"/>
+  <line x1="50" y1="42" x2="60" y2="52" stroke="currentColor" stroke-width="2.5"/>
+  <line x1="44" y1="60" x2="56" y2="60" stroke="currentColor" stroke-width="2.5"/>
+
+  <!-- Center point -->
+  <circle cx="50" cy="50" r="4" fill="currentColor"/>
+</svg>

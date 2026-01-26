@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="currentColor">
+  <!-- SCP Foundation Logo - Three arrows pointing inward in a circle -->
+  <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" stroke-width="3"/>
+  <circle cx="50" cy="50" r="38" fill="none" stroke="currentColor" stroke-width="1.5"/>
+
+  <!-- Top arrow -->
+  <path d="M50 15 L50 40 M40 30 L50 15 L60 30" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Bottom left arrow -->
+  <path d="M28 72 L43 52 M28 58 L28 72 L42 72" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Bottom right arrow -->
+  <path d="M72 72 L57 52 M72 58 L72 72 L58 72" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Center circle -->
+  <circle cx="50" cy="50" r="8" fill="currentColor"/>
+</svg>

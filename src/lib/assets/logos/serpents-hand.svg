@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="currentColor">
+  <!-- Serpent's Hand Logo - Hand with serpent -->
+  <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" stroke-width="3"/>
+
+  <!-- Stylized hand (palm) -->
+  <path d="M35 70 L35 45 Q35 35 45 35 L55 35 Q65 35 65 45 L65 70" fill="none" stroke="currentColor" stroke-width="2.5"/>
+
+  <!-- Fingers -->
+  <line x1="40" y1="35" x2="40" y2="25" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="50" y1="35" x2="50" y2="22" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="60" y1="35" x2="60" y2="25" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Serpent coiling around hand -->
+  <path d="M30 55 Q25 50 30 45 Q38 40 35 50 Q32 58 40 60 Q55 62 60 55 Q65 48 70 50" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Serpent head -->
+  <circle cx="72" cy="50" r="3" fill="currentColor"/>
+</svg>

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="currentColor">
+  <!-- Dr. Wondertainment Logo - Whimsical star/wand -->
+  <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" stroke-width="3"/>
+
+  <!-- Large star -->
+  <path d="M50 15 L55 35 L75 35 L60 48 L65 68 L50 55 L35 68 L40 48 L25 35 L45 35 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+
+  <!-- Wand -->
+  <line x1="50" y1="55" x2="50" y2="85" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Sparkles -->
+  <circle cx="30" cy="25" r="2" fill="currentColor"/>
+  <circle cx="70" cy="25" r="2" fill="currentColor"/>
+  <circle cx="25" cy="60" r="1.5" fill="currentColor"/>
+  <circle cx="75" cy="60" r="1.5" fill="currentColor"/>
+
+  <!-- W in center -->
+  <path d="M42 40 L45 48 L50 42 L55 48 L58 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
