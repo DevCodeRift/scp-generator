@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  scp-generator:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - HOST=0.0.0.0
+      - ORIGIN=http://localhost:3000
+      - BODY_SIZE_LIMIT=Infinity
+      - VIDEO_TEMP_DIR=/tmp/video-processing
+    labels:
+      # Traefik: allow large video uploads (1GB)
+      - "traefik.http.middlewares.scp-body-size.buffering.maxRequestBodyBytes=1073741824"
+      - "traefik.http.middlewares.scp-body-size.buffering.memRequestBodyBytes=2097152"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s

@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="currentColor">
+  <title>Dr. Wondertainment</title>
+  <!-- Whimsical top hat with magic wand and stars -->
+
+  <!-- Outer circle -->
+  <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" stroke-width="2"/>
+
+  <!-- Top hat -->
+  <rect x="30" y="30" width="40" height="35" rx="2" fill="none" stroke="currentColor" stroke-width="2.5"/>
+  <rect x="25" y="62" width="50" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="2.5"/>
+  <!-- Hat band -->
+  <rect x="30" y="55" width="40" height="7" fill="currentColor"/>
+
+  <!-- Magic wand (tilted) -->
+  <line x1="65" y1="75" x2="85" y2="35" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+  <!-- Wand tip star burst -->
+  <circle cx="85" cy="35" r="4" fill="currentColor"/>
+  <line x1="85" y1="28" x2="85" y2="25" stroke="currentColor" stroke-width="1.5"/>
+  <line x1="85" y1="42" x2="85" y2="45" stroke="currentColor" stroke-width="1.5"/>
+  <line x1="78" y1="35" x2="75" y2="35" stroke="currentColor" stroke-width="1.5"/>
+  <line x1="92" y1="35" x2="95" y2="35" stroke="currentColor" stroke-width="1.5"/>
+
+  <!-- Sparkles/stars around -->
+  <path d="M20 25 L22 30 L27 30 L23 33 L25 38 L20 35 L15 38 L17 33 L13 30 L18 30 Z" fill="currentColor"/>
+  <path d="M75 70 L76 73 L79 73 L77 75 L78 78 L75 76 L72 78 L73 75 L71 73 L74 73 Z" fill="currentColor"/>
+  <circle cx="18" cy="55" r="2" fill="currentColor"/>
+  <circle cx="25" cy="80" r="1.5" fill="currentColor"/>
+  <circle cx="82" cy="55" r="1.5" fill="currentColor"/>
+
+  <!-- "W" on hat band -->
+  <path d="M40 57 L43 61 L46 57 L49 61 L52 57 L55 61 L58 57" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="stroke: var(--color-primary, #000)"/>
+</svg>

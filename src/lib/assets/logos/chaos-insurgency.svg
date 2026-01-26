@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="currentColor">
+  <title>Chaos Insurgency</title>
+  <!-- Chaos Insurgency: Three arrows pointing OUTWARD (opposite of SCP) -->
+  <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" stroke-width="3"/>
+
+  <!-- Top arrow pointing UP/OUT -->
+  <path d="M50 50 L50 15" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+  <path d="M40 25 L50 10 L60 25" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Bottom left arrow pointing OUT -->
+  <path d="M50 50 L20 75" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+  <path d="M20 60 L15 80 L35 75" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Bottom right arrow pointing OUT -->
+  <path d="M50 50 L80 75" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+  <path d="M80 60 L85 80 L65 75" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Center dot -->
+  <circle cx="50" cy="50" r="6" fill="currentColor"/>
+</svg>

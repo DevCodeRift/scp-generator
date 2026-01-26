@@ -1,0 +1,288 @@
+﻿Site 65 Research Policy Handbook  
+________________
+Site 65
+Research Department Policy Handbook
+  
+________________
+
+This handbook is to be used for all RSD personnel as a rulebook for conducting tests. Failure to do so will result in consequences such as, but not limited to, fines, jail time, and termination.
+________________
+
+
+INDEX:
+________________
+
+
+General Policies - Pg. 2 - 4
+Cross-testing Authorisation - Pg. 5
+Sampling Guidelines - Pg. 5
+Chemical Policies - Pg. 6
+Thaumatologist Policies - pg. 6
+Dimensional Policies - Pg. 6-7
+Documentation Policies - Pg. 7 - 9
+Anomaly Specific Policies - Pg. 9 - 10 
+________________
+
+
+
+
+________________
+General Policies
+
+
+1. Research personnel may only conduct tests on anomalies at or below their own clearance level.
+   1. In some circumstances, Research Personnel can test on anomalies one step above their clearance level, with authorisation and escort from a member of Research Personnel at the correct clearance level.
+   2. SCP of the month can circumvent this
+
+
+2. All testing involving Class D Personnel requires at minimum a 1:2 ratio of GSD/MTF escort to Class D Personnel.
+   1. Testing involving more than 3 Class D requires approval from an Executive Researcher.
+
+
+3. During a test, the lead researcher is in command of any personnel present for the test and is responsible for the appropriate security measures and safety procedures.
+   1. MTF personnel may end the test if they have a grounded suspicion that a breach may occur because of the actions or procedures of the Researcher involved. 
+   2. Any personnel that is not required and is requested to leave must do so, the exemption for this would be an Internal Security Investigator+ or a member of CL4 staff.
+   3. Site Administration, Foundation Command, and administrative members of the Research Department [Executives/DPT. Directors.] may end or take command of any test without question.
+
+
+4. Only Class D personnel may directly interact with dangerous or hostile anomalies.
+
+
+5. RsD has the authority to take the lead in the event of a new, unclassified anomaly on site. This includes anomalies that are uncontained. RsD should be listened to at all times in these events, as we are the ones who create the containment procedures.
+
+
+6. The Lead Researcher of a test must credit all assisting personnel that they are able to. This includes: Class D Personnel, General Security Personnel & Medical Personnel.
+
+
+7. When testing, all necessary precautions must be taken to ensure the reasonable safety of Class D personnel, as they are second only to Foundation Staff's lives.
+   1. All Class D personnel must be briefed prior to testing, this must include at the minimum; the name of the SCP, its effects and what will happen to the Class D. You must not lie to the Class D to further the progress of your test.
+
+
+8. Deceptive, aggressive, or possibly harmful tactics are not to be used on D-Class or SCPs unless it is part of the pre-established containment procedures. This includes but is not limited to lying, omitting information that could put the SCP or D-Class in harm's way, and making deals that cannot be honored. The above actions, if taken regardless of policy, could aggravate SCPs and D-Class causing stress on site in the form of an avoidable Code 2 or a Code 5.
+   1. All Class D personnel must be briefed prior to testing, this must include at the minimum; the name of the SCP, its effects and what will happen to the Class D. You must not lie to the Class D to further the progress of your test.
+   2. Deals can be struck with SCPs, but only with CL4 member of staff clearance as well as a signed document detailing the deal if it is to be honored, and a signed incident report if it is not honored.
+   3. If any RSD member is found violating this policy they will be banned from interacting with that particular SCP. If violations continue to occur this could increase to a ban from research entirely for an undetermined amount of time
+   4. MTF are not to sample/test without an RSD member of CL3 clearance or higher. Ignoring this rule will count as aggressive and possibly harmful tactics.
+
+
+9. Testing involving firearms or explosives requires an Executive Researcher’s authorisation and security staff presence if it is more powerful than a pistol.
+   1. If AA has been requested for the duration of your test, a CL4 member of security staff must be present for the handling of the weapon.
+   2. If a firearms/explosives test involves an SCP, you must have approval from a Site Inspector. The exemption of requiring Site inspector's approval is if it's used on self replicating instances of SCPs, such as SCP-939 and SCP-9000.
+
+
+10. Surface access may be granted to Research Personnel for research purposes at the discretion of Site Administration, Clearance 4 member or Surface Operations personnel.
+   1. All surface testing will require documentation regarding the objective of the test and ensuring accurate safety.
+   2. A minimum of two members of SOP must be present during the test.
+   3. Testing involving a GOI will also need a NU-7 CO+ or Special Agent signature, and a member of SOP escorting.
+
+
+11. Testing that may cause permanent alterations or the destruction of anomalies requires Site Inspector authorisation.
+
+12. Sr. Researchers are permitted to conduct onboardings for Jr. Researchers, these will need to be logged in the relevant External Channel.
+Cross-testing Authorisation
+Authorisation for cross-testing must be approved by the appropriate member of staff, depending on the SCP’s designation.
+
+
+Please refer to the table below for an in-depth look at cross-testing approval.
+
+
+
+
+	Safe (Inanimate)
+	Safe (Animate)
+	Euclid
+	Keter
+	Safe (Inanimate)
+	Sr. Researcher
+	Executive
+	Executive
+	Executive
+	Safe (Animate)
+	Executive
+	Executive
+	Executive
+	Executive
+	Euclid
+	Executive
+	Executive
+	Director of Research
+	Director of Research
+	Keter
+	Executive
+	Executive
+	Director of Research
+	Director of Research
+	
+
+________________
+Sampling Guidelines
+
+
+All sampling with SCPs of Clearance Level 2 or higher requires an approved document. Sampling document must contain:
+
+
+   1. A page showing the RSD logo, clearance level, a signature box for the permit holder, the authorizing RSD leadership, and E11 Escort. Said page must also include the amount that will be sampled and the date it was signed by the CL4 RSD.
+   2. A section dedicated to a description of the SCP being sampled.
+   3. A page to describe the reason for sampling.
+   4. Possibly spanning multiple pages there needs to be a risk assessment, safety protocols, and a detailed method of sampling.
+Sampling documents are one-use and can be stored for three days before becoming expired. Documents without these features will be denied.
+
+
+RCPT is a unique exception to the sampling rules. Please check the RCPT handbook for their policies.
+Chemical Policies
+   1. All anomalous sample material is locked to the clearance level of the anomaly that produced it.
+
+
+   2. The introduction of anomalous sample material to other anomalies is classed as a cross-test, and requires the correct authorisation.
+
+
+   3. Experimentation of anomalous sample materials on any and all personnel requires the approval from an Executive Researcher.
+
+
+   4. A maximum of 3L of total sampling material is permitted to be gathered from an anomaly per test, per department present for the test.
+
+   5. When injecting SCPs with any chemicals, the Ethics Committee must be notified.
+
+
+
+
+Thaumatologist Policies
+
+      1. Thaumaturgy can be used to bless, banish, and protect members of personnel as long as said personnel verbally request one of the three options. It is up to the thaumatologist to get proof of verbal consent, or the testimony of the personnel that requested the action will suffice as evidence. Thaumatologists CAN NOT spawn weaponry, purposefully damage someone, or banish D-Class unless it is needed for a test.
+
+      2. Thaumaturgical ability use may be permitted through the Signature of an Executive Researcher or Senior Clearance Four department members as long as it is in the context of a test or project.
+
+      3. Thaumatologists are allowed to assist in codes with the permission of a CL4 personnel, but they must help only in getting others to safety. Thaumatologists are not combatives. 
+
+
+Dimensional Policies
+         1. All testing regarding dimensional anomalies must be conducted with a Foundational Cartographer or a Sr. Researcher.
+
+
+         1. An exception to this policy applies to SCP-860 and SCP-22415.
+
+
+
+
+Cartographer Specific Policies
+
+
+         1. Cartographers are classed as a combative role, meaning they have access to a weapon and can assist during codes.
+
+
+         2. Cartographers are the primary contact for all things dimensional, and should be consulted on anything regarding such.
+
+
+         3. All dimensional portals that are opened must be announced in CL1 comms beforehand and closed after testing is completed.
+
+
+         4. Portals can only be opened inside the following locations: MTF Loop, HCZ Cross Testing, Lecture Hall or Research Hall. Exceptions can be made if a CL4 authorizes it for a test, but then the CL4 becomes responsible for any damages, deaths, and consequences during this test. The CL4 must not leave the area/test. If they do it is concluded.
+
+
+
+
+Documentation Policies
+         1. Research testing and sampling documentation must use the 'Foundation Research Study' document-type.
+
+
+         2. Research documents should contain the following sections:
+         1. Front page with relevant logo/image
+         2. Index for ease of reading
+         3. SCP Information
+         4. Testing Aims
+         5. Testing Hypothesis
+         6. Testing Method
+         7. Test Conclusions
+
+
+         3. Sections should be divided up using headings and subheadings. You are encouraged to add extra sections to your document as you see fit.
+
+
+         4. Completed documents should be uploaded to SCiPNET via a Computer Terminal. You should upload your document to SCiPNET/Site_65/Experiment_Logs. Your document must be tagged at the correct Clearance Level.
+
+         5. You are encouraged to present your tests in the form of slide show presentations, which may also be graded.
+
+
+Documentation Grading Criteria
+Denied:
+A denied document does not use the correct template or does not evidence that any research was done.
+Poor:
+            * No sections were correctly used or filled out
+            * No relevant or useful research was conducted
+            * Bad spelling, grammar or punctuation
+Average:
+            * The format and sections have been used correctly
+            * The research conducted was reasonably purposeful
+            * The findings in the Conclusion are somewhat useful
+            * There are noteworthy spelling, grammar or punctuation errors
+
+
+Good:
+            * The format and sections have been used correctly
+            * The research conducted had meaningful aims
+            * Highly descriptive and analytical
+            * Few spelling, grammar and punctuation errors
+            * The findings in the conclusion are relevant to the SCP Foundation mission statement
+            * Rewarded with £5000 on hand-in
+Excellent:
+            * All sections have been used and filled with detailed information
+            * Additional subheadings have been used where necessary
+            * Highly detailed and analytical
+            * Almost no spelling, grammar or punctuation errors
+            * Good use of images, diagrams and photographs
+            * The conclusion forecasts a practical use for the findings
+            * The research directly benefits the SCP Foundation mission statement
+            * Rewarded with £10000 on hand-in
+
+
+Anomaly Specific Policies
+SCP-914
+            * Testing involving SCP-914 must be announced in CL1 communications.
+            * A member of the Internal Security Department or MTF E-11 NCO+ must be present during testing involving SCP-914.
+            * Testing of SCP-914 including biological matter requires Director of Research approval. And the Ethics Committee must be notified when testing starts.
+            * Any byproducts made from the SCP must be stored in a safe location, depending on the material produced.
+
+
+SCP-173
+            * A minimum of 3 Class D personnel are required to conduct testing on SCP-173.
+            * In the event that the number of Class D personnel drops below 2 during testing, the test is to be halted immediately.
+
+
+SCP-096
+            * All non Class D personnel present must be equipped with SCRAMBLE gear before testing on SCP-096 commences.
+            * If it does not interfere with the purpose of the test, Class D personnel must also be equipped with SCRAMBLE gear.
+
+
+SCP-049
+            * All non Class D personnel present must be equipped with Biohazard protective suits before testing on SCP-049 commences.
+            * If it does not interfere with the purpose of the test, Class D personnel must also be equipped with Biohazard protective suits.
+            * A minimum of one NCO+ from MTF E-11 must be present during all SCP-049 testing that involves someone going inside the chamber.
+
+
+SCP-035
+            * Under no circumstances may non Class D personnel enter SCP-035's containment chamber.
+            * A minimum of one NCO+ from MTF E-11 must be present during all SCP-035 testing.
+
+
+SCP-409
+            * All non Class D personnel present must be equipped with Biohazard protective suits before testing on SCP-409 commences.
+            * If it does not interfere with the purpose of the test, Class D personnel must also be equipped with Biohazard protective suits.
+
+
+SCP-500
+            * All testing involving SCP-500 requires authorisation from Medical Leadership.
+            * Before testing, you must fill out the SCP-500 logging sheet prepared upon request. You can find these forms upon request from an Executive.
+
+
+SCP-1162
+            * Due to 1162 possibly producing guns a minimum of 2 combatants (any department) are required in case the D-Class becomes armed and hostile.
+
+
+SCP-008
+            * All testing involving SCP-008 requires Site Administration Approval, however the Ethics Committee must be notified when the test takes place. Sampling requires Site Inspector Approval.
+            * Only Biohazard and clearance level 4 Researchers are permitted to test on SCP-008.
+            * Biohazard researchers are NOT allowed to collect samples from 008 but are permitted to be provided some for any tests that would involve it by an executive researcher. 
+            * 2 E-11 specialists, and a CO, must be present at all times during the sampling/extraction.
+            * Any external parties may only bring 1 member of their respective regiment inside the observation room and any one time, except research and E-11.
+  Pg.                                                                         Revised 
+                                                                                             2026
