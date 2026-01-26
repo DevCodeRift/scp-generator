@@ -22,9 +22,30 @@
 		'wondertainment': wondertainmentLogo
 	};
 
-	let doc = $derived($documentStore as SCPDocument | null);
-	let faction = $derived(FACTIONS.find(f => f.id === $factionStore));
-	let logo = $derived(logos[$factionStore] || foundationLogo);
+	// Use $state with $effect to sync from stores
+	let doc = $state<SCPDocument | null>(null);
+	let currentFaction = $state('foundation');
+
+	$effect(() => {
+		const unsub = documentStore.subscribe(d => {
+			if (d && d.type === 'scp') {
+				doc = d as SCPDocument;
+			} else {
+				doc = null;
+			}
+		});
+		return unsub;
+	});
+
+	$effect(() => {
+		const unsub = factionStore.subscribe(f => {
+			currentFaction = f;
+		});
+		return unsub;
+	});
+
+	let faction = $derived(FACTIONS.find(f => f.id === currentFaction));
+	let logo = $derived(logos[currentFaction] || foundationLogo);
 	let objectClassInfo = $derived(doc ? OBJECT_CLASS_INFO[doc.objectClass] : null);
 
 	interface Props {

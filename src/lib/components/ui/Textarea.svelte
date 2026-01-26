@@ -14,7 +14,7 @@
 	}
 
 	let {
-		value = $bindable(),
+		value,
 		label,
 		placeholder = '',
 		required = false,
@@ -29,8 +29,7 @@
 
 	function handleInput(e: Event) {
 		const target = e.target as HTMLTextAreaElement;
-		value = target.value;
-		onchange?.(value);
+		onchange?.(target.value);
 	}
 </script>
 

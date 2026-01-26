@@ -5,7 +5,19 @@
 	import { documentStore } from '$lib/stores/document';
 	import { LETTER_TYPE_INFO, COMMON_SITES, type Letter, type LetterType } from '$lib/schemas/letter';
 
-	let doc = $derived($documentStore as Letter | null);
+	// Use $state and sync from store via $effect
+	let doc = $state<Letter | null>(null);
+
+	$effect(() => {
+		const unsub = documentStore.subscribe(d => {
+			if (d && d.type === 'letter') {
+				doc = d as Letter;
+			} else {
+				doc = null;
+			}
+		});
+		return unsub;
+	});
 
 	const classificationOptions = [
 		{ value: 'unrestricted', label: 'Unrestricted' },

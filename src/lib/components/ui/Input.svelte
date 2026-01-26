@@ -1,6 +1,4 @@
 <script lang="ts">
-	import type { Snippet } from 'svelte';
-
 	interface Props {
 		value: string;
 		label?: string;
@@ -16,7 +14,7 @@
 	}
 
 	let {
-		value = $bindable(),
+		value,
 		label,
 		placeholder = '',
 		type = 'text',
@@ -31,8 +29,7 @@
 
 	function handleInput(e: Event) {
 		const target = e.target as HTMLInputElement;
-		value = target.value;
-		onchange?.(value);
+		onchange?.(target.value);
 	}
 </script>
 

@@ -19,7 +19,7 @@
 	}
 
 	let {
-		value = $bindable(),
+		value,
 		options,
 		label,
 		required = false,
@@ -33,8 +33,7 @@
 
 	function handleChange(e: Event) {
 		const target = e.target as HTMLSelectElement;
-		value = target.value;
-		onchange?.(value);
+		onchange?.(target.value);
 	}
 </script>
 

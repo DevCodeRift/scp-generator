@@ -40,15 +40,16 @@ function createDocumentStore() {
 			set(null);
 		},
 
-		// Save to localStorage
+		// Save to localStorage (reads current value without triggering update loop)
 		save(): void {
-			update(doc => {
-				if (doc && typeof localStorage !== 'undefined') {
-					const key = `scp-doc-${doc.type}`;
-					localStorage.setItem(key, JSON.stringify(doc));
-				}
-				return doc;
-			});
+			let currentDoc: Document | null = null;
+			const unsub = subscribe(d => { currentDoc = d; });
+			unsub();
+
+			if (currentDoc && typeof localStorage !== 'undefined') {
+				const key = `scp-doc-${currentDoc.type}`;
+				localStorage.setItem(key, JSON.stringify(currentDoc));
+			}
 		},
 
 		// Load from localStorage

@@ -21,9 +21,30 @@
 		'wondertainment': wondertainmentLogo
 	};
 
-	let doc = $derived($documentStore as InterviewLog | null);
-	let faction = $derived(FACTIONS.find(f => f.id === $factionStore));
-	let logo = $derived(logos[$factionStore] || foundationLogo);
+	// Use $state with $effect to sync from stores
+	let doc = $state<InterviewLog | null>(null);
+	let currentFaction = $state('foundation');
+
+	$effect(() => {
+		const unsub = documentStore.subscribe(d => {
+			if (d && d.type === 'interview') {
+				doc = d as InterviewLog;
+			} else {
+				doc = null;
+			}
+		});
+		return unsub;
+	});
+
+	$effect(() => {
+		const unsub = factionStore.subscribe(f => {
+			currentFaction = f;
+		});
+		return unsub;
+	});
+
+	let faction = $derived(FACTIONS.find(f => f.id === currentFaction));
+	let logo = $derived(logos[currentFaction] || foundationLogo);
 
 	interface Props {
 		scale?: number;

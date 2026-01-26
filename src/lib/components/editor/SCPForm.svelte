@@ -7,8 +7,19 @@
 	import { OBJECT_CLASS_INFO, type SCPDocument, type Addendum, type AddendumType } from '$lib/schemas/scp';
 	import { v4 as uuid } from 'uuid';
 
-	// Get the document from store
-	let doc = $derived($documentStore as SCPDocument | null);
+	// Use $state and sync from store via $effect
+	let doc = $state<SCPDocument | null>(null);
+
+	$effect(() => {
+		const unsub = documentStore.subscribe(d => {
+			if (d && d.type === 'scp') {
+				doc = d as SCPDocument;
+			} else {
+				doc = null;
+			}
+		});
+		return unsub;
+	});
 
 	// Create options for object class select
 	const objectClassOptions = Object.entries(OBJECT_CLASS_INFO).map(([value, info]) => ({

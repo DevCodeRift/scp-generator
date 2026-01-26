@@ -12,7 +12,19 @@
 	} from '$lib/schemas/interview';
 	import { v4 as uuid } from 'uuid';
 
-	let doc = $derived($documentStore as InterviewLog | null);
+	// Use $state and sync from store via $effect
+	let doc = $state<InterviewLog | null>(null);
+
+	$effect(() => {
+		const unsub = documentStore.subscribe(d => {
+			if (d && d.type === 'interview') {
+				doc = d as InterviewLog;
+			} else {
+				doc = null;
+			}
+		});
+		return unsub;
+	});
 
 	const classificationOptions = [
 		{ value: 'unrestricted', label: 'Unrestricted' },

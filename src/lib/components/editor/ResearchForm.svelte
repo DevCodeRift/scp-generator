@@ -7,7 +7,19 @@
 	import { RESEARCH_DEPARTMENTS, type ResearchReport } from '$lib/schemas/research';
 	import { v4 as uuid } from 'uuid';
 
-	let doc = $derived($documentStore as ResearchReport | null);
+	// Use $state and sync from store via $effect
+	let doc = $state<ResearchReport | null>(null);
+
+	$effect(() => {
+		const unsub = documentStore.subscribe(d => {
+			if (d && d.type === 'research') {
+				doc = d as ResearchReport;
+			} else {
+				doc = null;
+			}
+		});
+		return unsub;
+	});
 
 	const classificationOptions = [
 		{ value: 'unrestricted', label: 'Unrestricted' },
