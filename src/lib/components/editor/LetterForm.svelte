@@ -92,13 +92,13 @@
 					<Input
 						label="Date"
 						type="date"
-						bind:value={doc.date}
+						value={doc.date}
 						required
 						onchange={(v) => updateField('date', v)}
 					/>
 					<Input
 						label="Subject"
-						bind:value={doc.subject}
+						value={doc.subject}
 						placeholder="RE: Subject of correspondence"
 						required
 						onchange={(v) => updateField('subject', v)}
@@ -114,14 +114,14 @@
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 					<Input
 						label="Name"
-						bind:value={doc.from.name}
+						value={doc.from.name}
 						placeholder="Dr. [Name]"
 						required
 						onchange={(v) => updateFrom('name', v)}
 					/>
 					<Input
 						label="Title"
-						bind:value={doc.from.title}
+						value={doc.from.title || ''}
 						placeholder="Site Director, Head Researcher, etc."
 						onchange={(v) => updateFrom('title', v || '')}
 					/>
@@ -129,7 +129,7 @@
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 					<Input
 						label="Department"
-						bind:value={doc.from.department}
+						value={doc.from.department || ''}
 						placeholder="Department name..."
 						onchange={(v) => updateFrom('department', v || '')}
 					/>
@@ -150,14 +150,14 @@
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 					<Input
 						label="Name"
-						bind:value={doc.to.name}
+						value={doc.to.name}
 						placeholder="Recipient name..."
 						required
 						onchange={(v) => updateTo('name', v)}
 					/>
 					<Input
 						label="Title"
-						bind:value={doc.to.title}
+						value={doc.to.title || ''}
 						placeholder="Recipient title..."
 						onchange={(v) => updateTo('title', v || '')}
 					/>
@@ -165,7 +165,7 @@
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 					<Input
 						label="Department"
-						bind:value={doc.to.department}
+						value={doc.to.department || ''}
 						placeholder="Department name..."
 						onchange={(v) => updateTo('department', v || '')}
 					/>
@@ -184,7 +184,7 @@
 			<div class="terminal-header">MESSAGE BODY</div>
 			<div class="p-4">
 				<Textarea
-					bind:value={doc.body}
+					value={doc.body}
 					placeholder="Write your message here..."
 					rows={12}
 					required

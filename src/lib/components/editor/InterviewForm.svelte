@@ -129,7 +129,7 @@
 				<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
 					<Input
 						label="Log Number"
-						bind:value={doc.logNumber}
+						value={doc.logNumber}
 						placeholder="Interview-XXXX-X"
 						required
 						onchange={(v) => updateField('logNumber', v)}
@@ -137,20 +137,20 @@
 					<Input
 						label="Date"
 						type="date"
-						bind:value={doc.date}
+						value={doc.date}
 						required
 						onchange={(v) => updateField('date', v)}
 					/>
 					<Input
 						label="Time"
 						type="time"
-						bind:value={doc.time}
+						value={doc.time || ''}
 						onchange={(v) => updateField('time', v || '')}
 					/>
 				</div>
 				<Input
 					label="Location"
-					bind:value={doc.location}
+					value={doc.location || ''}
 					placeholder="Site-XX, Interview Room X"
 					onchange={(v) => updateField('location', v || '')}
 				/>
@@ -166,7 +166,7 @@
 					<div class="grid grid-cols-1 md:grid-cols-2 gap-3">
 						<Input
 							label="Name"
-							bind:value={doc.interviewer.name}
+							value={doc.interviewer.name}
 							placeholder="Name..."
 							required
 							onchange={(v) => updateInterviewer('name', v)}
@@ -185,7 +185,7 @@
 					<div class="grid grid-cols-1 md:grid-cols-2 gap-3">
 						<Input
 							label="Name"
-							bind:value={doc.interviewee.name}
+							value={doc.interviewee.name}
 							placeholder="Name or designation..."
 							required
 							onchange={(v) => updateInterviewee('name', v)}
@@ -206,7 +206,7 @@
 			<div class="terminal-header">FOREWORD (Optional)</div>
 			<div class="p-4">
 				<Textarea
-					bind:value={doc.foreword}
+					value={doc.foreword || ''}
 					placeholder="Context or notes before the interview begins..."
 					rows={3}
 					onchange={(v) => updateField('foreword', v || '')}
@@ -290,7 +290,7 @@
 			<div class="terminal-header">CLOSING NOTES (Optional)</div>
 			<div class="p-4">
 				<Textarea
-					bind:value={doc.afterword}
+					value={doc.afterword || ''}
 					placeholder="Notes after the interview concludes..."
 					rows={3}
 					onchange={(v) => updateField('afterword', v || '')}

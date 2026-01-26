@@ -127,7 +127,7 @@
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 					<Input
 						label="Report Number"
-						bind:value={doc.reportNumber}
+						value={doc.reportNumber}
 						placeholder="RR-XXXX-XXX"
 						required
 						onchange={(v) => updateField('reportNumber', v)}
@@ -135,14 +135,14 @@
 					<Input
 						label="Date"
 						type="date"
-						bind:value={doc.date}
+						value={doc.date}
 						required
 						onchange={(v) => updateField('date', v)}
 					/>
 				</div>
 				<Input
 					label="Title"
-					bind:value={doc.title}
+					value={doc.title}
 					placeholder="Research report title..."
 					required
 					onchange={(v) => updateField('title', v)}
@@ -163,14 +163,14 @@
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 					<Input
 						label="Lead Researcher"
-						bind:value={doc.leadResearcher}
+						value={doc.leadResearcher}
 						placeholder="Dr. [Name]"
 						required
 						onchange={(v) => updateField('leadResearcher', v)}
 					/>
 					<Input
 						label="Supervisor"
-						bind:value={doc.supervisor}
+						value={doc.supervisor || ''}
 						placeholder="Site Director [Name]"
 						onchange={(v) => updateField('supervisor', v || '')}
 					/>
@@ -201,7 +201,7 @@
 			<div class="terminal-header">ABSTRACT</div>
 			<div class="p-4">
 				<Textarea
-					bind:value={doc.abstract}
+					value={doc.abstract}
 					placeholder="Brief summary of the research..."
 					rows={4}
 					required
@@ -214,7 +214,7 @@
 			<div class="terminal-header">METHODOLOGY</div>
 			<div class="p-4">
 				<Textarea
-					bind:value={doc.methodology}
+					value={doc.methodology || ''}
 					placeholder="Research methodology and procedures..."
 					rows={6}
 					onchange={(v) => updateField('methodology', v || '')}
@@ -226,7 +226,7 @@
 			<div class="terminal-header">FINDINGS</div>
 			<div class="p-4">
 				<Textarea
-					bind:value={doc.findings}
+					value={doc.findings}
 					placeholder="Research findings and observations..."
 					rows={8}
 					required
@@ -239,7 +239,7 @@
 			<div class="terminal-header">CONCLUSIONS</div>
 			<div class="p-4">
 				<Textarea
-					bind:value={doc.conclusions}
+					value={doc.conclusions}
 					placeholder="Conclusions drawn from the research..."
 					rows={6}
 					required
@@ -252,7 +252,7 @@
 			<div class="terminal-header">RECOMMENDATIONS</div>
 			<div class="p-4">
 				<Textarea
-					bind:value={doc.recommendations}
+					value={doc.recommendations || ''}
 					placeholder="Recommendations for future research or containment..."
 					rows={4}
 					onchange={(v) => updateField('recommendations', v || '')}

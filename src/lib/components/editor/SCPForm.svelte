@@ -143,7 +143,7 @@
 			<div class="p-4">
 				<Input
 					label="Item Number"
-					bind:value={doc.itemNumber}
+					value={doc.itemNumber}
 					placeholder="SCP-XXXX"
 					required
 					hint="e.g., SCP-173, SCP-682, SCP-999"
@@ -157,7 +157,7 @@
 			<div class="terminal-header">SPECIAL CONTAINMENT PROCEDURES</div>
 			<div class="p-4">
 				<Textarea
-					bind:value={doc.containmentProcedures}
+					value={doc.containmentProcedures}
 					placeholder="Describe the containment procedures..."
 					rows={8}
 					required
@@ -172,7 +172,7 @@
 			<div class="terminal-header">DESCRIPTION</div>
 			<div class="p-4">
 				<Textarea
-					bind:value={doc.description}
+					value={doc.description}
 					placeholder="Describe the anomaly..."
 					rows={12}
 					required
