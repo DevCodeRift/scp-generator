@@ -75,6 +75,9 @@
 				return;
 			}
 
+			// Wait for fonts to load
+			await document.fonts.ready;
+
 			// Dynamic import of html2pdf
 			const html2pdf = (await import('html2pdf.js')).default;
 
@@ -82,7 +85,22 @@
 				margin: 10,
 				filename: `${docType}-document.pdf`,
 				image: { type: 'jpeg', quality: 0.98 },
-				html2canvas: { scale: 2, useCORS: true },
+				html2canvas: {
+					scale: 2,
+					useCORS: true,
+					logging: false,
+					onclone: (clonedDoc: Document) => {
+						const clonedEl = clonedDoc.getElementById('document-preview');
+						if (clonedEl) {
+							clonedEl.style.transform = 'none';
+							clonedEl.style.width = '800px';
+							clonedEl.style.maxWidth = '800px';
+							clonedEl.style.padding = '2rem';
+							clonedEl.style.margin = '0';
+							clonedEl.style.boxShadow = 'none';
+						}
+					}
+				},
 				jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
 			};
 
@@ -109,11 +127,29 @@
 			// Dynamic import of html2canvas
 			const html2canvas = (await import('html2canvas')).default;
 
-			// Capture the element as canvas
+			// Wait for fonts to load
+			await document.fonts.ready;
+
+			// Capture the element as canvas, removing transform and applying computed styles
 			const canvas = await html2canvas(previewElement, {
 				scale: 2,
 				useCORS: true,
-				backgroundColor: '#f5f5f0'
+				backgroundColor: '#f5f5f0',
+				logging: false,
+				onclone: (clonedDoc: Document) => {
+					const clonedEl = clonedDoc.getElementById('document-preview');
+					if (clonedEl) {
+						// Remove the scale transform for accurate capture
+						clonedEl.style.transform = 'none';
+						clonedEl.style.transformOrigin = 'top left';
+						// Ensure consistent sizing
+						clonedEl.style.width = '800px';
+						clonedEl.style.maxWidth = '800px';
+						clonedEl.style.padding = '2rem';
+						clonedEl.style.margin = '0';
+						clonedEl.style.boxShadow = 'none';
+					}
+				}
 			});
 
 			// Convert to PNG and download

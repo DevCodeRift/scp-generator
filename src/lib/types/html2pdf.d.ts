@@ -7,6 +7,8 @@ declare module 'html2pdf.js' {
 			scale?: number;
 			useCORS?: boolean;
 			backgroundColor?: string;
+			logging?: boolean;
+			onclone?: (document: Document) => void;
 		};
 		jsPDF?: {
 			unit?: string;
