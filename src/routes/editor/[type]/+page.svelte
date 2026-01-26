@@ -20,6 +20,13 @@
 	let showPreview = $state(true);
 	let previewScale = $state(0.75);
 	let isExporting = $state(false);
+	let isFullscreen = $state(false);
+
+	function handleKeydown(e: KeyboardEvent) {
+		if (e.key === 'Escape' && isFullscreen) {
+			isFullscreen = false;
+		}
+	}
 
 	const typeNames: Record<string, string> = {
 		scp: 'SCP Entry',
@@ -163,6 +170,8 @@
 	}
 </script>
 
+<svelte:window onkeydown={handleKeydown} />
+
 <svelte:head>
 	<title>{typeNames[docType] || 'Editor'} | SCP Document Generator</title>
 </svelte:head>
@@ -242,6 +251,13 @@
 						>
 							+
 						</button>
+						<button
+							class="text-xs text-gray-400 hover:text-white px-2 py-1 ml-2 border border-gray-600 rounded"
+							onclick={() => isFullscreen = true}
+							title="Fullscreen (for screenshots)"
+						>
+							Fullscreen
+						</button>
 					</div>
 				</div>
 				<div class="p-4">
@@ -259,3 +275,30 @@
 		{/if}
 	</main>
 </div>
+
+<!-- Fullscreen Preview Overlay -->
+{#if isFullscreen}
+	<div class="fixed inset-0 z-50 bg-gray-900 overflow-auto">
+		<!-- Close button -->
+		<button
+			class="fixed top-4 right-4 z-50 bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-lg shadow-lg flex items-center gap-2"
+			onclick={() => isFullscreen = false}
+		>
+			<span>Close</span>
+			<span class="text-xs text-gray-400">(ESC)</span>
+		</button>
+
+		<!-- Centered document -->
+		<div class="min-h-screen flex items-start justify-center py-8 px-4">
+			{#if docType === 'scp'}
+				<SCPPreview scale={1} />
+			{:else if docType === 'research'}
+				<ResearchPreview scale={1} />
+			{:else if docType === 'letter'}
+				<LetterPreview scale={1} />
+			{:else if docType === 'interview'}
+				<InterviewPreview scale={1} />
+			{/if}
+		</div>
+	</div>
+{/if}
