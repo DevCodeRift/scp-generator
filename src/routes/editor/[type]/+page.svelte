@@ -121,7 +121,7 @@
 			previewScale = 1;
 
 			// Wait for DOM to update and fonts to load
-			await new Promise(resolve => setTimeout(resolve, 100));
+			await new Promise(resolve => setTimeout(resolve, 150));
 			await document.fonts.ready;
 
 			const previewElement = document.getElementById('document-preview');
@@ -130,21 +130,21 @@
 				return;
 			}
 
-			// Dynamic import of html2canvas
-			const html2canvas = (await import('html2canvas')).default;
+			// Use modern-screenshot for better CSS support
+			const { domToPng } = await import('modern-screenshot');
 
-			// Capture the element at full scale
-			const canvas = await html2canvas(previewElement, {
+			const dataUrl = await domToPng(previewElement, {
 				scale: 2,
-				useCORS: true,
 				backgroundColor: '#f5f5f0',
-				logging: false
+				style: {
+					transform: 'none'
+				}
 			});
 
-			// Convert to PNG and download
+			// Download the image
 			const link = document.createElement('a');
 			link.download = `${docType}-document.png`;
-			link.href = canvas.toDataURL('image/png');
+			link.href = dataUrl;
 			link.click();
 		} catch (error) {
 			console.error('Export failed:', error);
