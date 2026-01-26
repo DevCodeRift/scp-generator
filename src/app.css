@@ -112,6 +112,21 @@
 	--color-glow: rgba(151, 8, 175, 0.25);
 }
 
+/* Ouroboros Foundation Theme */
+:root[data-faction="ouroboros"] {
+	--color-primary: #0f0f0f;
+	--color-secondary: #1a1a1a;
+	--color-accent: #666666;
+	--color-background: #050505;
+	--color-surface: #0f0f0f;
+	--color-text: #cccccc;
+	--color-text-muted: #666666;
+	--color-border: #333333;
+	--color-danger: #990000;
+	--color-warning: #996600;
+	--color-glow: rgba(102, 102, 102, 0.15);
+}
+
 /* Base Styles */
 @layer base {
 	html {

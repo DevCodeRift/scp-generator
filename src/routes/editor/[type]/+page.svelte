@@ -107,15 +107,19 @@
 			}
 
 			// Dynamic import of html2canvas
-			const html2canvas = (await import('html2pdf.js')).default;
+			const html2canvas = (await import('html2canvas')).default;
 
-			// Use html2pdf's html2canvas to capture the element
-			const canvas = await html2canvas().from(previewElement).outputImg('img');
+			// Capture the element as canvas
+			const canvas = await html2canvas(previewElement, {
+				scale: 2,
+				useCORS: true,
+				backgroundColor: '#f5f5f0'
+			});
 
-			// Create download link
+			// Convert to PNG and download
 			const link = document.createElement('a');
 			link.download = `${docType}-document.png`;
-			link.href = canvas.src;
+			link.href = canvas.toDataURL('image/png');
 			link.click();
 		} catch (error) {
 			console.error('Export failed:', error);
@@ -156,6 +160,9 @@
 					{showPreview ? 'Hide' : 'Show'} Preview
 				</Button>
 				<FactionSelector />
+				<Button variant="ghost" size="sm" onclick={handleExportImage} disabled={isExporting}>
+					{isExporting ? 'Exporting...' : 'Export PNG'}
+				</Button>
 				<Button variant="primary" size="sm" onclick={handleExport} disabled={isExporting}>
 					{isExporting ? 'Exporting...' : 'Export PDF'}
 				</Button>

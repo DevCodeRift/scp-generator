@@ -44,7 +44,7 @@
 	});
 
 	let faction = $derived(FACTIONS.find(f => f.id === currentFaction));
-	let logo = $derived(logos[currentFaction] || foundationLogo);
+	let logo = $derived(logos[currentFaction] || null);
 	let letterTypeLabel = $derived(doc ? LETTER_TYPE_INFO[doc.letterType]?.label : '');
 
 	interface Props {
@@ -70,7 +70,9 @@
 	>
 		<!-- Letterhead -->
 		<div class="document-header">
-			<img src={logo} alt="{faction?.name} Logo" class="document-logo" />
+			{#if logo}
+				<img src={logo} alt="{faction?.name} Logo" class="document-logo" />
+			{/if}
 			<h1 class="text-xl font-bold">{faction?.name || 'SCP Foundation'}</h1>
 			<div class="text-sm text-gray-600 mt-1 uppercase">{letterTypeLabel}</div>
 		</div>

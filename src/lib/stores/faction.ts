@@ -7,7 +7,8 @@ export type Faction =
 	| 'serpents-hand'
 	| 'mcd'
 	| 'broken-god'
-	| 'wondertainment';
+	| 'wondertainment'
+	| 'ouroboros';
 
 export interface FactionInfo {
 	id: Faction;
@@ -58,6 +59,12 @@ export const FACTIONS: FactionInfo[] = [
 		name: 'Dr. Wondertainment',
 		shortName: 'Wondertainment',
 		description: 'Anomalous toy manufacturer'
+	},
+	{
+		id: 'ouroboros',
+		name: 'Ouroboros Foundation',
+		shortName: 'Ouroboros',
+		description: 'The cycle continues eternally'
 	}
 ];
 

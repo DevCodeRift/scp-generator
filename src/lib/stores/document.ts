@@ -47,8 +47,9 @@ function createDocumentStore() {
 			unsub();
 
 			if (currentDoc && typeof localStorage !== 'undefined') {
-				const key = `scp-doc-${currentDoc.type}`;
-				localStorage.setItem(key, JSON.stringify(currentDoc));
+				const doc = currentDoc as Document;
+				const key = `scp-doc-${doc.type}`;
+				localStorage.setItem(key, JSON.stringify(doc));
 			}
 		},
 

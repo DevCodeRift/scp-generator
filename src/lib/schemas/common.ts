@@ -8,7 +8,8 @@ export const FactionSchema = z.enum([
 	'serpents-hand',
 	'mcd',
 	'broken-god',
-	'wondertainment'
+	'wondertainment',
+	'ouroboros'
 ]);
 export type Faction = z.infer<typeof FactionSchema>;
 

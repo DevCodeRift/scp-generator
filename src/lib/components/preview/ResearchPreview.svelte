@@ -44,7 +44,7 @@
 	});
 
 	let faction = $derived(FACTIONS.find(f => f.id === currentFaction));
-	let logo = $derived(logos[currentFaction] || foundationLogo);
+	let logo = $derived(logos[currentFaction] || null);
 
 	interface Props {
 		scale?: number;
@@ -61,7 +61,9 @@
 	>
 		<!-- Document Header -->
 		<div class="document-header">
-			<img src={logo} alt="{faction?.name} Logo" class="document-logo" />
+			{#if logo}
+				<img src={logo} alt="{faction?.name} Logo" class="document-logo" />
+			{/if}
 			<h1 class="text-xl font-bold">{faction?.name || 'SCP Foundation'}</h1>
 			<div class="text-lg font-bold mt-2">RESEARCH REPORT</div>
 			<div class="text-sm text-gray-600 mt-1">
