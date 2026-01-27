@@ -6,6 +6,23 @@
 import { writable, derived, get } from 'svelte/store';
 import { browser } from '$app/environment';
 
+// UUID generator that works without secure context
+function generateId(): string {
+	try {
+		if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+			return crypto.randomUUID();
+		}
+	} catch {
+		// Fall through to fallback
+	}
+	// Fallback for non-secure contexts
+	return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+		const r = (Math.random() * 16) | 0;
+		const v = c === 'x' ? r : (r & 0x3) | 0x8;
+		return v.toString(16);
+	});
+}
+
 // Types
 export type AlertLevel = 'green' | 'yellow' | 'red' | 'black';
 export type ContainmentStatus = 'contained' | 'breaching' | 'loose' | 'neutralized' | 'unknown';
@@ -111,7 +128,7 @@ function createSessionStore() {
 		startNewSession(siteName: string = 'Site-19') {
 			const newState: SessionState = {
 				...defaultState,
-				id: crypto.randomUUID(),
+				id: generateId(),
 				siteName,
 				startedAt: new Date().toISOString()
 			};
@@ -165,7 +182,7 @@ function createSessionStore() {
 		addContainment(entry: Omit<ContainmentEntry, 'id'>) {
 			const newEntry: ContainmentEntry = {
 				...entry,
-				id: crypto.randomUUID()
+				id: generateId()
 			};
 			update(s => ({
 				...s,
@@ -203,7 +220,7 @@ function createSessionStore() {
 		addPersonnel(entry: Omit<PersonnelEntry, 'id'>) {
 			const newEntry: PersonnelEntry = {
 				...entry,
-				id: crypto.randomUUID()
+				id: generateId()
 			};
 			update(s => ({
 				...s,
@@ -241,7 +258,7 @@ function createSessionStore() {
 		addCommsEntry(entry: Omit<CommsEntry, 'id' | 'timestamp'>) {
 			const newEntry: CommsEntry = {
 				...entry,
-				id: crypto.randomUUID(),
+				id: generateId(),
 				timestamp: new Date().toLocaleTimeString('en-US', {
 					hour12: false,
 					hour: '2-digit',
