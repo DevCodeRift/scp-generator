@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import FactionSelector from '$lib/components/ui/FactionSelector.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
 	import Badge from '$lib/components/ui/Badge.svelte';
@@ -10,7 +11,7 @@
 	import QuickRollers from '$lib/components/session/QuickRollers.svelte';
 	import { sessionStore, sessionStats, ALERT_LEVELS, type SessionState } from '$lib/stores/session';
 
-	// Use $state to hold the store value and subscribe manually for better Svelte 5 compatibility
+	// Use $state to hold the store value
 	let session = $state<SessionState>({
 		id: '',
 		siteName: 'Site-19',
@@ -34,9 +35,10 @@
 		commsCount: 0
 	});
 
-	// Subscribe to stores
-	$effect(() => {
+	// Subscribe to stores on mount
+	onMount(() => {
 		const unsubSession = sessionStore.subscribe(value => {
+			console.log('Session store updated:', value.id);
 			session = value;
 		});
 		const unsubStats = sessionStats.subscribe(value => {
@@ -52,8 +54,11 @@
 	let newSiteName = $state('Site-19');
 
 	function handleStartSession() {
+		console.log('handleStartSession called, siteName:', newSiteName);
 		if (newSiteName.trim()) {
+			console.log('Calling startNewSession...');
 			sessionStore.startNewSession(newSiteName.trim());
+			console.log('startNewSession called');
 		}
 	}
 
@@ -129,9 +134,12 @@
 							class="mb-4"
 						/>
 
-						<Button variant="primary" onclick={handleStartSession} class="w-full">
+						<button
+							onclick={handleStartSession}
+							class="w-full px-4 py-2 font-mono font-bold uppercase tracking-wide bg-[var(--color-accent)] text-[var(--color-background)] border border-[var(--color-accent)] rounded hover:bg-transparent hover:text-[var(--color-accent)] transition-all cursor-pointer"
+						>
 							Start Session
-						</Button>
+						</button>
 
 						<div class="mt-6 pt-6 border-t border-[var(--color-border)]">
 							<div class="text-xs text-[var(--color-text-muted)] space-y-2">
