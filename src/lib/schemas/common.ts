@@ -23,7 +23,12 @@ export const DocumentTypeSchema = z.enum([
 	'incident',
 	'mission',
 	'breach',
-	'anomaly-card'
+	'anomaly-card',
+	'exploration',
+	'autopsy',
+	'directive',
+	'newspaper',
+	'avlog'
 ]);
 export type DocumentType = z.infer<typeof DocumentTypeSchema>;
 

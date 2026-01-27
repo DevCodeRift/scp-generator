@@ -1,5 +1,5 @@
 import { writable, derived } from 'svelte/store';
-import type { SCPDocument, ResearchReport, Letter, InterviewLog, PersonnelFile, IncidentReport, MissionBriefing, ContainmentBreach, AnomalyCard } from '$lib/schemas';
+import type { SCPDocument, ResearchReport, Letter, InterviewLog, PersonnelFile, IncidentReport, MissionBriefing, ContainmentBreach, AnomalyCard, ExplorationLog, AutopsyReport, Directive, NewspaperClipping, AVLog } from '$lib/schemas';
 import { defaultSCPDocument } from '$lib/schemas/scp';
 import { defaultResearchReport } from '$lib/schemas/research';
 import { defaultLetter } from '$lib/schemas/letter';
@@ -9,9 +9,14 @@ import { defaultIncidentReport } from '$lib/schemas/incident';
 import { defaultMissionBriefing } from '$lib/schemas/mission';
 import { defaultContainmentBreach } from '$lib/schemas/breach';
 import { defaultAnomalyCard } from '$lib/schemas/anomaly-card';
+import { defaultExplorationLog } from '$lib/schemas/exploration';
+import { defaultAutopsyReport } from '$lib/schemas/autopsy';
+import { defaultDirective } from '$lib/schemas/directive';
+import { defaultNewspaperClipping } from '$lib/schemas/newspaper';
+import { defaultAVLog } from '$lib/schemas/avlog';
 
-export type Document = SCPDocument | ResearchReport | Letter | InterviewLog | PersonnelFile | IncidentReport | MissionBriefing | ContainmentBreach | AnomalyCard;
-export type DocumentType = 'scp' | 'research' | 'letter' | 'interview' | 'personnel' | 'incident' | 'mission' | 'breach' | 'anomaly-card';
+export type Document = SCPDocument | ResearchReport | Letter | InterviewLog | PersonnelFile | IncidentReport | MissionBriefing | ContainmentBreach | AnomalyCard | ExplorationLog | AutopsyReport | Directive | NewspaperClipping | AVLog;
+export type DocumentType = 'scp' | 'research' | 'letter' | 'interview' | 'personnel' | 'incident' | 'mission' | 'breach' | 'anomaly-card' | 'exploration' | 'autopsy' | 'directive' | 'newspaper' | 'avlog';
 
 // Create the document store
 function createDocumentStore() {
@@ -51,6 +56,21 @@ function createDocumentStore() {
 					break;
 				case 'anomaly-card':
 					set({ ...defaultAnomalyCard });
+					break;
+				case 'exploration':
+					set({ ...defaultExplorationLog });
+					break;
+				case 'autopsy':
+					set({ ...defaultAutopsyReport });
+					break;
+				case 'directive':
+					set({ ...defaultDirective });
+					break;
+				case 'newspaper':
+					set({ ...defaultNewspaperClipping });
+					break;
+				case 'avlog':
+					set({ ...defaultAVLog });
 					break;
 			}
 		},
@@ -118,6 +138,16 @@ export const isDocumentValid = derived(documentStore, ($doc) => {
 			return !!$doc.breachId && !!$doc.scpNumber && !!$doc.breachDescription;
 		case 'anomaly-card':
 			return !!$doc.itemNumber && !!$doc.briefDescription;
+		case 'exploration':
+			return !!$doc.logNumber && !!$doc.teamDesignation;
+		case 'autopsy':
+			return !!$doc.caseNumber && !!$doc.subjectDesignation;
+		case 'directive':
+			return !!$doc.directiveNumber && !!$doc.subject && !!$doc.directiveContent;
+		case 'newspaper':
+			return !!$doc.publicationName && !!$doc.headline && !!$doc.bodyContent;
+		case 'avlog':
+			return !!$doc.logDesignation;
 		default:
 			return false;
 	}

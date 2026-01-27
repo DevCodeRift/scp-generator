@@ -62,6 +62,93 @@
 		}
 	];
 
+	const creativeDocuments = [
+		{
+			id: 'exploration',
+			name: 'Exploration Log',
+			description: 'Field journal entries with waypoints, hazards, and discoveries',
+			icon: '[ EXP ]'
+		},
+		{
+			id: 'autopsy',
+			name: 'Autopsy Report',
+			description: 'Medical examination reports with clinical styling and diagrams',
+			icon: '[ MED ]'
+		},
+		{
+			id: 'directive',
+			name: 'O5 Directive',
+			description: 'High-level classified orders from the O5 Council',
+			icon: '[ O5 ]'
+		},
+		{
+			id: 'newspaper',
+			name: 'Newspaper Clipping',
+			description: 'Cover story articles with vintage paper styling',
+			icon: '[ NEWS ]'
+		},
+		{
+			id: 'avlog',
+			name: 'Audio/Video Log',
+			description: 'Surveillance transcripts with terminal aesthetics',
+			icon: '[ A/V ]'
+		}
+	];
+
+	const generators = [
+		{
+			id: 'npc',
+			name: 'NPC Generator',
+			description: 'Generate random Foundation personnel, D-Class, and MTF operatives',
+			icon: '[ NPC ]'
+		},
+		{
+			id: 'scp',
+			name: 'SCP Generator',
+			description: 'Create random SCP anomaly concepts with containment details',
+			icon: '[ RNG ]'
+		},
+		{
+			id: 'artifact',
+			name: 'Artifact Generator',
+			description: 'Generate minor anomalous items with effects and drawbacks',
+			icon: '[ ART ]'
+		},
+		{
+			id: 'event',
+			name: 'Event Roller',
+			description: 'Roll random anomalous events and complications',
+			icon: '[ EVT ]'
+		},
+		{
+			id: 'location',
+			name: 'Location Generator',
+			description: 'Generate anomalous sites, GOI facilities, and dimensional spaces',
+			icon: '[ LOC ]'
+		},
+		{
+			id: 'breach',
+			name: 'Breach Scenario',
+			description: 'Build multi-phase containment breach scenarios',
+			icon: '[ BRK ]'
+		},
+		{
+			id: 'facility',
+			name: 'Facility Map',
+			description: 'Create procedural site layouts with rooms and corridors',
+			icon: '[ MAP ]'
+		}
+	];
+
+	const sessionTools = [
+		{
+			id: 'session',
+			name: 'Session Manager',
+			description: 'Track initiative, casualties, containment status, and timeline during games',
+			icon: '[ SES ]'
+		}
+	];
+
 	let currentFaction = $derived(FACTIONS.find(f => f.id === $factionStore));
 </script>
 
@@ -164,6 +251,106 @@
 									<p class="text-xs text-[var(--color-text-muted)]">
 										{docType.description}
 									</p>
+								</div>
+							</div>
+						</div>
+					</a>
+				{/each}
+			</div>
+		</div>
+
+		<!-- Creative Documents Section -->
+		<div class="mb-6">
+			<h2 class="text-sm font-bold uppercase text-[var(--color-text-muted)] mb-3 flex items-center gap-2">
+				<span class="text-[var(--color-accent)]">&gt;</span> Creative Documents
+			</h2>
+			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+				{#each creativeDocuments as docType}
+					<a
+						href="/editor/{docType.id}"
+						class="terminal-window group hover:border-[var(--color-accent)] hover:border-glow transition-all block"
+					>
+						<div class="p-4">
+							<div class="flex items-start gap-3">
+								<div class="font-mono text-xl text-[var(--color-accent)] group-hover:crt-glow">
+									{docType.icon}
+								</div>
+								<div class="flex-1">
+									<h3 class="font-bold mb-1 group-hover:text-[var(--color-accent)] transition-colors">
+										{docType.name}
+									</h3>
+									<p class="text-xs text-[var(--color-text-muted)]">
+										{docType.description}
+									</p>
+								</div>
+							</div>
+						</div>
+					</a>
+				{/each}
+			</div>
+		</div>
+
+		<!-- Generators Section -->
+		<div class="mb-6">
+			<h2 class="text-sm font-bold uppercase text-[var(--color-text-muted)] mb-3 flex items-center gap-2">
+				<span class="text-[var(--color-accent)]">&gt;</span> Generators & Randomizers
+				<span class="text-xs font-normal text-[var(--color-warning)]">[NEW]</span>
+			</h2>
+			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+				{#each generators as gen}
+					<a
+						href="/generators/{gen.id}"
+						class="terminal-window group hover:border-[var(--color-accent)] hover:border-glow transition-all block"
+					>
+						<div class="p-4">
+							<div class="flex items-start gap-3">
+								<div class="font-mono text-xl text-[var(--color-accent)] group-hover:crt-glow">
+									{gen.icon}
+								</div>
+								<div class="flex-1">
+									<h3 class="font-bold mb-1 group-hover:text-[var(--color-accent)] transition-colors">
+										{gen.name}
+									</h3>
+									<p class="text-xs text-[var(--color-text-muted)]">
+										{gen.description}
+									</p>
+								</div>
+							</div>
+						</div>
+					</a>
+				{/each}
+			</div>
+		</div>
+
+		<!-- Session Management Section -->
+		<div class="mb-6">
+			<h2 class="text-sm font-bold uppercase text-[var(--color-text-muted)] mb-3 flex items-center gap-2">
+				<span class="text-[var(--color-accent)]">&gt;</span> Session Management
+				<span class="text-xs font-normal text-[var(--color-warning)]">[NEW]</span>
+			</h2>
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+				{#each sessionTools as tool}
+					<a
+						href="/{tool.id}"
+						class="terminal-window group hover:border-[var(--color-accent)] hover:border-glow transition-all block"
+					>
+						<div class="p-6">
+							<div class="flex items-start gap-4">
+								<div class="font-mono text-2xl text-[var(--color-accent)] group-hover:crt-glow">
+									{tool.icon}
+								</div>
+								<div class="flex-1">
+									<h3 class="text-lg font-bold mb-1 group-hover:text-[var(--color-accent)] transition-colors">
+										{tool.name}
+									</h3>
+									<p class="text-sm text-[var(--color-text-muted)]">
+										{tool.description}
+									</p>
+								</div>
+								<div class="text-[var(--color-text-muted)] group-hover:text-[var(--color-accent)] transition-colors">
+									<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+									</svg>
 								</div>
 							</div>
 						</div>

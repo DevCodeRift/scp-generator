@@ -9,3 +9,8 @@ export * from './incident';
 export * from './mission';
 export * from './breach';
 export * from './anomaly-card';
+export * from './exploration';
+export * from './autopsy';
+export * from './directive';
+export * from './newspaper';
+export * from './avlog';

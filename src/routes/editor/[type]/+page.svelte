@@ -14,6 +14,11 @@
 	import MissionForm from '$lib/components/editor/MissionForm.svelte';
 	import BreachForm from '$lib/components/editor/BreachForm.svelte';
 	import AnomalyCardForm from '$lib/components/editor/AnomalyCardForm.svelte';
+	import ExplorationForm from '$lib/components/editor/ExplorationForm.svelte';
+	import AutopsyForm from '$lib/components/editor/AutopsyForm.svelte';
+	import DirectiveForm from '$lib/components/editor/DirectiveForm.svelte';
+	import NewspaperForm from '$lib/components/editor/NewspaperForm.svelte';
+	import AVLogForm from '$lib/components/editor/AVLogForm.svelte';
 	import SCPPreview from '$lib/components/preview/SCPPreview.svelte';
 	import ResearchPreview from '$lib/components/preview/ResearchPreview.svelte';
 	import LetterPreview from '$lib/components/preview/LetterPreview.svelte';
@@ -23,6 +28,11 @@
 	import MissionPreview from '$lib/components/preview/MissionPreview.svelte';
 	import BreachPreview from '$lib/components/preview/BreachPreview.svelte';
 	import AnomalyCardPreview from '$lib/components/preview/AnomalyCardPreview.svelte';
+	import ExplorationPreview from '$lib/components/preview/ExplorationPreview.svelte';
+	import AutopsyPreview from '$lib/components/preview/AutopsyPreview.svelte';
+	import DirectivePreview from '$lib/components/preview/DirectivePreview.svelte';
+	import NewspaperPreview from '$lib/components/preview/NewspaperPreview.svelte';
+	import AVLogPreview from '$lib/components/preview/AVLogPreview.svelte';
 	import { documentStore, type DocumentType } from '$lib/stores/document';
 	import { factionStore } from '$lib/stores/faction';
 
@@ -47,10 +57,15 @@
 		incident: 'Incident Report',
 		mission: 'Mission Briefing',
 		breach: 'Containment Breach',
-		'anomaly-card': 'Anomaly Card'
+		'anomaly-card': 'Anomaly Card',
+		exploration: 'Exploration Log',
+		autopsy: 'Autopsy Report',
+		directive: 'O5 Directive',
+		newspaper: 'Newspaper Clipping',
+		avlog: 'Audio/Video Log'
 	};
 
-	const validTypes = ['scp', 'research', 'letter', 'interview', 'personnel', 'incident', 'mission', 'breach', 'anomaly-card'];
+	const validTypes = ['scp', 'research', 'letter', 'interview', 'personnel', 'incident', 'mission', 'breach', 'anomaly-card', 'exploration', 'autopsy', 'directive', 'newspaper', 'avlog'];
 
 	onMount(() => {
 		// Validate document type
@@ -254,6 +269,16 @@
 				<BreachForm />
 			{:else if docType === 'anomaly-card'}
 				<AnomalyCardForm />
+			{:else if docType === 'exploration'}
+				<ExplorationForm />
+			{:else if docType === 'autopsy'}
+				<AutopsyForm />
+			{:else if docType === 'directive'}
+				<DirectiveForm />
+			{:else if docType === 'newspaper'}
+				<NewspaperForm />
+			{:else if docType === 'avlog'}
+				<AVLogForm />
 			{/if}
 		</div>
 
@@ -306,6 +331,16 @@
 						<BreachPreview scale={previewScale} />
 					{:else if docType === 'anomaly-card'}
 						<AnomalyCardPreview scale={previewScale} />
+					{:else if docType === 'exploration'}
+						<ExplorationPreview scale={previewScale} />
+					{:else if docType === 'autopsy'}
+						<AutopsyPreview scale={previewScale} />
+					{:else if docType === 'directive'}
+						<DirectivePreview scale={previewScale} />
+					{:else if docType === 'newspaper'}
+						<NewspaperPreview scale={previewScale} />
+					{:else if docType === 'avlog'}
+						<AVLogPreview scale={previewScale} />
 					{/if}
 				</div>
 			</div>
@@ -345,6 +380,16 @@
 				<BreachPreview scale={1} />
 			{:else if docType === 'anomaly-card'}
 				<AnomalyCardPreview scale={1} />
+			{:else if docType === 'exploration'}
+				<ExplorationPreview scale={1} />
+			{:else if docType === 'autopsy'}
+				<AutopsyPreview scale={1} />
+			{:else if docType === 'directive'}
+				<DirectivePreview scale={1} />
+			{:else if docType === 'newspaper'}
+				<NewspaperPreview scale={1} />
+			{:else if docType === 'avlog'}
+				<AVLogPreview scale={1} />
 			{/if}
 		</div>
 	</div>
