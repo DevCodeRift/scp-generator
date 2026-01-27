@@ -2,7 +2,7 @@
 	import FactionSelector from '$lib/components/ui/FactionSelector.svelte';
 	import { factionStore, FACTIONS } from '$lib/stores/faction';
 
-	const documentTypes = [
+	const coreDocuments = [
 		{
 			id: 'scp',
 			name: 'SCP Entry',
@@ -26,6 +26,39 @@
 			name: 'Interview Log',
 			description: 'Dialogue transcripts with proper formatting',
 			icon: '[ LOG ]'
+		}
+	];
+
+	const gmToolkitDocuments = [
+		{
+			id: 'personnel',
+			name: 'Personnel File',
+			description: 'Character sheets for staff, agents, and D-Class personnel',
+			icon: '[ ID ]'
+		},
+		{
+			id: 'incident',
+			name: 'Incident Report',
+			description: 'Document anomalous events, breaches, and security incidents',
+			icon: '[ INC ]'
+		},
+		{
+			id: 'mission',
+			name: 'Mission Briefing',
+			description: 'MTF operation briefings with objectives and team rosters',
+			icon: '[ OPS ]'
+		},
+		{
+			id: 'breach',
+			name: 'Containment Breach',
+			description: 'Emergency breach reports with severity and response protocols',
+			icon: '[ !! ]'
+		},
+		{
+			id: 'anomaly-card',
+			name: 'Anomaly Card',
+			description: 'Quick reference cards for SCP entries',
+			icon: '[ QR ]'
 		}
 	];
 
@@ -72,35 +105,71 @@
 			</div>
 		</div>
 
-		<!-- Document Types Grid -->
-		<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-			{#each documentTypes as docType}
-				<a
-					href="/editor/{docType.id}"
-					class="terminal-window group hover:border-[var(--color-accent)] hover:border-glow transition-all block"
-				>
-					<div class="p-6">
-						<div class="flex items-start gap-4">
-							<div class="font-mono text-2xl text-[var(--color-accent)] group-hover:crt-glow">
-								{docType.icon}
-							</div>
-							<div class="flex-1">
-								<h2 class="text-lg font-bold mb-1 group-hover:text-[var(--color-accent)] transition-colors">
-									{docType.name}
-								</h2>
-								<p class="text-sm text-[var(--color-text-muted)]">
-									{docType.description}
-								</p>
-							</div>
-							<div class="text-[var(--color-text-muted)] group-hover:text-[var(--color-accent)] transition-colors">
-								<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-								</svg>
+		<!-- Core Documents Section -->
+		<div class="mb-6">
+			<h2 class="text-sm font-bold uppercase text-[var(--color-text-muted)] mb-3 flex items-center gap-2">
+				<span class="text-[var(--color-accent)]">&gt;</span> Core Documents
+			</h2>
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+				{#each coreDocuments as docType}
+					<a
+						href="/editor/{docType.id}"
+						class="terminal-window group hover:border-[var(--color-accent)] hover:border-glow transition-all block"
+					>
+						<div class="p-6">
+							<div class="flex items-start gap-4">
+								<div class="font-mono text-2xl text-[var(--color-accent)] group-hover:crt-glow">
+									{docType.icon}
+								</div>
+								<div class="flex-1">
+									<h3 class="text-lg font-bold mb-1 group-hover:text-[var(--color-accent)] transition-colors">
+										{docType.name}
+									</h3>
+									<p class="text-sm text-[var(--color-text-muted)]">
+										{docType.description}
+									</p>
+								</div>
+								<div class="text-[var(--color-text-muted)] group-hover:text-[var(--color-accent)] transition-colors">
+									<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+									</svg>
+								</div>
 							</div>
 						</div>
-					</div>
-				</a>
-			{/each}
+					</a>
+				{/each}
+			</div>
+		</div>
+
+		<!-- GM Toolkit Section -->
+		<div class="mb-6">
+			<h2 class="text-sm font-bold uppercase text-[var(--color-text-muted)] mb-3 flex items-center gap-2">
+				<span class="text-[var(--color-accent)]">&gt;</span> GM Toolkit
+			</h2>
+			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+				{#each gmToolkitDocuments as docType}
+					<a
+						href="/editor/{docType.id}"
+						class="terminal-window group hover:border-[var(--color-accent)] hover:border-glow transition-all block"
+					>
+						<div class="p-4">
+							<div class="flex items-start gap-3">
+								<div class="font-mono text-xl text-[var(--color-accent)] group-hover:crt-glow">
+									{docType.icon}
+								</div>
+								<div class="flex-1">
+									<h3 class="font-bold mb-1 group-hover:text-[var(--color-accent)] transition-colors">
+										{docType.name}
+									</h3>
+									<p class="text-xs text-[var(--color-text-muted)]">
+										{docType.description}
+									</p>
+								</div>
+							</div>
+						</div>
+					</a>
+				{/each}
+			</div>
 		</div>
 
 		<!-- Info Footer -->

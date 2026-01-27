@@ -1,12 +1,17 @@
 import { writable, derived } from 'svelte/store';
-import type { SCPDocument, ResearchReport, Letter, InterviewLog } from '$lib/schemas';
+import type { SCPDocument, ResearchReport, Letter, InterviewLog, PersonnelFile, IncidentReport, MissionBriefing, ContainmentBreach, AnomalyCard } from '$lib/schemas';
 import { defaultSCPDocument } from '$lib/schemas/scp';
 import { defaultResearchReport } from '$lib/schemas/research';
 import { defaultLetter } from '$lib/schemas/letter';
 import { defaultInterviewLog } from '$lib/schemas/interview';
+import { defaultPersonnelFile } from '$lib/schemas/personnel';
+import { defaultIncidentReport } from '$lib/schemas/incident';
+import { defaultMissionBriefing } from '$lib/schemas/mission';
+import { defaultContainmentBreach } from '$lib/schemas/breach';
+import { defaultAnomalyCard } from '$lib/schemas/anomaly-card';
 
-export type Document = SCPDocument | ResearchReport | Letter | InterviewLog;
-export type DocumentType = 'scp' | 'research' | 'letter' | 'interview';
+export type Document = SCPDocument | ResearchReport | Letter | InterviewLog | PersonnelFile | IncidentReport | MissionBriefing | ContainmentBreach | AnomalyCard;
+export type DocumentType = 'scp' | 'research' | 'letter' | 'interview' | 'personnel' | 'incident' | 'mission' | 'breach' | 'anomaly-card';
 
 // Create the document store
 function createDocumentStore() {
@@ -31,6 +36,21 @@ function createDocumentStore() {
 					break;
 				case 'interview':
 					set({ ...defaultInterviewLog });
+					break;
+				case 'personnel':
+					set({ ...defaultPersonnelFile });
+					break;
+				case 'incident':
+					set({ ...defaultIncidentReport });
+					break;
+				case 'mission':
+					set({ ...defaultMissionBriefing });
+					break;
+				case 'breach':
+					set({ ...defaultContainmentBreach });
+					break;
+				case 'anomaly-card':
+					set({ ...defaultAnomalyCard });
 					break;
 			}
 		},
@@ -88,6 +108,16 @@ export const isDocumentValid = derived(documentStore, ($doc) => {
 			return !!$doc.subject && !!$doc.body && !!$doc.from.name && !!$doc.to.name;
 		case 'interview':
 			return !!$doc.logNumber && !!$doc.interviewer.name && !!$doc.interviewee.name;
+		case 'personnel':
+			return !!$doc.staffId && !!$doc.fullName;
+		case 'incident':
+			return !!$doc.incidentNumber && !!$doc.summary && !!$doc.location;
+		case 'mission':
+			return !!$doc.missionCode && !!$doc.objective && !!$doc.operationArea;
+		case 'breach':
+			return !!$doc.breachId && !!$doc.scpNumber && !!$doc.breachDescription;
+		case 'anomaly-card':
+			return !!$doc.itemNumber && !!$doc.briefDescription;
 		default:
 			return false;
 	}

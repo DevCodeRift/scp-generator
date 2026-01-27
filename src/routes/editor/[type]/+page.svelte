@@ -9,10 +9,20 @@
 	import ResearchForm from '$lib/components/editor/ResearchForm.svelte';
 	import LetterForm from '$lib/components/editor/LetterForm.svelte';
 	import InterviewForm from '$lib/components/editor/InterviewForm.svelte';
+	import PersonnelForm from '$lib/components/editor/PersonnelForm.svelte';
+	import IncidentForm from '$lib/components/editor/IncidentForm.svelte';
+	import MissionForm from '$lib/components/editor/MissionForm.svelte';
+	import BreachForm from '$lib/components/editor/BreachForm.svelte';
+	import AnomalyCardForm from '$lib/components/editor/AnomalyCardForm.svelte';
 	import SCPPreview from '$lib/components/preview/SCPPreview.svelte';
 	import ResearchPreview from '$lib/components/preview/ResearchPreview.svelte';
 	import LetterPreview from '$lib/components/preview/LetterPreview.svelte';
 	import InterviewPreview from '$lib/components/preview/InterviewPreview.svelte';
+	import PersonnelPreview from '$lib/components/preview/PersonnelPreview.svelte';
+	import IncidentPreview from '$lib/components/preview/IncidentPreview.svelte';
+	import MissionPreview from '$lib/components/preview/MissionPreview.svelte';
+	import BreachPreview from '$lib/components/preview/BreachPreview.svelte';
+	import AnomalyCardPreview from '$lib/components/preview/AnomalyCardPreview.svelte';
 	import { documentStore, type DocumentType } from '$lib/stores/document';
 	import { factionStore } from '$lib/stores/faction';
 
@@ -32,12 +42,19 @@
 		scp: 'SCP Entry',
 		research: 'Research Report',
 		letter: 'Letter / Memo',
-		interview: 'Interview Log'
+		interview: 'Interview Log',
+		personnel: 'Personnel File',
+		incident: 'Incident Report',
+		mission: 'Mission Briefing',
+		breach: 'Containment Breach',
+		'anomaly-card': 'Anomaly Card'
 	};
+
+	const validTypes = ['scp', 'research', 'letter', 'interview', 'personnel', 'incident', 'mission', 'breach', 'anomaly-card'];
 
 	onMount(() => {
 		// Validate document type
-		if (!['scp', 'research', 'letter', 'interview'].includes(docType)) {
+		if (!validTypes.includes(docType)) {
 			goto('/');
 			return;
 		}
@@ -227,6 +244,16 @@
 				<LetterForm />
 			{:else if docType === 'interview'}
 				<InterviewForm />
+			{:else if docType === 'personnel'}
+				<PersonnelForm />
+			{:else if docType === 'incident'}
+				<IncidentForm />
+			{:else if docType === 'mission'}
+				<MissionForm />
+			{:else if docType === 'breach'}
+				<BreachForm />
+			{:else if docType === 'anomaly-card'}
+				<AnomalyCardForm />
 			{/if}
 		</div>
 
@@ -269,6 +296,16 @@
 						<LetterPreview scale={previewScale} />
 					{:else if docType === 'interview'}
 						<InterviewPreview scale={previewScale} />
+					{:else if docType === 'personnel'}
+						<PersonnelPreview scale={previewScale} />
+					{:else if docType === 'incident'}
+						<IncidentPreview scale={previewScale} />
+					{:else if docType === 'mission'}
+						<MissionPreview scale={previewScale} />
+					{:else if docType === 'breach'}
+						<BreachPreview scale={previewScale} />
+					{:else if docType === 'anomaly-card'}
+						<AnomalyCardPreview scale={previewScale} />
 					{/if}
 				</div>
 			</div>
@@ -298,6 +335,16 @@
 				<LetterPreview scale={1} />
 			{:else if docType === 'interview'}
 				<InterviewPreview scale={1} />
+			{:else if docType === 'personnel'}
+				<PersonnelPreview scale={1} />
+			{:else if docType === 'incident'}
+				<IncidentPreview scale={1} />
+			{:else if docType === 'mission'}
+				<MissionPreview scale={1} />
+			{:else if docType === 'breach'}
+				<BreachPreview scale={1} />
+			{:else if docType === 'anomaly-card'}
+				<AnomalyCardPreview scale={1} />
 			{/if}
 		</div>
 	</div>

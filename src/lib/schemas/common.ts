@@ -18,7 +18,12 @@ export const DocumentTypeSchema = z.enum([
 	'scp',
 	'research',
 	'letter',
-	'interview'
+	'interview',
+	'personnel',
+	'incident',
+	'mission',
+	'breach',
+	'anomaly-card'
 ]);
 export type DocumentType = z.infer<typeof DocumentTypeSchema>;
 

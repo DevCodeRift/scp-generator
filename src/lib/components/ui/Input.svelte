@@ -3,7 +3,7 @@
 		value: string;
 		label?: string;
 		placeholder?: string;
-		type?: 'text' | 'date' | 'time' | 'email';
+		type?: 'text' | 'date' | 'time' | 'email' | 'number' | 'datetime-local';
 		required?: boolean;
 		disabled?: boolean;
 		error?: string;
