@@ -1,5 +1,5 @@
 import { writable, derived } from 'svelte/store';
-import type { SCPDocument, ResearchReport, Letter, InterviewLog, PersonnelFile, IncidentReport, MissionBriefing, ContainmentBreach, AnomalyCard, ExplorationLog, AutopsyReport, Directive, NewspaperClipping, AVLog } from '$lib/schemas';
+import type { SCPDocument, ResearchReport, Letter, InterviewLog, PersonnelFile, IncidentReport, MissionBriefing, ContainmentBreach, AnomalyCard, ExplorationLog, AutopsyReport, Directive, NewspaperClipping, AVLog, IDBadge } from '$lib/schemas';
 import { defaultSCPDocument } from '$lib/schemas/scp';
 import { defaultResearchReport } from '$lib/schemas/research';
 import { defaultLetter } from '$lib/schemas/letter';
@@ -14,9 +14,10 @@ import { defaultAutopsyReport } from '$lib/schemas/autopsy';
 import { defaultDirective } from '$lib/schemas/directive';
 import { defaultNewspaperClipping } from '$lib/schemas/newspaper';
 import { defaultAVLog } from '$lib/schemas/avlog';
+import { defaultIDBadge } from '$lib/schemas/id-badge';
 
-export type Document = SCPDocument | ResearchReport | Letter | InterviewLog | PersonnelFile | IncidentReport | MissionBriefing | ContainmentBreach | AnomalyCard | ExplorationLog | AutopsyReport | Directive | NewspaperClipping | AVLog;
-export type DocumentType = 'scp' | 'research' | 'letter' | 'interview' | 'personnel' | 'incident' | 'mission' | 'breach' | 'anomaly-card' | 'exploration' | 'autopsy' | 'directive' | 'newspaper' | 'avlog';
+export type Document = SCPDocument | ResearchReport | Letter | InterviewLog | PersonnelFile | IncidentReport | MissionBriefing | ContainmentBreach | AnomalyCard | ExplorationLog | AutopsyReport | Directive | NewspaperClipping | AVLog | IDBadge;
+export type DocumentType = 'scp' | 'research' | 'letter' | 'interview' | 'personnel' | 'incident' | 'mission' | 'breach' | 'anomaly-card' | 'exploration' | 'autopsy' | 'directive' | 'newspaper' | 'avlog' | 'id-badge';
 
 // Create the document store
 function createDocumentStore() {
@@ -71,6 +72,9 @@ function createDocumentStore() {
 					break;
 				case 'avlog':
 					set({ ...defaultAVLog });
+					break;
+				case 'id-badge':
+					set({ ...defaultIDBadge });
 					break;
 			}
 		},
@@ -148,6 +152,8 @@ export const isDocumentValid = derived(documentStore, ($doc) => {
 			return !!$doc.publicationName && !!$doc.headline && !!$doc.bodyContent;
 		case 'avlog':
 			return !!$doc.logDesignation;
+		case 'id-badge':
+			return !!$doc.staffId && !!$doc.fullName;
 		default:
 			return false;
 	}

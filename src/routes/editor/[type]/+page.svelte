@@ -5,6 +5,7 @@
 	import { browser } from '$app/environment';
 	import FactionSelector from '$lib/components/ui/FactionSelector.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
+	import ExportOptions, { type ExportSettings } from '$lib/components/ui/ExportOptions.svelte';
 	import SCPForm from '$lib/components/editor/SCPForm.svelte';
 	import ResearchForm from '$lib/components/editor/ResearchForm.svelte';
 	import LetterForm from '$lib/components/editor/LetterForm.svelte';
@@ -19,6 +20,7 @@
 	import DirectiveForm from '$lib/components/editor/DirectiveForm.svelte';
 	import NewspaperForm from '$lib/components/editor/NewspaperForm.svelte';
 	import AVLogForm from '$lib/components/editor/AVLogForm.svelte';
+	import IDBadgeForm from '$lib/components/editor/IDBadgeForm.svelte';
 	import SCPPreview from '$lib/components/preview/SCPPreview.svelte';
 	import ResearchPreview from '$lib/components/preview/ResearchPreview.svelte';
 	import LetterPreview from '$lib/components/preview/LetterPreview.svelte';
@@ -33,6 +35,7 @@
 	import DirectivePreview from '$lib/components/preview/DirectivePreview.svelte';
 	import NewspaperPreview from '$lib/components/preview/NewspaperPreview.svelte';
 	import AVLogPreview from '$lib/components/preview/AVLogPreview.svelte';
+	import IDBadgePreview from '$lib/components/preview/IDBadgePreview.svelte';
 	import { documentStore, type DocumentType } from '$lib/stores/document';
 	import { factionStore } from '$lib/stores/faction';
 
@@ -62,10 +65,11 @@
 		autopsy: 'Autopsy Report',
 		directive: 'O5 Directive',
 		newspaper: 'Newspaper Clipping',
-		avlog: 'Audio/Video Log'
+		avlog: 'Audio/Video Log',
+		'id-badge': 'ID Badge'
 	};
 
-	const validTypes = ['scp', 'research', 'letter', 'interview', 'personnel', 'incident', 'mission', 'breach', 'anomaly-card', 'exploration', 'autopsy', 'directive', 'newspaper', 'avlog'];
+	const validTypes = ['scp', 'research', 'letter', 'interview', 'personnel', 'incident', 'mission', 'breach', 'anomaly-card', 'exploration', 'autopsy', 'directive', 'newspaper', 'avlog', 'id-badge'];
 
 	onMount(() => {
 		// Validate document type
@@ -103,7 +107,29 @@
 		};
 	});
 
-	async function handleExport() {
+	function getExportFilename(extension: string): string {
+		// Try to get a meaningful name from the document
+		const doc = $documentStore;
+		if (doc) {
+			if ('staffId' in doc && doc.staffId) {
+				return `badge-${doc.staffId}.${extension}`;
+			}
+			if ('itemNumber' in doc && doc.itemNumber) {
+				return `SCP-${doc.itemNumber}.${extension}`;
+			}
+			if ('fullName' in doc && doc.fullName) {
+				const safeName = (doc.fullName as string).replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
+				return `${docType}-${safeName}.${extension}`;
+			}
+			if ('subject' in doc && doc.subject) {
+				const safeSubject = (doc.subject as string).substring(0, 30).replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
+				return `${docType}-${safeSubject}.${extension}`;
+			}
+		}
+		return `${docType}-document.${extension}`;
+	}
+
+	async function handleExportPDF(settings: ExportSettings) {
 		if (!browser) return;
 
 		isExporting = true;
@@ -126,19 +152,37 @@
 			// Dynamic import of html2pdf
 			const html2pdf = (await import('html2pdf.js')).default;
 
+			// Determine page format
+			let pageFormat: string = 'a4';
+			let customDimensions: number[] | null = null;
+
+			if (settings.format === 'letter') {
+				pageFormat = 'letter';
+			} else if (settings.format === 'fit') {
+				// Calculate dimensions based on content
+				const rect = previewElement.getBoundingClientRect();
+				const widthMm = (rect.width * 25.4) / 96; // px to mm
+				const heightMm = (rect.height * 25.4) / 96;
+				customDimensions = [widthMm + 20, heightMm + 20]; // Add margin
+			}
+
 			const opt = {
 				margin: 10,
-				filename: `${docType}-document.pdf`,
+				filename: getExportFilename('pdf'),
 				image: { type: 'jpeg', quality: 0.98 },
 				html2canvas: {
-					scale: 2,
+					scale: settings.scale,
 					useCORS: true,
 					logging: false
 				},
-				jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+				jsPDF: {
+					unit: 'mm',
+					format: customDimensions || pageFormat,
+					orientation: 'portrait'
+				}
 			};
 
-			await html2pdf().set(opt).from(previewElement).save();
+			await html2pdf().set(opt as Parameters<ReturnType<typeof html2pdf>['set']>[0]).from(previewElement).save();
 		} catch (error) {
 			console.error('Export failed:', error);
 			alert('Export failed. Please try again.');
@@ -149,7 +193,7 @@
 		}
 	}
 
-	async function handleExportImage() {
+	async function handleExportPNG(settings: ExportSettings) {
 		if (!browser) return;
 
 		isExporting = true;
@@ -173,8 +217,8 @@
 			const { domToPng } = await import('modern-screenshot');
 
 			const dataUrl = await domToPng(previewElement, {
-				scale: 2,
-				backgroundColor: '#f5f5f0',
+				scale: settings.scale,
+				backgroundColor: settings.transparent ? undefined : '#f5f5f0',
 				style: {
 					transform: 'none'
 				}
@@ -182,7 +226,7 @@
 
 			// Download the image
 			const link = document.createElement('a');
-			link.download = `${docType}-document.png`;
+			link.download = getExportFilename('png');
 			link.href = dataUrl;
 			link.click();
 		} catch (error) {
@@ -228,12 +272,11 @@
 					{showPreview ? 'Hide' : 'Show'} Preview
 				</Button>
 				<FactionSelector />
-				<Button variant="ghost" size="sm" onclick={handleExportImage} disabled={isExporting}>
-					{isExporting ? 'Exporting...' : 'Export PNG'}
-				</Button>
-				<Button variant="primary" size="sm" onclick={handleExport} disabled={isExporting}>
-					{isExporting ? 'Exporting...' : 'Export PDF'}
-				</Button>
+				<ExportOptions
+					{isExporting}
+					onExportPNG={handleExportPNG}
+					onExportPDF={handleExportPDF}
+				/>
 			</div>
 		</div>
 	</header>
@@ -279,6 +322,8 @@
 				<NewspaperForm />
 			{:else if docType === 'avlog'}
 				<AVLogForm />
+			{:else if docType === 'id-badge'}
+				<IDBadgeForm />
 			{/if}
 		</div>
 
@@ -341,6 +386,8 @@
 						<NewspaperPreview scale={previewScale} />
 					{:else if docType === 'avlog'}
 						<AVLogPreview scale={previewScale} />
+					{:else if docType === 'id-badge'}
+						<IDBadgePreview scale={previewScale} />
 					{/if}
 				</div>
 			</div>
@@ -390,6 +437,8 @@
 				<NewspaperPreview scale={1} />
 			{:else if docType === 'avlog'}
 				<AVLogPreview scale={1} />
+			{:else if docType === 'id-badge'}
+				<IDBadgePreview scale={1} />
 			{/if}
 		</div>
 	</div>

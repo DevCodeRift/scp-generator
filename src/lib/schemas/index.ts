@@ -14,3 +14,4 @@ export * from './autopsy';
 export * from './directive';
 export * from './newspaper';
 export * from './avlog';
+export * from './id-badge';
