@@ -8,10 +8,45 @@
 	import PersonnelTracker from '$lib/components/session/PersonnelTracker.svelte';
 	import CommsLog from '$lib/components/session/CommsLog.svelte';
 	import QuickRollers from '$lib/components/session/QuickRollers.svelte';
-	import { sessionStore, sessionStats, ALERT_LEVELS } from '$lib/stores/session';
+	import { sessionStore, sessionStats, ALERT_LEVELS, type SessionState } from '$lib/stores/session';
 
-	let session = $derived($sessionStore);
-	let stats = $derived($sessionStats);
+	// Use $state to hold the store value and subscribe manually for better Svelte 5 compatibility
+	let session = $state<SessionState>({
+		id: '',
+		siteName: 'Site-19',
+		startedAt: '',
+		alertLevel: 'green',
+		lockdownZones: [],
+		powerStatus: 'normal',
+		commsStatus: 'normal',
+		containment: [],
+		personnel: [],
+		commsLog: []
+	});
+
+	let stats = $state({
+		totalSCPs: 0,
+		breached: 0,
+		contained: 0,
+		totalPersonnel: 0,
+		active: 0,
+		casualties: 0,
+		commsCount: 0
+	});
+
+	// Subscribe to stores
+	$effect(() => {
+		const unsubSession = sessionStore.subscribe(value => {
+			session = value;
+		});
+		const unsubStats = sessionStats.subscribe(value => {
+			stats = value;
+		});
+		return () => {
+			unsubSession();
+			unsubStats();
+		};
+	});
 
 	// New session form state
 	let newSiteName = $state('Site-19');
