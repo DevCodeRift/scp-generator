@@ -27,8 +27,8 @@
 			return;
 		}
 
-		if (file.size > 500 * 1024 * 1024) {
-			error = 'File too large. Maximum size: 500MB';
+		if (file.size > 1024 * 1024 * 1024) {
+			error = 'File too large. Maximum size: 1GB';
 			return;
 		}
 
@@ -145,7 +145,7 @@
 				Drop a video clip here or click to browse
 			</div>
 			<div class="text-sm text-[var(--color-text-muted)]">
-				Supports MP4, WebM, AVI, MOV, MKV (max 500MB)
+				Supports MP4, WebM, AVI, MOV, MKV (max 1GB)
 			</div>
 		</label>
 	{/if}

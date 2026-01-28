@@ -15,8 +15,8 @@ services:
       - BODY_SIZE_LIMIT=Infinity
       - VIDEO_TEMP_DIR=/tmp/video-processing
     labels:
-      # Traefik: allow large video uploads (500MB)
-      - "traefik.http.middlewares.scp-body-size.buffering.maxRequestBodyBytes=524288000"
+      # Traefik: allow large video uploads (1GB)
+      - "traefik.http.middlewares.scp-body-size.buffering.maxRequestBodyBytes=1073741824"
       - "traefik.http.middlewares.scp-body-size.buffering.memRequestBodyBytes=2097152"
     restart: unless-stopped
     healthcheck:
