@@ -37,9 +37,6 @@
 		uploadProgress = 0;
 
 		try {
-			const formData = new FormData();
-			formData.append('video', file);
-
 			const xhr = new XMLHttpRequest();
 			const result = await new Promise<UploadResult>((resolve, reject) => {
 				xhr.upload.addEventListener('progress', (e) => {
@@ -65,7 +62,9 @@
 				xhr.addEventListener('abort', () => reject(new Error('Upload cancelled')));
 
 				xhr.open('POST', '/api/video/upload');
-				xhr.send(formData);
+				xhr.setRequestHeader('X-Filename', encodeURIComponent(file.name));
+				xhr.setRequestHeader('Content-Type', 'application/octet-stream');
+				xhr.send(file);
 			});
 
 			onUploadComplete(result);

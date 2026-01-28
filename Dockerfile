@@ -53,7 +53,7 @@ EXPOSE 3000
 ENV NODE_ENV=production
 ENV PORT=3000
 ENV HOST=0.0.0.0
-ENV BODY_SIZE_LIMIT=524288000
+ENV BODY_SIZE_LIMIT=Infinity
 ENV VIDEO_TEMP_DIR=/tmp/video-processing
 
 # Start the application

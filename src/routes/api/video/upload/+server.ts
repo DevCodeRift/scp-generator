@@ -1,78 +1,104 @@
 import { json, error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { writeFile, mkdir } from 'fs/promises';
+import { createWriteStream } from 'fs';
+import { mkdir, unlink } from 'fs/promises';
 import { existsSync } from 'fs';
+import { Readable, Transform } from 'stream';
+import { pipeline } from 'stream/promises';
 import { createJob, updateJob, getTempDir } from '$lib/server/job-manager';
 import { probeVideo, extractVideoMeta } from '$lib/server/video-processor';
 
 const MAX_FILE_SIZE = 500 * 1024 * 1024; // 500MB
-const ALLOWED_TYPES = ['video/mp4', 'video/webm', 'video/x-msvideo', 'video/quicktime', 'video/x-matroska'];
 const ALLOWED_EXTENSIONS = ['.mp4', '.webm', '.avi', '.mov', '.mkv'];
 
 export const POST: RequestHandler = async ({ request }) => {
+	const rawFilename = request.headers.get('x-filename') || 'upload.mp4';
+	const filename = decodeURIComponent(rawFilename);
+	const contentLength = parseInt(request.headers.get('content-length') || '0', 10);
+
+	// Validate extension
+	const ext = '.' + (filename.split('.').pop()?.toLowerCase() || '');
+	if (!ALLOWED_EXTENSIONS.includes(ext)) {
+		throw error(400, `Unsupported file type. Allowed: ${ALLOWED_EXTENSIONS.join(', ')}`);
+	}
+
+	// Early reject based on content-length header
+	if (contentLength > MAX_FILE_SIZE) {
+		throw error(400, `File too large. Maximum size: ${MAX_FILE_SIZE / 1024 / 1024}MB`);
+	}
+
+	if (!request.body) {
+		throw error(400, 'No file data provided');
+	}
+
+	// Ensure temp directory exists
+	const tempDir = getTempDir();
+	if (!existsSync(tempDir)) {
+		await mkdir(tempDir, { recursive: true });
+	}
+
+	// Create job
+	const job = createJob(filename);
+
+	// Stream the request body directly to disk (no memory buffering)
+	let bytesWritten = 0;
+
+	const sizeTracker = new Transform({
+		transform(chunk, _encoding, callback) {
+			bytesWritten += chunk.length;
+			if (bytesWritten > MAX_FILE_SIZE) {
+				callback(new Error(`File exceeds maximum size of ${MAX_FILE_SIZE / 1024 / 1024}MB`));
+			} else {
+				callback(null, chunk);
+			}
+		}
+	});
+
 	try {
-		const formData = await request.formData();
-		const file = formData.get('video');
-
-		if (!file || !(file instanceof File)) {
-			throw error(400, 'No video file provided');
-		}
-
-		// Validate file type
-		const ext = '.' + (file.name.split('.').pop()?.toLowerCase() || '');
-		if (!ALLOWED_EXTENSIONS.includes(ext) && !ALLOWED_TYPES.includes(file.type)) {
-			throw error(400, `Unsupported file type. Allowed: ${ALLOWED_EXTENSIONS.join(', ')}`);
-		}
-
-		// Validate file size
-		if (file.size > MAX_FILE_SIZE) {
-			throw error(400, `File too large. Maximum size: ${MAX_FILE_SIZE / 1024 / 1024}MB`);
-		}
-
-		// Ensure temp directory exists
-		const tempDir = getTempDir();
-		if (!existsSync(tempDir)) {
-			await mkdir(tempDir, { recursive: true });
-		}
-
-		// Create job and save file
-		const job = createJob(file.name);
-		const buffer = Buffer.from(await file.arrayBuffer());
-		await writeFile(job.inputPath, buffer);
-
-		// Update job status
-		updateJob(job.id, { status: 'uploaded', fileSize: file.size });
-
-		// Probe video for metadata
-		try {
-			const probeData = await probeVideo(job.inputPath);
-			const meta = extractVideoMeta(probeData);
-			updateJob(job.id, {
-				duration: meta.duration,
-				resolution: meta.resolution,
-				fileSize: meta.fileSize || file.size
-			});
-
-			return json({
-				jobId: job.id,
-				filename: file.name,
-				duration: meta.duration,
-				resolution: meta.resolution,
-				fileSize: meta.fileSize || file.size
-			});
-		} catch {
-			// If probe fails, still return job (user can try processing)
-			return json({
-				jobId: job.id,
-				filename: file.name,
-				fileSize: file.size,
-				duration: null,
-				resolution: null
-			});
-		}
+		// Convert Web ReadableStream to Node.js Readable
+		const nodeReadable = Readable.fromWeb(request.body as import('stream/web').ReadableStream);
+		const writeStream = createWriteStream(job.inputPath);
+		await pipeline(nodeReadable, sizeTracker, writeStream);
 	} catch (e) {
-		if (e && typeof e === 'object' && 'status' in e) throw e;
-		console.error('[upload] Error:', e);
-		throw error(500, 'Upload failed');
+		// Clean up partial file on failure
+		try {
+			if (existsSync(job.inputPath)) await unlink(job.inputPath);
+		} catch { /* ignore cleanup error */ }
+
+		if (e instanceof Error && e.message.includes('maximum size')) {
+			throw error(400, e.message);
+		}
+		console.error('[upload] Stream error:', e);
+		throw error(500, 'Upload failed - connection interrupted');
+	}
+
+	updateJob(job.id, { status: 'uploaded', fileSize: bytesWritten });
+
+	// Probe video for metadata
+	try {
+		const probeData = await probeVideo(job.inputPath);
+		const meta = extractVideoMeta(probeData);
+		updateJob(job.id, {
+			duration: meta.duration,
+			resolution: meta.resolution,
+			fileSize: meta.fileSize || bytesWritten
+		});
+
+		return json({
+			jobId: job.id,
+			filename,
+			duration: meta.duration,
+			resolution: meta.resolution,
+			fileSize: meta.fileSize || bytesWritten
+		});
+	} catch {
+		// If probe fails, still return job (user can try processing)
+		return json({
+			jobId: job.id,
+			filename,
+			fileSize: bytesWritten,
+			duration: null,
+			resolution: null
+		});
 	}
 };

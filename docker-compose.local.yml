@@ -12,8 +12,12 @@ services:
       - PORT=3000
       - HOST=0.0.0.0
       - ORIGIN=http://localhost:3000
-      - BODY_SIZE_LIMIT=524288000
+      - BODY_SIZE_LIMIT=Infinity
       - VIDEO_TEMP_DIR=/tmp/video-processing
+    labels:
+      # Traefik: allow large video uploads (500MB)
+      - "traefik.http.middlewares.scp-body-size.buffering.maxRequestBodyBytes=524288000"
+      - "traefik.http.middlewares.scp-body-size.buffering.memRequestBodyBytes=2097152"
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "wget", "-q", "--spider", "http://localhost:3000"]
