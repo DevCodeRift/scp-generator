@@ -12,6 +12,8 @@ services:
       - PORT=3000
       - HOST=0.0.0.0
       - ORIGIN=http://localhost:3000
+      - BODY_SIZE_LIMIT=524288000
+      - VIDEO_TEMP_DIR=/tmp/video-processing
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "wget", "-q", "--spider", "http://localhost:3000"]
