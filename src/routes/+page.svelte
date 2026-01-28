@@ -60,6 +60,11 @@
 		{ id: 'event', name: 'Event Roller', description: 'Random events' }
 	];
 
+	const tools = [
+		{ href: '/templates', name: 'DAT Templates', description: 'Import & view Gmod .dat files' },
+		{ href: '/video', name: 'Body Cam Processor', description: 'Add SCP effects to video clips' }
+	];
+
 	let currentFaction = $derived(FACTIONS.find(f => f.id === $factionStore));
 	let activeCategory = $state<string | null>(null);
 </script>
@@ -212,6 +217,24 @@
 								>
 									<span class="group-hover:text-[var(--color-accent)]">{gen.name}</span>
 									<span class="text-xs text-[var(--color-text-muted)]">{gen.description}</span>
+								</a>
+							{/each}
+						</div>
+					</div>
+
+					<!-- Tools -->
+					<div class="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-4">
+						<h3 class="font-bold mb-4 flex items-center gap-2 text-sm uppercase tracking-wide">
+							<span class="text-[var(--color-accent)]">//</span> Tools
+						</h3>
+						<div class="space-y-2">
+							{#each tools as tool}
+								<a
+									href={tool.href}
+									class="flex items-center justify-between p-2 rounded hover:bg-[var(--color-primary)] transition-colors group"
+								>
+									<span class="group-hover:text-[var(--color-accent)]">{tool.name}</span>
+									<span class="text-xs text-[var(--color-text-muted)]">{tool.description}</span>
 								</a>
 							{/each}
 						</div>

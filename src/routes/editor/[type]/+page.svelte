@@ -38,6 +38,7 @@
 	import IDBadgePreview from '$lib/components/preview/IDBadgePreview.svelte';
 	import { documentStore, type DocumentType } from '$lib/stores/document';
 	import { factionStore } from '$lib/stores/faction';
+	import { convertAppDocumentToDat, downloadDatFile } from '$lib/dat/serializer';
 
 	let docType = $derived($page.params.type as DocumentType);
 	let showPreview = $state(true);
@@ -239,6 +240,21 @@
 		}
 	}
 
+	function handleExportDAT() {
+		const doc = $documentStore;
+		if (!doc) {
+			alert('No document to export');
+			return;
+		}
+		try {
+			const datDoc = convertAppDocumentToDat(doc);
+			downloadDatFile(datDoc, getExportFilename('dat'));
+		} catch (error) {
+			console.error('DAT export failed:', error);
+			alert('DAT export failed. Please try again.');
+		}
+	}
+
 	function handleNewDocument() {
 		if (confirm('Start a new document? Current changes will be saved.')) {
 			documentStore.initDocument(docType);
@@ -276,6 +292,7 @@
 					{isExporting}
 					onExportPNG={handleExportPNG}
 					onExportPDF={handleExportPDF}
+					onExportDAT={handleExportDAT}
 				/>
 			</div>
 		</div>

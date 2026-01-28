@@ -25,9 +25,16 @@ FROM node:20-alpine AS runner
 
 WORKDIR /app
 
+# Install FFmpeg for video processing
+RUN apk add --no-cache ffmpeg
+
 # Create non-root user for security
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 sveltekit
+
+# Create temp directory for video processing
+RUN mkdir -p /tmp/video-processing && \
+    chown sveltekit:nodejs /tmp/video-processing
 
 # Copy built application
 COPY --from=builder --chown=sveltekit:nodejs /app/build ./build

@@ -5,6 +5,7 @@
 		isExporting: boolean;
 		onExportPNG: (options: ExportSettings) => void;
 		onExportPDF: (options: ExportSettings) => void;
+		onExportDAT?: () => void;
 	}
 
 	export interface ExportSettings {
@@ -13,7 +14,7 @@
 		transparent: boolean;
 	}
 
-	let { isExporting, onExportPNG, onExportPDF }: Props = $props();
+	let { isExporting, onExportPNG, onExportPDF, onExportDAT }: Props = $props();
 
 	let showDropdown = $state(false);
 	let scale = $state(2);
@@ -28,6 +29,13 @@
 	function handleExportPDF() {
 		onExportPDF({ scale, format, transparent: false });
 		showDropdown = false;
+	}
+
+	function handleExportDAT() {
+		if (onExportDAT) {
+			onExportDAT();
+			showDropdown = false;
+		}
 	}
 
 	function handleClickOutside(e: MouseEvent) {
@@ -113,6 +121,15 @@
 				>
 					PDF
 				</button>
+				{#if onExportDAT}
+					<button
+						class="flex-1 bg-amber-700 text-white text-sm font-bold py-2 px-3 rounded hover:opacity-90 transition-opacity"
+						onclick={handleExportDAT}
+						disabled={isExporting}
+					>
+						DAT
+					</button>
+				{/if}
 			</div>
 
 			<div class="mt-3 text-xs text-[var(--color-text-muted)] text-center">

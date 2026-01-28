@@ -1,0 +1,180 @@
+<script lang="ts">
+	import DatImport from '$lib/components/ui/DatImport.svelte';
+	import DatPreview from '$lib/components/preview/DatPreview.svelte';
+	import { getDatDocumentTitle, getDatDocumentStats } from '$lib/dat/parser';
+	import { downloadDatFile } from '$lib/dat/serializer';
+	import type { DatDocument } from '$lib/dat/types';
+	import Button from '$lib/components/ui/Button.svelte';
+	import FactionSelector from '$lib/components/ui/FactionSelector.svelte';
+
+	let importedDocs = $state<Array<{ doc: DatDocument; title: string }>>([]);
+	let selectedDoc = $state<DatDocument | null>(null);
+	let previewScale = $state(0.8);
+
+	function handleImport(doc: DatDocument, title: string) {
+		importedDocs = [...importedDocs, { doc, title }];
+		selectedDoc = doc;
+	}
+
+	function handleRemove(index: number) {
+		const removed = importedDocs[index];
+		importedDocs = importedDocs.filter((_, i) => i !== index);
+		if (selectedDoc === removed.doc) {
+			selectedDoc = importedDocs.length > 0 ? importedDocs[0].doc : null;
+		}
+	}
+
+	function handleDownload(doc: DatDocument) {
+		const title = getDatDocumentTitle(doc);
+		downloadDatFile(doc, `${title}.dat`);
+	}
+
+	function formatDate(date: Date | null): string {
+		if (!date) return 'Unknown';
+		return date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+	}
+</script>
+
+<svelte:head>
+	<title>DAT Templates | SCP Document Generator</title>
+</svelte:head>
+
+<div class="min-h-screen flex flex-col bg-[var(--color-background)]">
+	<!-- Header -->
+	<header class="border-b border-[var(--color-border)] bg-[var(--color-surface)] sticky top-0 z-40">
+		<div class="max-w-[1800px] mx-auto px-4 py-3 flex items-center justify-between">
+			<div class="flex items-center gap-4">
+				<a href="/" class="text-xl font-terminal crt-glow text-[var(--color-accent)] hover:opacity-80">
+					SCP://DOCGEN
+				</a>
+				<span class="text-[var(--color-text-muted)]">/</span>
+				<span class="text-sm font-bold uppercase">DAT Templates</span>
+			</div>
+			<FactionSelector />
+		</div>
+	</header>
+
+	<main class="flex-1">
+		<div class="max-w-[1800px] mx-auto px-4 py-6">
+			<div class="grid lg:grid-cols-[1fr_1fr] gap-6">
+				<!-- Left: Import & List -->
+				<div class="space-y-6">
+					<!-- Import Zone -->
+					<div class="terminal-window">
+						<div class="terminal-header bg-gray-900">IMPORT .DAT TEMPLATE</div>
+						<div class="p-4">
+							<DatImport onImport={handleImport} />
+						</div>
+					</div>
+
+					<!-- Imported Templates List -->
+					{#if importedDocs.length > 0}
+						<div class="terminal-window">
+							<div class="terminal-header bg-gray-900">
+								LOADED TEMPLATES ({importedDocs.length})
+							</div>
+							<div class="divide-y divide-[var(--color-border)]">
+								{#each importedDocs as { doc, title }, i}
+									{@const stats = getDatDocumentStats(doc)}
+									<div
+										class="p-4 flex items-center justify-between hover:bg-[var(--color-primary)] cursor-pointer transition-colors
+											{selectedDoc === doc ? 'bg-[var(--color-accent)]/10 border-l-2 border-l-[var(--color-accent)]' : ''}"
+										role="button"
+										tabindex="0"
+										onclick={() => (selectedDoc = doc)}
+										onkeydown={(e) => e.key === 'Enter' && (selectedDoc = doc)}
+									>
+										<div>
+											<div class="font-bold text-sm">{title}</div>
+											<div class="text-xs text-[var(--color-text-muted)] mt-1 space-x-3">
+												<span>{stats.pages} pages</span>
+												<span>{stats.totalElements} elements</span>
+												{#if stats.signatures > 0}
+													<span>{stats.signatures} signatures</span>
+												{/if}
+												{#if stats.images > 0}
+													<span>{stats.images} images</span>
+												{/if}
+												{#if stats.checkboxes > 0}
+													<span>{stats.checkboxes} checkboxes</span>
+												{/if}
+											</div>
+											<div class="text-xs text-[var(--color-text-muted)] mt-0.5">
+												Type: {doc.type} | Created: {formatDate(stats.date)}
+											</div>
+										</div>
+										<div class="flex items-center gap-2">
+											<Button
+												variant="ghost"
+												size="sm"
+												onclick={(e) => {
+													e.stopPropagation();
+													handleDownload(doc);
+												}}
+											>
+												Save
+											</Button>
+											<button
+												class="text-red-500 hover:text-red-400 text-sm px-2"
+												onclick={(e) => {
+													e.stopPropagation();
+													handleRemove(i);
+												}}
+											>
+												x
+											</button>
+										</div>
+									</div>
+								{/each}
+							</div>
+						</div>
+					{/if}
+
+					<!-- Info -->
+					<div class="text-xs text-[var(--color-text-muted)] space-y-1 p-4">
+						<p>DAT files are JSON-formatted document templates used by Gmod SCP RP addons.</p>
+						<p>Import .dat files to view their structure, or export app documents to .dat format from the editor.</p>
+					</div>
+				</div>
+
+				<!-- Right: Preview -->
+				<div class="space-y-4">
+					{#if selectedDoc}
+						<div class="sticky top-16">
+							<!-- Preview Controls -->
+							<div class="bg-gray-900 border border-gray-700 rounded-t-lg p-2 flex items-center justify-between">
+								<span class="text-xs text-gray-400 uppercase tracking-wide">Document Preview</span>
+								<div class="flex items-center gap-2">
+									<button
+										class="text-xs text-gray-400 hover:text-white px-2 py-1"
+										onclick={() => (previewScale = Math.max(0.4, previewScale - 0.1))}
+									>
+										-
+									</button>
+									<span class="text-xs text-gray-400 w-12 text-center">
+										{Math.round(previewScale * 100)}%
+									</span>
+									<button
+										class="text-xs text-gray-400 hover:text-white px-2 py-1"
+										onclick={() => (previewScale = Math.min(1.2, previewScale + 0.1))}
+									>
+										+
+									</button>
+								</div>
+							</div>
+							<!-- Preview Content -->
+							<div class="bg-gray-800 border border-t-0 border-gray-700 rounded-b-lg p-4 overflow-auto max-h-[80vh]">
+								<DatPreview document={selectedDoc} scale={previewScale} />
+							</div>
+						</div>
+					{:else}
+						<div class="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-16 text-center">
+							<div class="text-4xl text-[var(--color-text-muted)] mb-4">&#128196;</div>
+							<p class="text-[var(--color-text-muted)]">Import a .dat file to preview it here</p>
+						</div>
+					{/if}
+				</div>
+			</div>
+		</div>
+	</main>
+</div>
