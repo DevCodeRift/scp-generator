@@ -87,10 +87,50 @@
 	</header>
 
 	<main class="flex-1">
-		<div class="max-w-[1800px] mx-auto px-4 py-6">
-			<div class="grid lg:grid-cols-[1fr_1fr] gap-6">
-				<!-- Left: Import & List -->
-				<div class="space-y-6">
+		{#if editMode && selectedDoc && selectedDocIndex !== null}
+			<!-- Full-width Edit Mode (Google Docs style) -->
+			<div class="edit-mode-container">
+				<!-- Sticky Toolbar -->
+				<div class="edit-toolbar">
+					<div class="edit-toolbar-inner">
+						<div class="flex items-center gap-4">
+							<button
+								class="text-sm px-3 py-1.5 rounded bg-gray-700 text-gray-200 hover:bg-gray-600 flex items-center gap-2"
+								onclick={() => (editMode = false)}
+							>
+								<span>&larr;</span> Back to Templates
+							</button>
+							<span class="text-sm text-gray-400 font-medium">
+								{getDatDocumentTitle(selectedDoc)}
+							</span>
+						</div>
+						<div class="flex items-center gap-3">
+							<Button
+								variant="ghost"
+								size="sm"
+								onclick={() => selectedDoc && handleDownload(selectedDoc)}
+							>
+								Download .dat
+							</Button>
+						</div>
+					</div>
+				</div>
+
+				<!-- Editor Content -->
+				<div class="edit-content">
+					<DatEditor
+						bind:document={importedDocs[selectedDocIndex].doc}
+						scale={1}
+						onUpdate={handleDocUpdate}
+					/>
+				</div>
+			</div>
+		{:else}
+			<!-- Normal two-column layout -->
+			<div class="max-w-[1800px] mx-auto px-4 py-6">
+				<div class="grid lg:grid-cols-[1fr_1fr] gap-6">
+					<!-- Left: Import & List -->
+					<div class="space-y-6">
 					<!-- Preset Templates -->
 					<div class="terminal-window">
 						<div class="terminal-header bg-gray-900">PRESET TEMPLATES</div>
@@ -267,5 +307,50 @@
 				</div>
 			</div>
 		</div>
+		{/if}
 	</main>
 </div>
+
+<style>
+	.edit-mode-container {
+		min-height: calc(100vh - 60px);
+		background: #1a1a1a;
+	}
+
+	.edit-toolbar {
+		position: sticky;
+		top: 60px;
+		z-index: 30;
+		background: #111;
+		border-bottom: 1px solid #333;
+		padding: 0.75rem 0;
+	}
+
+	.edit-toolbar-inner {
+		max-width: 900px;
+		margin: 0 auto;
+		padding: 0 1rem;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.edit-content {
+		max-width: 900px;
+		margin: 0 auto;
+		padding: 2rem 1rem 4rem;
+	}
+
+	/* Override DatEditor styles for full-width mode */
+	.edit-content :global(.dat-editor) {
+		max-width: 100%;
+	}
+
+	.edit-content :global(.dat-page) {
+		padding: 3rem;
+	}
+
+	.edit-content :global(.element-controls) {
+		right: -40px;
+	}
+</style>

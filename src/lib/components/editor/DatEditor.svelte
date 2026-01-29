@@ -301,12 +301,16 @@
 	.dat-toolbar {
 		display: flex;
 		gap: 1rem;
-		padding: 0.75rem;
+		padding: 0.75rem 1rem;
 		background: #1a1a1a;
 		border: 1px solid #333;
 		border-radius: 4px;
 		margin-bottom: 1rem;
 		flex-wrap: wrap;
+		position: sticky;
+		top: 110px;
+		z-index: 20;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 	}
 
 	.toolbar-section {
@@ -340,7 +344,6 @@
 	.dat-editor {
 		font-family: 'Courier Prime', 'Courier New', monospace;
 		color: #1a1a1a;
-		max-width: 700px;
 	}
 
 	.dat-page {
