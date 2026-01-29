@@ -2,6 +2,15 @@ import ffmpeg from 'fluent-ffmpeg';
 import type { VideoEffects } from '$lib/schemas/video-effects';
 import { OUTPUT_QUALITY_INFO } from '$lib/schemas/video-effects';
 import { updateJob } from './job-manager';
+import { existsSync } from 'fs';
+import { mkdir } from 'fs/promises';
+import { dirname } from 'path';
+
+// Use DejaVu Mono in Docker (Alpine), fall back to Courier for local dev
+const DOCKER_FONT = '/usr/share/fonts/dejavu/DejaVuSansMono.ttf';
+const fontSpec = existsSync(DOCKER_FONT)
+	? `fontfile=${DOCKER_FONT}`
+	: 'font=Courier';
 
 /**
  * Probe a video file to get metadata (duration, resolution, etc.).
@@ -81,21 +90,21 @@ export function buildFilterChain(effects: VideoEffects): string {
 	if (effects.facilityId) {
 		const escapedText = effects.facilityId.replace(/'/g, "\\'").replace(/:/g, '\\:');
 		filters.push(
-			`drawtext=text='${escapedText}':x=20:y=20:fontsize=18:fontcolor=white@0.7:font=Courier:borderw=1:bordercolor=black@0.5`
+			`drawtext=text='${escapedText}':x=20:y=20:fontsize=18:fontcolor=white@0.7:${fontSpec}:borderw=1:bordercolor=black@0.5`
 		);
 	}
 
 	// 7. Timestamp
 	if (effects.timestamp) {
 		filters.push(
-			"drawtext=text='%{pts\\:hms}':x=w-200:y=20:fontsize=18:fontcolor=white@0.7:font=Courier:borderw=1:bordercolor=black@0.5"
+			`drawtext=text='%{pts\\:hms}':x=w-200:y=20:fontsize=18:fontcolor=white@0.7:${fontSpec}:borderw=1:bordercolor=black@0.5`
 		);
 	}
 
 	// 8. REC indicator
 	if (effects.recIndicator) {
 		filters.push(
-			"drawtext=text='REC':x=20:y=h-40:fontsize=16:fontcolor=red@0.9:font=Courier:borderw=1:bordercolor=black@0.5:enable='lt(mod(t\\,2)\\,1.5)'"
+			`drawtext=text='REC':x=20:y=h-40:fontsize=16:fontcolor=red@0.9:${fontSpec}:borderw=1:bordercolor=black@0.5:enable='lt(mod(t\\,2)\\,1.5)'`
 		);
 		filters.push(
 			"drawbox=x=56:y=h-38:w=8:h=8:color=red@0.9:t=fill:enable='lt(mod(t\\,2)\\,1.5)'"
@@ -109,12 +118,18 @@ export function buildFilterChain(effects: VideoEffects): string {
  * Process a video with SCP body cam effects.
  * Returns a promise that resolves when processing is complete.
  */
-export function processVideo(
+export async function processVideo(
 	jobId: string,
 	inputPath: string,
 	outputPath: string,
 	effects: VideoEffects
 ): Promise<void> {
+	// Ensure output directory exists
+	const outDir = dirname(outputPath);
+	if (!existsSync(outDir)) {
+		await mkdir(outDir, { recursive: true });
+	}
+
 	return new Promise((resolve, reject) => {
 		const filterChain = buildFilterChain(effects);
 		const qualityInfo = OUTPUT_QUALITY_INFO[effects.outputQuality];

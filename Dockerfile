@@ -25,8 +25,8 @@ FROM node:20-alpine AS runner
 
 WORKDIR /app
 
-# Install FFmpeg for video processing
-RUN apk add --no-cache ffmpeg
+# Install FFmpeg for video processing + fonts for drawtext filter overlays
+RUN apk add --no-cache ffmpeg ttf-dejavu fontconfig
 
 # Create non-root user for security
 RUN addgroup --system --gid 1001 nodejs && \
