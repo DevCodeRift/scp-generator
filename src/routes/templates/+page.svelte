@@ -1,6 +1,7 @@
 <script lang="ts">
 	import DatImport from '$lib/components/ui/DatImport.svelte';
 	import DatPreview from '$lib/components/preview/DatPreview.svelte';
+	import DatEditor from '$lib/components/editor/DatEditor.svelte';
 	import { getDatDocumentTitle, getDatDocumentStats } from '$lib/dat/parser';
 	import { downloadDatFile } from '$lib/dat/serializer';
 	import { PRESET_TEMPLATES, loadPresetTemplate } from '$lib/dat/presets';
@@ -9,14 +10,27 @@
 	import FactionSelector from '$lib/components/ui/FactionSelector.svelte';
 
 	let importedDocs = $state<Array<{ doc: DatDocument; title: string }>>([]);
-	let selectedDoc = $state<DatDocument | null>(null);
+	let selectedDocIndex = $state<number | null>(null);
 	let previewScale = $state(0.8);
 	let loadingPreset = $state<string | null>(null);
 	let presetError = $state<string | null>(null);
+	let editMode = $state(false);
+
+	// Derived selected document
+	let selectedDoc = $derived(selectedDocIndex !== null ? importedDocs[selectedDocIndex]?.doc : null);
 
 	function handleImport(doc: DatDocument, title: string) {
 		importedDocs = [...importedDocs, { doc, title }];
-		selectedDoc = doc;
+		selectedDocIndex = importedDocs.length - 1;
+	}
+
+	function handleDocUpdate(updatedDoc: DatDocument) {
+		if (selectedDocIndex !== null) {
+			importedDocs[selectedDocIndex] = {
+				...importedDocs[selectedDocIndex],
+				doc: updatedDoc
+			};
+		}
 	}
 
 	async function handleLoadPreset(id: string) {
@@ -34,10 +48,11 @@
 	}
 
 	function handleRemove(index: number) {
-		const removed = importedDocs[index];
 		importedDocs = importedDocs.filter((_, i) => i !== index);
-		if (selectedDoc === removed.doc) {
-			selectedDoc = importedDocs.length > 0 ? importedDocs[0].doc : null;
+		if (selectedDocIndex === index) {
+			selectedDocIndex = importedDocs.length > 0 ? 0 : null;
+		} else if (selectedDocIndex !== null && selectedDocIndex > index) {
+			selectedDocIndex--;
 		}
 	}
 
@@ -127,11 +142,11 @@
 									{@const stats = getDatDocumentStats(doc)}
 									<div
 										class="p-4 flex items-center justify-between hover:bg-[var(--color-primary)] cursor-pointer transition-colors
-											{selectedDoc === doc ? 'bg-[var(--color-accent)]/10 border-l-2 border-l-[var(--color-accent)]' : ''}"
+											{selectedDocIndex === i ? 'bg-[var(--color-accent)]/10 border-l-2 border-l-[var(--color-accent)]' : ''}"
 										role="button"
 										tabindex="0"
-										onclick={() => (selectedDoc = doc)}
-										onkeydown={(e) => e.key === 'Enter' && (selectedDoc = doc)}
+										onclick={() => (selectedDocIndex = i)}
+										onkeydown={(e) => e.key === 'Enter' && (selectedDocIndex = i)}
 									>
 										<div>
 											<div class="font-bold text-sm">{title}</div>
@@ -186,34 +201,61 @@
 					</div>
 				</div>
 
-				<!-- Right: Preview -->
+				<!-- Right: Preview/Editor -->
 				<div class="space-y-4">
-					{#if selectedDoc}
+					{#if selectedDoc && selectedDocIndex !== null}
 						<div class="sticky top-16">
-							<!-- Preview Controls -->
+							<!-- Controls -->
 							<div class="bg-gray-900 border border-gray-700 rounded-t-lg p-2 flex items-center justify-between">
-								<span class="text-xs text-gray-400 uppercase tracking-wide">Document Preview</span>
-								<div class="flex items-center gap-2">
-									<button
-										class="text-xs text-gray-400 hover:text-white px-2 py-1"
-										onclick={() => (previewScale = Math.max(0.4, previewScale - 0.1))}
-									>
-										-
-									</button>
-									<span class="text-xs text-gray-400 w-12 text-center">
-										{Math.round(previewScale * 100)}%
+								<div class="flex items-center gap-3">
+									<span class="text-xs text-gray-400 uppercase tracking-wide">
+										{editMode ? 'Edit Mode' : 'Preview'}
 									</span>
 									<button
-										class="text-xs text-gray-400 hover:text-white px-2 py-1"
-										onclick={() => (previewScale = Math.min(1.2, previewScale + 0.1))}
+										class="text-xs px-2 py-1 rounded transition-colors {editMode ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}"
+										onclick={() => (editMode = !editMode)}
 									>
-										+
+										{editMode ? 'Preview' : 'Edit'}
 									</button>
 								</div>
+								<div class="flex items-center gap-2">
+									{#if !editMode}
+										<button
+											class="text-xs text-gray-400 hover:text-white px-2 py-1"
+											onclick={() => (previewScale = Math.max(0.4, previewScale - 0.1))}
+										>
+											-
+										</button>
+										<span class="text-xs text-gray-400 w-12 text-center">
+											{Math.round(previewScale * 100)}%
+										</span>
+										<button
+											class="text-xs text-gray-400 hover:text-white px-2 py-1"
+											onclick={() => (previewScale = Math.min(1.2, previewScale + 0.1))}
+										>
+											+
+										</button>
+									{/if}
+									<Button
+										variant="ghost"
+										size="sm"
+										onclick={() => selectedDoc && handleDownload(selectedDoc)}
+									>
+										Download .dat
+									</Button>
+								</div>
 							</div>
-							<!-- Preview Content -->
+							<!-- Content -->
 							<div class="bg-gray-800 border border-t-0 border-gray-700 rounded-b-lg p-4 overflow-auto max-h-[80vh]">
-								<DatPreview document={selectedDoc} scale={previewScale} />
+								{#if editMode}
+									<DatEditor
+										bind:document={importedDocs[selectedDocIndex].doc}
+										scale={0.9}
+										onUpdate={handleDocUpdate}
+									/>
+								{:else}
+									<DatPreview document={selectedDoc} scale={previewScale} />
+								{/if}
 							</div>
 						</div>
 					{:else}
