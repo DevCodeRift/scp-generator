@@ -19,6 +19,8 @@
 	let uploadProgress = $state(0);
 	let error = $state<string | null>(null);
 
+	const CHUNK_SIZE = 10 * 1024 * 1024; // 10MB chunks
+
 	async function handleFile(file: File) {
 		const ext = file.name.split('.').pop()?.toLowerCase();
 		const allowed = ['mp4', 'webm', 'avi', 'mov', 'mkv'];
@@ -37,43 +39,85 @@
 		uploadProgress = 0;
 
 		try {
-			const xhr = new XMLHttpRequest();
-			const result = await new Promise<UploadResult>((resolve, reject) => {
-				xhr.upload.addEventListener('progress', (e) => {
-					if (e.lengthComputable) {
-						uploadProgress = Math.round((e.loaded / e.total) * 100);
-					}
-				});
-
-				xhr.addEventListener('load', () => {
-					if (xhr.status >= 200 && xhr.status < 300) {
-						resolve(JSON.parse(xhr.responseText));
-					} else {
-						try {
-							const body = JSON.parse(xhr.responseText);
-							reject(new Error(body.message || `Upload failed (${xhr.status})`));
-						} catch {
-							reject(new Error(`Upload failed (${xhr.status})`));
-						}
-					}
-				});
-
-				xhr.addEventListener('error', () => reject(new Error('Network error during upload')));
-				xhr.addEventListener('abort', () => reject(new Error('Upload cancelled')));
-
-				xhr.open('POST', '/api/video/upload');
-				xhr.setRequestHeader('X-Filename', encodeURIComponent(file.name));
-				xhr.setRequestHeader('Content-Type', 'application/octet-stream');
-				xhr.send(file);
+			// Step 1: Initialize upload - create job on server
+			const initRes = await fetch('/api/video/upload', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ filename: file.name, fileSize: file.size })
 			});
 
-			onUploadComplete(result);
+			if (!initRes.ok) {
+				const body = await initRes.json().catch(() => null);
+				throw new Error(body?.message || `Init failed (${initRes.status})`);
+			}
+
+			const { jobId } = await initRes.json();
+
+			// Step 2: Upload file in chunks
+			const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
+
+			for (let i = 0; i < totalChunks; i++) {
+				const start = i * CHUNK_SIZE;
+				const end = Math.min(start + CHUNK_SIZE, file.size);
+				const chunk = file.slice(start, end);
+
+				// Use XHR for per-chunk progress tracking
+				const chunkResult = await uploadChunk(chunk, jobId, i, totalChunks);
+
+				// Update overall progress
+				uploadProgress = Math.round(((i + 1) / totalChunks) * 100);
+
+				// Final chunk returns the full upload result
+				if (chunkResult.complete) {
+					onUploadComplete({
+						jobId: chunkResult.jobId,
+						filename: chunkResult.filename,
+						duration: chunkResult.duration,
+						resolution: chunkResult.resolution,
+						fileSize: chunkResult.fileSize
+					});
+				}
+			}
 		} catch (e) {
 			error = e instanceof Error ? e.message : 'Upload failed';
 		} finally {
 			uploading = false;
 			uploadProgress = 0;
 		}
+	}
+
+	function uploadChunk(
+		chunk: Blob,
+		jobId: string,
+		chunkIndex: number,
+		totalChunks: number
+	): Promise<any> {
+		return new Promise((resolve, reject) => {
+			const xhr = new XMLHttpRequest();
+
+			xhr.addEventListener('load', () => {
+				if (xhr.status >= 200 && xhr.status < 300) {
+					resolve(JSON.parse(xhr.responseText));
+				} else {
+					try {
+						const body = JSON.parse(xhr.responseText);
+						reject(new Error(body.message || `Chunk upload failed (${xhr.status})`));
+					} catch {
+						reject(new Error(`Chunk upload failed (${xhr.status})`));
+					}
+				}
+			});
+
+			xhr.addEventListener('error', () => reject(new Error('Network error during chunk upload')));
+			xhr.addEventListener('abort', () => reject(new Error('Upload cancelled')));
+
+			xhr.open('POST', '/api/video/upload/chunk');
+			xhr.setRequestHeader('Content-Type', 'application/octet-stream');
+			xhr.setRequestHeader('X-Job-Id', jobId);
+			xhr.setRequestHeader('X-Chunk-Index', String(chunkIndex));
+			xhr.setRequestHeader('X-Total-Chunks', String(totalChunks));
+			xhr.send(chunk);
+		});
 	}
 
 	function handleDrop(e: DragEvent) {
@@ -97,13 +141,6 @@
 		const file = input.files?.[0];
 		if (file) handleFile(file);
 		input.value = '';
-	}
-
-	function formatSize(bytes: number): string {
-		if (bytes >= 1024 * 1024 * 1024) return `${(bytes / (1024 * 1024 * 1024)).toFixed(1)} GB`;
-		if (bytes >= 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-		if (bytes >= 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-		return `${bytes} B`;
 	}
 </script>
 
