@@ -3,6 +3,7 @@
 	import DatPreview from '$lib/components/preview/DatPreview.svelte';
 	import { getDatDocumentTitle, getDatDocumentStats } from '$lib/dat/parser';
 	import { downloadDatFile } from '$lib/dat/serializer';
+	import { PRESET_TEMPLATES, loadPresetTemplate } from '$lib/dat/presets';
 	import type { DatDocument } from '$lib/dat/types';
 	import Button from '$lib/components/ui/Button.svelte';
 	import FactionSelector from '$lib/components/ui/FactionSelector.svelte';
@@ -10,10 +11,26 @@
 	let importedDocs = $state<Array<{ doc: DatDocument; title: string }>>([]);
 	let selectedDoc = $state<DatDocument | null>(null);
 	let previewScale = $state(0.8);
+	let loadingPreset = $state<string | null>(null);
+	let presetError = $state<string | null>(null);
 
 	function handleImport(doc: DatDocument, title: string) {
 		importedDocs = [...importedDocs, { doc, title }];
 		selectedDoc = doc;
+	}
+
+	async function handleLoadPreset(id: string) {
+		loadingPreset = id;
+		presetError = null;
+		try {
+			const doc = await loadPresetTemplate(id);
+			const title = getDatDocumentTitle(doc);
+			handleImport(doc, title);
+		} catch (e) {
+			presetError = e instanceof Error ? e.message : 'Failed to load preset';
+		} finally {
+			loadingPreset = null;
+		}
 	}
 
 	function handleRemove(index: number) {
@@ -59,6 +76,38 @@
 			<div class="grid lg:grid-cols-[1fr_1fr] gap-6">
 				<!-- Left: Import & List -->
 				<div class="space-y-6">
+					<!-- Preset Templates -->
+					<div class="terminal-window">
+						<div class="terminal-header bg-gray-900">PRESET TEMPLATES</div>
+						<div class="p-4">
+							<div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+								{#each PRESET_TEMPLATES as preset}
+									<button
+										class="text-left p-3 rounded border border-[var(--color-border)] hover:border-[var(--color-accent)] hover:bg-[var(--color-accent)]/5 transition-all disabled:opacity-50 disabled:cursor-wait"
+										onclick={() => handleLoadPreset(preset.id)}
+										disabled={loadingPreset !== null}
+									>
+										<div class="font-bold text-sm text-[var(--color-text)]">
+											{#if loadingPreset === preset.id}
+												<span class="animate-pulse">Loading...</span>
+											{:else}
+												{preset.name}
+											{/if}
+										</div>
+										<div class="text-xs text-[var(--color-text-muted)] mt-0.5">
+											{preset.description}
+										</div>
+									</button>
+								{/each}
+							</div>
+							{#if presetError}
+								<div class="mt-3 text-sm text-red-500 bg-red-500/10 p-2 rounded">
+									{presetError}
+								</div>
+							{/if}
+						</div>
+					</div>
+
 					<!-- Import Zone -->
 					<div class="terminal-window">
 						<div class="terminal-header bg-gray-900">IMPORT .DAT TEMPLATE</div>
