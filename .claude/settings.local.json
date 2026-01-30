@@ -4,7 +4,9 @@
       "Bash(npm create:*)",
       "Bash(npx sv create:*)",
       "Bash(npm run check:*)",
-      "Bash(ping:*)"
+      "Bash(ping:*)",
+      "Bash(npx svelte-check:*)",
+      "Bash(npm run build:*)"
     ]
   }
 }
