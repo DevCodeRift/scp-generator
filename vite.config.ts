@@ -19,5 +19,10 @@ function disableServerTimeouts(): Plugin {
 }
 
 export default defineConfig({
-	plugins: [disableServerTimeouts(), sveltekit()]
+	plugins: [disableServerTimeouts(), sveltekit()],
+	build: {
+		rollupOptions: {
+			external: ['fluent-ffmpeg']
+		}
+	}
 });
