@@ -580,7 +580,7 @@
 						{/if}
 
 						<div
-							class="element-wrapper relative group"
+							class="element-wrapper relative group pr-12"
 							onclick={() => { datEditorStore.selectPage(pageIndex); datEditorStore.selectElement(elementIndex); }}
 							ondblclick={() => { datEditorStore.selectPage(pageIndex); startEditing(elementIndex); }}
 							oncontextmenu={(e) => { datEditorStore.selectPage(pageIndex); handleContextMenu(e, elementIndex); }}
