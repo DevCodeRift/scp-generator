@@ -15,6 +15,7 @@
 
 	// UI State
 	let showTemplateModal = $state(false);
+	let showTemplateGallery = $state(true); // Show gallery by default
 	let editingElementIndex = $state<number | null>(null);
 	let editingContent = $state('');
 	let contextMenu = $state<{ x: number; y: number; elementIndex: number } | null>(null);
@@ -24,6 +25,7 @@
 	let titleInput: HTMLInputElement;
 	let lastSaved = $state<Date | null>(null);
 	let hoveredInsertIndex = $state<number | null>(null);
+	let isLoadingTemplate = $state(false);
 
 	// Auto-save key
 	const AUTOSAVE_KEY = 'dat-editor-autosave';
@@ -54,11 +56,14 @@
 				const doc = JSON.parse(saved);
 				datEditorStore.loadDocument(doc);
 				lastSaved = new Date();
+				showTemplateGallery = false; // Hide gallery if we have a saved doc
 			} catch {
 				datEditorStore.newDocument();
+				showTemplateGallery = true;
 			}
 		} else {
 			datEditorStore.newDocument();
+			showTemplateGallery = true; // Show gallery for new users
 		}
 	});
 
@@ -159,6 +164,7 @@
 			try {
 				const doc = await parseDatFileFromUpload(file);
 				datEditorStore.loadDocument(doc);
+				showTemplateGallery = false;
 			} catch (err) {
 				alert(`Failed to open: ${err instanceof Error ? err.message : 'Unknown error'}`);
 			}
@@ -178,15 +184,20 @@
 		if ($datEditorStore.isDirty && !confirm('Discard unsaved changes?')) return;
 		datEditorStore.newDocument();
 		localStorage.removeItem(AUTOSAVE_KEY);
+		showTemplateGallery = false;
 	}
 
 	async function handleLoadTemplate(id: string) {
+		isLoadingTemplate = true;
 		try {
 			const doc = await loadPresetTemplate(id);
 			datEditorStore.loadDocument(doc);
 			showTemplateModal = false;
+			showTemplateGallery = false;
 		} catch (err) {
 			alert(`Failed to load template: ${err instanceof Error ? err.message : 'Unknown error'}`);
+		} finally {
+			isLoadingTemplate = false;
 		}
 	}
 
@@ -445,7 +456,98 @@
 
 	<!-- Main Editor Area -->
 	<div class="flex-1 overflow-auto bg-[#f8f9fa]" style="background-image: linear-gradient(#e5e5e5 1px, transparent 1px); background-size: 100% 20px;">
-		<div class="max-w-[850px] mx-auto py-8">
+		<!-- Template Gallery -->
+		{#if showTemplateGallery}
+			<div class="max-w-[1000px] mx-auto py-8 px-4">
+				<!-- Gallery Header -->
+				<div class="bg-gradient-to-r from-[#1a73e8] to-[#4285f4] rounded-xl p-8 mb-8 text-white">
+					<h1 class="text-3xl font-medium mb-2">Start a new document</h1>
+					<p class="text-white/80">Choose a template or start from scratch</p>
+				</div>
+
+				<!-- Quick Actions -->
+				<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+					<button
+						onclick={handleNew}
+						class="bg-white border-2 border-dashed border-[#dadce0] rounded-lg p-6 hover:border-[#1a73e8] hover:bg-[#e8f0fe] transition-all flex flex-col items-center gap-3 group"
+					>
+						<div class="w-16 h-20 bg-white border border-[#dadce0] rounded shadow-sm flex items-center justify-center group-hover:border-[#1a73e8]">
+							<svg class="w-8 h-8 text-[#1a73e8]" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+						</div>
+						<span class="font-medium text-[#202124]">Blank document</span>
+					</button>
+
+					<button
+						onclick={handleOpen}
+						class="bg-white border border-[#dadce0] rounded-lg p-6 hover:border-[#1a73e8] hover:bg-[#e8f0fe] transition-all flex flex-col items-center gap-3 group"
+					>
+						<div class="w-16 h-20 bg-[#f1f3f4] border border-[#dadce0] rounded shadow-sm flex items-center justify-center group-hover:border-[#1a73e8]">
+							<svg class="w-8 h-8 text-[#5f6368]" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z" transform="rotate(180 12 12)"/></svg>
+						</div>
+						<span class="font-medium text-[#202124]">Open .dat file</span>
+					</button>
+				</div>
+
+				<!-- Template Section -->
+				<div class="mb-4 flex items-center justify-between">
+					<h2 class="text-lg font-medium text-[#202124]">Templates</h2>
+					<button
+						onclick={() => showTemplateGallery = false}
+						class="text-sm text-[#1a73e8] hover:underline"
+					>
+						Skip to editor →
+					</button>
+				</div>
+
+				<!-- Template Grid -->
+				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+					{#each PRESET_TEMPLATES as template}
+						<button
+							onclick={() => handleLoadTemplate(template.id)}
+							disabled={isLoadingTemplate}
+							class="bg-white border border-[#dadce0] rounded-lg overflow-hidden hover:border-[#1a73e8] hover:shadow-lg transition-all text-left group disabled:opacity-50"
+						>
+							<!-- Template Preview -->
+							<div class="h-40 bg-gradient-to-br from-[#f8f9fa] to-[#e8eaed] p-4 border-b border-[#dadce0] flex items-center justify-center">
+								<div class="w-24 h-32 bg-white rounded shadow-md p-2 text-[4px] text-[#5f6368] leading-tight overflow-hidden">
+									<div class="font-bold text-[6px] text-[#202124] mb-1 truncate">{template.name}</div>
+									<div class="h-px bg-[#dadce0] mb-1"></div>
+									<div class="space-y-0.5">
+										<div class="h-1 bg-[#e8eaed] rounded w-full"></div>
+										<div class="h-1 bg-[#e8eaed] rounded w-3/4"></div>
+										<div class="h-1 bg-[#e8eaed] rounded w-5/6"></div>
+										<div class="h-1 bg-[#e8eaed] rounded w-2/3"></div>
+									</div>
+								</div>
+							</div>
+							<!-- Template Info -->
+							<div class="p-4">
+								<div class="font-medium text-[#202124] group-hover:text-[#1a73e8] transition-colors">{template.name}</div>
+								<div class="text-sm text-[#5f6368] mt-1">{template.description}</div>
+							</div>
+						</button>
+					{/each}
+				</div>
+
+				<!-- Continue editing hint -->
+				{#if lastSaved}
+					<div class="mt-8 p-4 bg-[#e8f0fe] rounded-lg flex items-center justify-between">
+						<div>
+							<div class="font-medium text-[#202124]">Continue editing</div>
+							<div class="text-sm text-[#5f6368]">You have an unsaved document from your last session</div>
+						</div>
+						<button
+							onclick={() => showTemplateGallery = false}
+							class="px-4 py-2 bg-[#1a73e8] text-white rounded-md hover:bg-[#1557b0] font-medium"
+						>
+							Continue
+						</button>
+					</div>
+				{/if}
+			</div>
+		{:else}
+			<!-- Document Editor -->
+			<div class="max-w-[850px] mx-auto py-8">
 			{#each $datEditorStore.document?.pages || [] as page, pageIndex}
 				<!-- Page -->
 				<div
@@ -456,10 +558,10 @@
 					<!-- Page number -->
 					<div class="absolute top-2 right-4 text-xs text-[#5f6368]">Page {pageIndex + 1}</div>
 
-					{#if pageIndex === $datEditorStore.selectedPageIndex}
-						<!-- Elements -->
-						{#each page.elements as element, elementIndex}
-							<!-- Insert button above -->
+					<!-- Elements - always show all pages -->
+					{#each page.elements as element, elementIndex}
+						<!-- Insert button above (only on selected page) -->
+						{#if pageIndex === $datEditorStore.selectedPageIndex}
 							<div
 								class="relative h-0"
 								onmouseenter={() => hoveredInsertIndex = elementIndex}
@@ -475,105 +577,107 @@
 									</div>
 								{/if}
 							</div>
+						{/if}
 
-							<div
-								class="element-wrapper relative group"
-								onclick={() => { datEditorStore.selectElement(elementIndex); }}
-								ondblclick={() => startEditing(elementIndex)}
-								oncontextmenu={(e) => handleContextMenu(e, elementIndex)}
-							>
-								<!-- Selection indicator -->
-								{#if $datEditorStore.selectedElementIndex === elementIndex}
-									<div class="absolute -left-4 top-0 bottom-0 w-1 bg-[#1a73e8] rounded"></div>
-								{/if}
+						<div
+							class="element-wrapper relative group"
+							onclick={() => { datEditorStore.selectPage(pageIndex); datEditorStore.selectElement(elementIndex); }}
+							ondblclick={() => { datEditorStore.selectPage(pageIndex); startEditing(elementIndex); }}
+							oncontextmenu={(e) => { datEditorStore.selectPage(pageIndex); handleContextMenu(e, elementIndex); }}
+						>
+							<!-- Selection indicator -->
+							{#if pageIndex === $datEditorStore.selectedPageIndex && $datEditorStore.selectedElementIndex === elementIndex}
+								<div class="absolute -left-4 top-0 bottom-0 w-1 bg-[#1a73e8] rounded"></div>
+							{/if}
 
-								<!-- Element content -->
-								<div class="py-1 px-1 rounded {$datEditorStore.selectedElementIndex === elementIndex ? 'bg-[#e8f0fe]' : 'hover:bg-[#f1f3f4]'} cursor-text">
-									{#if editingElementIndex === elementIndex}
-										<!-- Inline editor -->
-										{#if element.type === 'image'}
-											<input
-												type="text"
-												class="inline-editor w-full p-2 border border-[#1a73e8] rounded outline-none text-sm"
-												placeholder="Enter image URL..."
-												bind:value={editingContent}
-												onblur={finishEditing}
-												onkeydown={(e) => e.key === 'Enter' && finishEditing()}
-											/>
-										{:else}
-											<textarea
-												class="inline-editor w-full p-2 border border-[#1a73e8] rounded outline-none resize-none overflow-hidden
-													{element.type === 'header' ? 'text-2xl font-bold' : ''}
-													{element.type === 'header2' ? 'text-xl font-semibold' : ''}
-													{element.type === 'header3' ? 'text-lg font-medium' : ''}
-													{element.type === 'smalltext' ? 'text-sm' : ''}"
-												bind:value={editingContent}
-												onblur={finishEditing}
-												onkeydown={(e) => { if (e.key === 'Escape') finishEditing(); }}
-												oninput={(e) => {
-													const target = e.target as HTMLTextAreaElement;
-													target.style.height = 'auto';
-													target.style.height = target.scrollHeight + 'px';
-												}}
-												style="min-height: 1.5em;"
-											></textarea>
-										{/if}
+							<!-- Element content -->
+							<div class="py-1 px-1 rounded {pageIndex === $datEditorStore.selectedPageIndex && $datEditorStore.selectedElementIndex === elementIndex ? 'bg-[#e8f0fe]' : 'hover:bg-[#f1f3f4]'} cursor-text">
+								{#if pageIndex === $datEditorStore.selectedPageIndex && editingElementIndex === elementIndex}
+									<!-- Inline editor -->
+									{#if element.type === 'image'}
+										<input
+											type="text"
+											class="inline-editor w-full p-2 border border-[#1a73e8] rounded outline-none text-sm"
+											placeholder="Enter image URL..."
+											bind:value={editingContent}
+											onblur={finishEditing}
+											onkeydown={(e) => e.key === 'Enter' && finishEditing()}
+										/>
 									{:else}
-										<!-- Display mode -->
-										{#if element.type === 'header'}
-											<h1 class="text-2xl font-bold text-[#202124]">{element.content || 'Click to add title'}</h1>
-										{:else if element.type === 'header2'}
-											<h2 class="text-xl font-semibold text-[#202124]">{element.content || 'Click to add heading'}</h2>
-										{:else if element.type === 'header3'}
-											<h3 class="text-lg font-medium text-[#202124]">{element.content || 'Click to add subheading'}</h3>
-										{:else if element.type === 'paragraph'}
-											<p class="text-[#202124] whitespace-pre-wrap">{element.content || 'Click to add text'}</p>
-										{:else if element.type === 'smalltext'}
-											<p class="text-sm text-[#5f6368] whitespace-pre-wrap">{element.content || 'Click to add small text'}</p>
-										{:else if element.type === 'line'}
-											<hr class="border-t-2 border-[#202124] my-4">
-										{:else if element.type === 'dottedline'}
-											<hr class="border-t-2 border-dotted border-[#5f6368] my-4">
-										{:else if element.type === 'signature'}
-											<div class="border-2 border-dashed border-[#dadce0] p-6 text-center text-[#5f6368] italic my-2">
-												[Signature Box]
+										<textarea
+											class="inline-editor w-full p-2 border border-[#1a73e8] rounded outline-none resize-none overflow-hidden
+												{element.type === 'header' ? 'text-2xl font-bold' : ''}
+												{element.type === 'header2' ? 'text-xl font-semibold' : ''}
+												{element.type === 'header3' ? 'text-lg font-medium' : ''}
+												{element.type === 'smalltext' ? 'text-sm' : ''}"
+											bind:value={editingContent}
+											onblur={finishEditing}
+											onkeydown={(e) => { if (e.key === 'Escape') finishEditing(); }}
+											oninput={(e) => {
+												const target = e.target as HTMLTextAreaElement;
+												target.style.height = 'auto';
+												target.style.height = target.scrollHeight + 'px';
+											}}
+											style="min-height: 1.5em;"
+										></textarea>
+									{/if}
+								{:else}
+									<!-- Display mode -->
+									{#if element.type === 'header'}
+										<h1 class="text-2xl font-bold text-[#202124]">{element.content || 'Click to add title'}</h1>
+									{:else if element.type === 'header2'}
+										<h2 class="text-xl font-semibold text-[#202124]">{element.content || 'Click to add heading'}</h2>
+									{:else if element.type === 'header3'}
+										<h3 class="text-lg font-medium text-[#202124]">{element.content || 'Click to add subheading'}</h3>
+									{:else if element.type === 'paragraph'}
+										<p class="text-[#202124] whitespace-pre-wrap">{element.content || 'Click to add text'}</p>
+									{:else if element.type === 'smalltext'}
+										<p class="text-sm text-[#5f6368] whitespace-pre-wrap">{element.content || 'Click to add small text'}</p>
+									{:else if element.type === 'line'}
+										<hr class="border-t-2 border-[#202124] my-4">
+									{:else if element.type === 'dottedline'}
+										<hr class="border-t-2 border-dotted border-[#5f6368] my-4">
+									{:else if element.type === 'signature'}
+										<div class="border-2 border-dashed border-[#dadce0] p-6 text-center text-[#5f6368] italic my-2">
+											[Signature Box]
+										</div>
+									{:else if element.type === 'checkbox'}
+										<label class="flex items-center gap-3 py-1">
+											<input
+												type="checkbox"
+												checked={element.params.toggle}
+												onchange={(e) => datEditorStore.updateElement(pageIndex, elementIndex, { params: { ...element.params, toggle: (e.target as HTMLInputElement).checked } } as any)}
+												class="w-5 h-5"
+											/>
+											<span class="text-[#202124]">{element.args.text || 'Checkbox label'}</span>
+										</label>
+									{:else if element.type === 'image'}
+										{#if element.args.url}
+											<img src={element.args.url} alt="" class="max-w-full mx-auto" style="max-width: {element.params.scale * 100}%">
+										{:else}
+											<div class="border-2 border-dashed border-[#dadce0] p-8 text-center text-[#5f6368]">
+												Double-click to add image URL
 											</div>
-										{:else if element.type === 'checkbox'}
-											<label class="flex items-center gap-3 py-1">
-												<input
-													type="checkbox"
-													checked={element.params.toggle}
-													onchange={(e) => datEditorStore.updateElement(pageIndex, elementIndex, { params: { ...element.params, toggle: (e.target as HTMLInputElement).checked } } as any)}
-													class="w-5 h-5"
-												/>
-												<span class="text-[#202124]">{element.args.text || 'Checkbox label'}</span>
-											</label>
-										{:else if element.type === 'image'}
-											{#if element.args.url}
-												<img src={element.args.url} alt="" class="max-w-full mx-auto" style="max-width: {element.params.scale * 100}%">
-											{:else}
-												<div class="border-2 border-dashed border-[#dadce0] p-8 text-center text-[#5f6368]">
-													Double-click to add image URL
-												</div>
-											{/if}
 										{/if}
 									{/if}
-								</div>
-
-								<!-- Quick actions on hover -->
-								<div class="absolute -right-10 top-0 hidden group-hover:flex flex-col gap-1">
-									<button
-										onclick={(e) => { e.stopPropagation(); datEditorStore.deleteElement(pageIndex, elementIndex); }}
-										class="w-7 h-7 flex items-center justify-center bg-white border border-[#dadce0] rounded shadow-sm hover:bg-[#fce8e6]"
-										title="Delete"
-									>
-										<svg class="w-4 h-4" viewBox="0 0 24 24" fill="#c5221f"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
-									</button>
-								</div>
+								{/if}
 							</div>
-						{/each}
 
-						<!-- Insert at end -->
+							<!-- Quick actions on hover -->
+							<div class="absolute -right-10 top-0 hidden group-hover:flex flex-col gap-1">
+								<button
+									onclick={(e) => { e.stopPropagation(); datEditorStore.deleteElement(pageIndex, elementIndex); }}
+									class="w-7 h-7 flex items-center justify-center bg-white border border-[#dadce0] rounded shadow-sm hover:bg-[#fce8e6]"
+									title="Delete"
+								>
+									<svg class="w-4 h-4" viewBox="0 0 24 24" fill="#c5221f"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+								</button>
+							</div>
+						</div>
+					{/each}
+
+					<!-- Insert at end (only on selected page) -->
+					{#if pageIndex === $datEditorStore.selectedPageIndex}
 						<div class="mt-4 flex justify-center">
 							<button
 								onclick={() => insertElement('paragraph')}
@@ -583,9 +687,19 @@
 								Add element
 							</button>
 						</div>
-					{:else}
-						<!-- Collapsed page preview -->
-						<div class="text-[#5f6368] text-sm italic">Click to edit page {pageIndex + 1}</div>
+					{/if}
+
+					<!-- Empty page message -->
+					{#if page.elements.length === 0}
+						<div class="text-center text-[#5f6368] py-16">
+							<p class="mb-4">This page is empty</p>
+							<button
+								onclick={() => { datEditorStore.selectPage(pageIndex); insertElement('paragraph'); }}
+								class="px-4 py-2 bg-[#1a73e8] text-white rounded hover:bg-[#1557b0]"
+							>
+								Add Element
+							</button>
+						</div>
 					{/if}
 				</div>
 			{/each}
