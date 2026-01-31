@@ -1,25 +1,17 @@
-/**
- * Core generator type definitions
- */
-
-// Base generator interface
 export interface Generator<TConfig, TOutput> {
 	name: string;
 	description: string;
 	defaultConfig: TConfig;
 	generate(config: TConfig, seed?: number): TOutput;
-	// Optional: convert output to an existing document type
 	outputToDocument?(output: TOutput): unknown;
 }
 
-// Generated content with metadata
 export interface GeneratedContent<T> {
 	data: T;
 	seed: number;
 	timestamp: string;
 }
 
-// NPC Types
 export type NPCRole = 'researcher' | 'mtf' | 'd-class' | 'security' | 'administrative' | 'medical';
 
 export interface NPCConfig {
@@ -41,7 +33,6 @@ export interface GeneratedNPC {
 	specializations?: string[];
 }
 
-// SCP Types
 export type ObjectClass = 'Safe' | 'Euclid' | 'Keter' | 'Thaumiel' | 'Neutralized' | 'Apollyon' | 'Archon';
 export type DisruptionClass = 'Dark' | 'Vlam' | 'Keneq' | 'Ekhi' | 'Amida';
 export type RiskClass = 'Notice' | 'Caution' | 'Warning' | 'Danger' | 'Critical';
@@ -72,7 +63,6 @@ export interface GeneratedSCP {
 	additionalNotes?: string[];
 }
 
-// Artifact Types
 export interface ArtifactConfig {
 	minorOnly: boolean;
 	includeDrawbacks: boolean;
@@ -88,7 +78,6 @@ export interface GeneratedArtifact {
 	origin?: string;
 }
 
-// Event Types
 export type EventSeverity = 'minor' | 'moderate' | 'major' | 'critical';
 export type EventType =
 	| 'containment-breach'
@@ -116,7 +105,6 @@ export interface GeneratedEvent {
 	suggestedResponse?: string;
 }
 
-// Facility Map Types
 export type RoomType =
 	| 'containment-cell'
 	| 'corridor'
@@ -165,7 +153,6 @@ export interface GeneratedFacility {
 	gridHeight: number;
 }
 
-// Location Types
 export type LocationCategory = 'anomalous-site' | 'goi-facility' | 'dimensional' | 'extradimensional';
 
 export interface LocationConfig {
@@ -183,7 +170,6 @@ export interface GeneratedLocation {
 	accessMethod?: string;
 }
 
-// Breach Scenario Types
 export interface BreachPhase {
 	name: string;
 	description: string;

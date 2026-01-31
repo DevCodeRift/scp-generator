@@ -1,4 +1,3 @@
-// SCP Generator Engine
 import { createRandom, generateSeed, type RandomGenerator } from '../core/random';
 import { createWeightedTable, pickFromTable, type WeightedTable } from '../core/weighted-table';
 import type { GeneratedSCP, GeneratedContent, SCPConfig, ObjectClass, DisruptionClass, RiskClass, AnomalyCategory } from '../types';
@@ -20,7 +19,6 @@ import {
 } from '../data/scp/containment';
 import { ALL_SITES } from '../data/sites';
 
-// Weighted tables for generation
 const objectClassTable: WeightedTable<ObjectClass> = createWeightedTable([
 	{ value: 'Safe', weight: 30 },
 	{ value: 'Euclid', weight: 40 },
@@ -73,8 +71,7 @@ export const defaultSCPConfig: SCPConfig = {
 };
 
 function generateItemNumber(rng: RandomGenerator): string {
-	// Generate a plausible SCP number
-	const series = rng.int(1, 7); // Series 1-7
+	const series = rng.int(1, 7);
 	let num: number;
 
 	if (series === 1) {
@@ -96,31 +93,24 @@ function generateContainmentProcedures(
 ): string[] {
 	const procedures: string[] = [];
 
-	// Location based on danger level
 	const location = rng.pick(CONTAINMENT_LOCATIONS);
 	const material = rng.pick(CONTAINMENT_MATERIALS);
 
 	procedures.push(`SCP is to be contained in a ${location} constructed with ${material}.`);
-
-	// Access requirements
 	procedures.push(rng.pick(ACCESS_REQUIREMENTS) + '.');
 
-	// Monitoring for Euclid and above
 	if (objectClass !== 'Safe' && objectClass !== 'Neutralized') {
 		procedures.push(rng.pick(MONITORING_REQUIREMENTS) + ' is required.');
 	}
 
-	// Standard complexity adds maintenance
 	if (complexity !== 'minimal') {
 		procedures.push(rng.pick(MAINTENANCE_REQUIREMENTS) + '.');
 	}
 
-	// Detailed adds emergency procedures
 	if (complexity === 'detailed') {
 		procedures.push(rng.pick(EMERGENCY_PROCEDURES) + '.');
 	}
 
-	// Special requirements for Keter and above, or if specifically requested
 	if (includeSpecialRequirements && (objectClass === 'Keter' || objectClass === 'Apollyon' || rng.chance(0.3))) {
 		procedures.push(`Additionally, the object ${rng.pick(SPECIAL_REQUIREMENTS)}.`);
 	}
@@ -136,14 +126,10 @@ function generateDescription(
 ): string {
 	const parts: string[] = [];
 
-	// Form
 	const forms = ANOMALY_FORMS[category];
 	const form = rng.pick(forms as unknown as string[]);
-
-	// Primary effect
 	const primaryEffect = rng.pick(PRIMARY_EFFECTS);
 
-	// Opening line
 	const openers = [
 		`SCP-XXXX is a ${form} that ${primaryEffect}.`,
 		`SCP-XXXX appears to be a ${form}. Its primary anomalous property is that it ${primaryEffect}.`,
@@ -152,7 +138,6 @@ function generateDescription(
 	];
 	parts.push(rng.pick(openers));
 
-	// Trigger condition
 	const trigger = rng.pick(TRIGGER_CONDITIONS);
 	const triggerSentences = [
 		`This effect is triggered ${trigger}.`,
@@ -162,12 +147,10 @@ function generateDescription(
 	];
 	parts.push(rng.pick(triggerSentences));
 
-	// Secondary effect
 	if (includeSecondaryEffects && rng.chance(0.7)) {
 		parts.push(rng.pick(SECONDARY_EFFECTS) + '.');
 	}
 
-	// Origin
 	if (includeOrigin) {
 		const origin = rng.pick(ORIGINS);
 		const originSentences = [
@@ -186,7 +169,6 @@ function generateAdditionalNotes(
 	rng: RandomGenerator,
 	_objectClass: ObjectClass
 ): string[] | undefined {
-	// Only generate notes sometimes
 	if (!rng.chance(0.5)) return undefined;
 
 	const possibleNotes = [
@@ -221,19 +203,14 @@ export function generateSCP(
 	const rng = createRandom(finalSeed);
 	const finalConfig = { ...defaultSCPConfig, ...config };
 
-	// Generate or use specified classifications
 	const objectClass = config.objectClass ?? pickFromTable(objectClassTable, rng);
 	const category = config.category ?? pickFromTable(categoryTable, rng);
 	const disruptionClass = pickFromTable(disruptionClassTable, rng);
 	const riskClass = pickFromTable(riskClassTable, rng);
 
-	// Generate item number
 	const itemNumber = generateItemNumber(rng);
-
-	// Select containment site
 	const site = rng.pick(ALL_SITES);
 
-	// Generate containment procedures
 	const containmentProcedures = generateContainmentProcedures(
 		rng,
 		objectClass,
@@ -242,7 +219,6 @@ export function generateSCP(
 		finalConfig.complexity
 	);
 
-	// Generate description
 	const description = generateDescription(
 		rng,
 		category,
@@ -250,7 +226,6 @@ export function generateSCP(
 		finalConfig.includeOrigin
 	);
 
-	// Generate additional notes
 	const additionalNotes = generateAdditionalNotes(rng, objectClass);
 
 	const scp: GeneratedSCP = {
@@ -281,7 +256,6 @@ export function generateSCPs(
 	const results: GeneratedContent<GeneratedSCP>[] = [];
 
 	for (let i = 0; i < count; i++) {
-		// Use deterministic seeds for reproducibility
 		const itemSeed = seed + i * 1000;
 		results.push(generateSCP(config, itemSeed));
 	}
@@ -289,7 +263,6 @@ export function generateSCPs(
 	return results;
 }
 
-// Helper functions for labels
 export function getObjectClassLabel(objectClass: ObjectClass): string {
 	return objectClass;
 }

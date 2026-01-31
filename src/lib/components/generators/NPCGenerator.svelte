@@ -12,13 +12,11 @@
 	import type { NPCRole, GeneratedNPC, GeneratedContent } from '$lib/generators/types';
 	import { generateSeed } from '$lib/generators/core/random';
 
-	// Configuration state
 	let selectedRole = $state<NPCRole | 'random'>('random');
 	let includeBackground = $state(true);
 	let includeQuirks = $state(true);
 	let generateCount = $state(1);
 
-	// Generated results
 	let results = $state<GeneratedContent<GeneratedNPC>[]>([]);
 	let isGenerating = $state(false);
 
@@ -42,7 +40,6 @@
 	function handleGenerate() {
 		isGenerating = true;
 
-		// Small delay for visual feedback
 		setTimeout(() => {
 			const config = {
 				role: selectedRole === 'random' ? undefined : selectedRole as NPCRole,
@@ -87,7 +84,6 @@
 </script>
 
 <div class="npc-generator">
-	<!-- Configuration Panel -->
 	<div class="terminal-window mb-6">
 		<div class="terminal-header">CONFIGURATION</div>
 		<div class="p-4 space-y-4">
@@ -138,7 +134,6 @@
 		</div>
 	</div>
 
-	<!-- Results -->
 	{#if results.length > 0}
 		<div class="space-y-4">
 			{#each results as result, i}
@@ -156,7 +151,6 @@
 						</div>
 					</div>
 					<div class="p-4">
-						<!-- Main Info -->
 						<div class="mb-4">
 							<h3 class="text-xl font-bold text-[var(--color-accent)] mb-1">
 								{npc.designation}
@@ -168,7 +162,6 @@
 							{/if}
 						</div>
 
-						<!-- Details Grid -->
 						<div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4 text-sm">
 							<div>
 								<span class="text-[var(--color-text-muted)]">Department:</span>
@@ -184,7 +177,6 @@
 							</div>
 						</div>
 
-						<!-- Specializations -->
 						{#if npc.specializations && npc.specializations.length > 0}
 							<div class="mb-4">
 								<span class="text-sm text-[var(--color-text-muted)]">Specializations:</span>
@@ -196,7 +188,6 @@
 							</div>
 						{/if}
 
-						<!-- Background -->
 						{#if npc.background}
 							<div class="mb-4">
 								<span class="text-sm text-[var(--color-text-muted)]">Background:</span>
@@ -204,7 +195,6 @@
 							</div>
 						{/if}
 
-						<!-- Quirks -->
 						{#if npc.quirks && npc.quirks.length > 0}
 							<div>
 								<span class="text-sm text-[var(--color-text-muted)]">Quirks:</span>
@@ -216,7 +206,6 @@
 							</div>
 						{/if}
 
-						<!-- Seed (for reproduction) -->
 						<div class="mt-4 pt-4 border-t border-[var(--color-border)]">
 							<span class="text-xs text-[var(--color-text-muted)]">
 								Seed: {result.seed}

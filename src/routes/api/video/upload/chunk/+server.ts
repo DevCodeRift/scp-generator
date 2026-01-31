@@ -4,14 +4,8 @@ import { open } from 'fs/promises';
 import { getJob, updateJob } from '$lib/server/job-manager';
 import { probeVideo, extractVideoMeta } from '$lib/server/video-processor';
 
-const MAX_FILE_SIZE = 1024 * 1024 * 1024; // 1GB
+const MAX_FILE_SIZE = 1024 * 1024 * 1024;
 
-/**
- * Receive a single chunk and append it to the job's input file.
- * Body: raw binary chunk (application/octet-stream)
- * Headers: X-Job-Id, X-Chunk-Index, X-Total-Chunks
- * On the final chunk, probes the video and returns metadata.
- */
 export const POST: RequestHandler = async ({ request }) => {
 	const jobId = request.headers.get('x-job-id');
 	const chunkIndex = parseInt(request.headers.get('x-chunk-index') || '0', 10);
@@ -30,7 +24,6 @@ export const POST: RequestHandler = async ({ request }) => {
 		throw error(400, 'No chunk data provided');
 	}
 
-	// Read chunk and append to file
 	const reader = request.body.getReader();
 	let chunkBytes = 0;
 	let fh;
@@ -53,7 +46,6 @@ export const POST: RequestHandler = async ({ request }) => {
 
 	const newSize = (job.fileSize || 0) + chunkBytes;
 
-	// Check total size doesn't exceed limit
 	if (newSize > MAX_FILE_SIZE) {
 		throw error(400, `File exceeds maximum size of ${MAX_FILE_SIZE / (1024 * 1024 * 1024)}GB`);
 	}
@@ -65,7 +57,6 @@ export const POST: RequestHandler = async ({ request }) => {
 	if (isLast) {
 		updateJob(jobId, { status: 'uploaded' });
 
-		// Probe video for metadata
 		try {
 			const probeData = await probeVideo(job.inputPath);
 			const meta = extractVideoMeta(probeData);

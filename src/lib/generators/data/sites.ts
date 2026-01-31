@@ -1,8 +1,3 @@
-/**
- * Foundation sites database
- * Based on SCP wiki canonical sites with additional generated sites
- */
-
 export interface FoundationSite {
 	designation: string;
 	type: 'Site' | 'Area' | 'Sector' | 'Unit';
@@ -13,7 +8,6 @@ export interface FoundationSite {
 	securityLevel: 'standard' | 'high' | 'maximum' | 'classified';
 }
 
-// Major canonical sites
 export const CANONICAL_SITES: FoundationSite[] = [
 	{
 		designation: 'Site-01',
@@ -154,7 +148,6 @@ export const CANONICAL_SITES: FoundationSite[] = [
 	}
 ];
 
-// Armed containment areas
 export const CANONICAL_AREAS: FoundationSite[] = [
 	{
 		designation: 'Area-02',
@@ -190,13 +183,10 @@ export const CANONICAL_AREAS: FoundationSite[] = [
 	}
 ];
 
-// All sites combined
 export const ALL_SITES: FoundationSite[] = [...CANONICAL_SITES, ...CANONICAL_AREAS];
 
-// Site designations for quick reference
 export const SITE_DESIGNATIONS = ALL_SITES.map((s) => s.designation);
 
-// Common locations for generated sites
 export const GENERATED_SITE_LOCATIONS = [
 	'[REDACTED], North America',
 	'[REDACTED], South America',
@@ -215,7 +205,6 @@ export const GENERATED_SITE_LOCATIONS = [
 	'Urban concealed facility'
 ] as const;
 
-// Site specialties for generation
 export const SITE_SPECIALTIES = [
 	'General containment',
 	'Humanoid containment',
@@ -235,17 +224,14 @@ export const SITE_SPECIALTIES = [
 	'Decommissioning facility'
 ] as const;
 
-// Get site by designation
 export function getSiteByDesignation(designation: string): FoundationSite | undefined {
 	return ALL_SITES.find((s) => s.designation === designation);
 }
 
-// Get sites by specialty
 export function getSitesBySpecialty(specialty: string): FoundationSite[] {
 	return ALL_SITES.filter((s) => s.specialty.toLowerCase().includes(specialty.toLowerCase()));
 }
 
-// Get sites by security level
 export function getSitesBySecurityLevel(level: FoundationSite['securityLevel']): FoundationSite[] {
 	return ALL_SITES.filter((s) => s.securityLevel === level);
 }

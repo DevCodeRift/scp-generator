@@ -19,7 +19,7 @@
 	let uploadProgress = $state(0);
 	let error = $state<string | null>(null);
 
-	const CHUNK_SIZE = 10 * 1024 * 1024; // 10MB chunks
+	const CHUNK_SIZE = 10 * 1024 * 1024;
 
 	async function handleFile(file: File) {
 		const ext = file.name.split('.').pop()?.toLowerCase();
@@ -39,7 +39,6 @@
 		uploadProgress = 0;
 
 		try {
-			// Step 1: Initialize upload - create job on server
 			const initRes = await fetch('/api/video/upload', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
@@ -53,7 +52,6 @@
 
 			const { jobId } = await initRes.json();
 
-			// Step 2: Upload file in chunks
 			const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
 
 			for (let i = 0; i < totalChunks; i++) {
@@ -61,13 +59,10 @@
 				const end = Math.min(start + CHUNK_SIZE, file.size);
 				const chunk = file.slice(start, end);
 
-				// Use XHR for per-chunk progress tracking
 				const chunkResult = await uploadChunk(chunk, jobId, i, totalChunks);
 
-				// Update overall progress
 				uploadProgress = Math.round(((i + 1) / totalChunks) * 100);
 
-				// Final chunk returns the full upload result
 				if (chunkResult.complete) {
 					onUploadComplete({
 						jobId: chunkResult.jobId,

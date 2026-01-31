@@ -2,7 +2,6 @@ import { error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { getJob, deleteJob } from '$lib/server/job-manager';
 import { createReadStream, existsSync, statSync } from 'fs';
-import { Readable } from 'stream';
 
 export const GET: RequestHandler = async ({ params }) => {
 	const { jobId } = params;
@@ -30,10 +29,8 @@ export const GET: RequestHandler = async ({ params }) => {
 		? `SCP-BODYCAM-${job.filename.replace(/\.[^.]+$/, '')}.mp4`
 		: `SCP-BODYCAM-${jobId.slice(0, 8)}.mp4`;
 
-	// Create a readable stream from the output file
 	const nodeStream = createReadStream(job.outputPath);
 
-	// Convert Node.js stream to Web ReadableStream
 	const webStream = new ReadableStream({
 		start(controller) {
 			nodeStream.on('data', (chunk: Buffer) => {
@@ -41,7 +38,6 @@ export const GET: RequestHandler = async ({ params }) => {
 			});
 			nodeStream.on('end', () => {
 				controller.close();
-				// Schedule cleanup after download completes
 				setTimeout(() => deleteJob(jobId), 5000);
 			});
 			nodeStream.on('error', (err) => {

@@ -1,5 +1,3 @@
-// SCP Anomaly Type Data
-
 export const ANOMALY_CATEGORIES = [
 	'Biological',
 	'Mechanical',

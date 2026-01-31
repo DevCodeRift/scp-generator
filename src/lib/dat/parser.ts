@@ -1,9 +1,5 @@
 import { DatDocumentSchema, type DatDocument } from './types';
 
-/**
- * Parse a raw JSON string (from a .dat file) into a validated DatDocument.
- * Throws a descriptive error if parsing or validation fails.
- */
 export function parseDatFile(rawContent: string): DatDocument {
 	let json: unknown;
 	try {
@@ -23,24 +19,16 @@ export function parseDatFile(rawContent: string): DatDocument {
 	return result.data;
 }
 
-/**
- * Read a File object (from a file input / drag-and-drop) and parse it as a DatDocument.
- */
 export async function parseDatFileFromUpload(file: File): Promise<DatDocument> {
 	const text = await file.text();
 	return parseDatFile(text);
 }
 
-/**
- * Extract a human-readable title from a DatDocument.
- * Uses the fields.title if available, otherwise derives from the first header element.
- */
 export function getDatDocumentTitle(doc: DatDocument): string {
 	if (doc.fields.title) {
 		return doc.fields.title.trim();
 	}
 
-	// Fall back to first header element content
 	for (const page of doc.pages) {
 		for (const el of page.elements) {
 			if (el.type === 'header' || el.type === 'header2' || el.type === 'header3') {
@@ -55,9 +43,6 @@ export function getDatDocumentTitle(doc: DatDocument): string {
 	return 'Untitled Document';
 }
 
-/**
- * Get summary statistics for a DatDocument.
- */
 export function getDatDocumentStats(doc: DatDocument) {
 	let totalElements = 0;
 	let signatures = 0;

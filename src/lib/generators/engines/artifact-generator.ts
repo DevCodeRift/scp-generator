@@ -1,4 +1,3 @@
-// Artifact Generator Engine
 import { createRandom, generateSeed, type RandomGenerator } from '../core/random';
 import type { GeneratedArtifact, GeneratedContent, ArtifactConfig } from '../types';
 import {
@@ -40,26 +39,18 @@ export function generateArtifact(
 	const rng = createRandom(finalSeed);
 	const finalConfig = { ...defaultArtifactConfig, ...config };
 
-	// Generate base properties
 	const form = rng.pick([...ARTIFACT_FORMS]);
 	const material = rng.pick([...ARTIFACT_MATERIALS]);
 	const era = rng.pick([...ARTIFACT_ERAS]);
 
-	// Generate name
 	const name = generateArtifactName(rng, form, material, era);
-
-	// Generate primary effect
 	const primaryEffect = rng.pick([...ARTIFACT_EFFECTS]);
-
-	// Generate activation condition
 	const activation = rng.pick([...ARTIFACT_ACTIVATIONS]);
 
-	// Generate drawback (if enabled)
 	const drawback = finalConfig.includeDrawbacks && rng.chance(0.7)
 		? rng.pick([...ARTIFACT_DRAWBACKS])
 		: undefined;
 
-	// Generate origin (70% chance)
 	const origin = rng.chance(0.7)
 		? rng.pick([...ARTIFACT_ORIGINS])
 		: undefined;

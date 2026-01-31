@@ -48,7 +48,6 @@
 </svelte:head>
 
 <div class="min-h-screen flex flex-col">
-	<!-- Header -->
 	<header class="border-b border-[var(--color-border)] bg-[var(--color-surface)] sticky top-0 z-40">
 		<div class="max-w-[1800px] mx-auto px-4 py-3 flex items-center justify-between">
 			<div class="flex items-center gap-4">
@@ -72,9 +71,7 @@
 		</div>
 	</header>
 
-	<!-- Main Content -->
 	<main class="flex-1 max-w-4xl mx-auto px-4 py-8 w-full">
-		<!-- Generator Header -->
 		<div class="terminal-window mb-6">
 			<div class="terminal-header flex items-center justify-between">
 				<span>{typeNames[generatorType]?.toUpperCase()}</span>
@@ -87,7 +84,6 @@
 			</div>
 		</div>
 
-		<!-- Generator Content -->
 		{#if generatorType === 'npc'}
 			<NPCGenerator />
 		{:else if generatorType === 'scp'}
@@ -97,7 +93,6 @@
 		{:else if generatorType === 'event'}
 			<EventRoller />
 		{:else}
-			<!-- Placeholder for other generators -->
 			<div class="terminal-window">
 				<div class="terminal-header">CONFIGURATION</div>
 				<div class="p-8 text-center">
@@ -112,7 +107,6 @@
 			</div>
 		{/if}
 
-		<!-- Quick Links -->
 		<div class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
 			{#each validTypes.filter(t => t !== generatorType) as type}
 				<a

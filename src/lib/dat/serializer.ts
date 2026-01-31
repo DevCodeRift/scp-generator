@@ -1,16 +1,10 @@
 import type { DatDocument, DatElement, DatPage, DatDocumentType } from './types';
 import type { Document } from '$lib/stores/document';
 
-/**
- * Serialize a DatDocument back to a JSON string suitable for saving as a .dat file.
- */
 export function serializeDatDocument(doc: DatDocument): string {
 	return JSON.stringify(doc);
 }
 
-/**
- * Trigger a browser download of a DatDocument as a .dat file.
- */
 export function downloadDatFile(doc: DatDocument, filename?: string): void {
 	const json = serializeDatDocument(doc);
 	const blob = new Blob([json], { type: 'application/json' });
@@ -22,37 +16,22 @@ export function downloadDatFile(doc: DatDocument, filename?: string): void {
 	URL.revokeObjectURL(url);
 }
 
-/**
- * Generate a pseudo-random draft ID (mimics Gmod's ID format).
- */
 function generateDraftId(): number {
 	return Math.floor(Math.random() * 9000000000000) + 1000000000000;
 }
 
-/**
- * Helper to create a text element.
- */
 function textEl(type: 'header' | 'header2' | 'header3' | 'paragraph' | 'smalltext', content: string): DatElement {
 	return { type, content };
 }
 
-/**
- * Helper to create a line separator.
- */
 function lineEl(): DatElement {
 	return { type: 'line', content: 'New Line' };
 }
 
-/**
- * Helper to create a dotted line separator.
- */
 function dottedLineEl(): DatElement {
 	return { type: 'dottedline', content: 'New Dotted Line' };
 }
 
-/**
- * Helper to create a signature box.
- */
 function signatureEl(): DatElement {
 	return {
 		type: 'signature',
@@ -61,10 +40,6 @@ function signatureEl(): DatElement {
 	};
 }
 
-/**
- * Convert an app Document into a DatDocument for export.
- * Maps each app document type to a multi-page .dat structure.
- */
 export function convertAppDocumentToDat(doc: Document): DatDocument {
 	const pages: DatPage[] = [];
 	let title = 'Untitled';
@@ -385,7 +360,6 @@ export function convertAppDocumentToDat(doc: Document): DatDocument {
 			]));
 	}
 
-	// Ensure at least one page exists
 	if (pages.length === 0) {
 		pages.push(makePage([textEl('header', title)]));
 	}

@@ -28,7 +28,6 @@
 >
 	{#each doc.pages as page, pageIndex}
 		<div class="dat-page" class:not-first={pageIndex > 0}>
-			<!-- Page number -->
 			<div class="page-number">Page {pageIndex + 1} of {doc.pages.length}</div>
 
 			{#each page.elements as element}

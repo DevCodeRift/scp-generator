@@ -11,11 +11,9 @@
 	import type { GeneratedEvent, GeneratedContent, EventSeverity } from '$lib/generators/types';
 	import { generateSeed } from '$lib/generators/core/random';
 
-	// Configuration state
 	let selectedSeverity = $state<EventSeverity | 'random'>('random');
 	let generateCount = $state(1);
 
-	// Generated results
 	let results = $state<GeneratedContent<GeneratedEvent>[]>([]);
 	let isGenerating = $state(false);
 
@@ -69,7 +67,6 @@
 </script>
 
 <div class="event-roller">
-	<!-- Configuration Panel -->
 	<div class="terminal-window mb-6">
 		<div class="terminal-header">CONFIGURATION</div>
 		<div class="p-4 space-y-4">
@@ -101,7 +98,6 @@
 		</div>
 	</div>
 
-	<!-- Results -->
 	{#if results.length > 0}
 		<div class="space-y-4">
 			{#each results as result, i}
@@ -124,14 +120,12 @@
 						</div>
 					</div>
 					<div class="p-4">
-						<!-- Title -->
 						<div class="mb-4">
 							<h3 class="text-xl font-bold text-[var(--color-accent)]">
 								{event.title}
 							</h3>
 						</div>
 
-						<!-- Description -->
 						<div class="mb-4">
 							<span class="text-sm font-bold text-[var(--color-text-muted)]">SITUATION:</span>
 							<p class="mt-1 text-sm bg-[var(--color-primary)] p-3 border border-[var(--color-border)]">
@@ -139,7 +133,6 @@
 							</p>
 						</div>
 
-						<!-- Immediate Effects -->
 						<div class="mb-4">
 							<span class="text-sm font-bold text-[var(--color-text-muted)]">IMMEDIATE EFFECTS:</span>
 							<ul class="mt-1 text-sm list-disc list-inside space-y-1">
@@ -149,7 +142,6 @@
 							</ul>
 						</div>
 
-						<!-- Complications -->
 						{#if event.complications && event.complications.length > 0}
 							<div class="mb-4">
 								<span class="text-sm font-bold text-[var(--color-warning)]">COMPLICATIONS:</span>
@@ -161,7 +153,6 @@
 							</div>
 						{/if}
 
-						<!-- Suggested Response -->
 						{#if event.suggestedResponse}
 							<div class="mb-4">
 								<span class="text-sm font-bold text-[var(--color-success)]">SUGGESTED RESPONSE:</span>
@@ -171,7 +162,6 @@
 							</div>
 						{/if}
 
-						<!-- Seed -->
 						<div class="mt-4 pt-4 border-t border-[var(--color-border)]">
 							<span class="text-xs text-[var(--color-text-muted)]">
 								Seed: {result.seed}

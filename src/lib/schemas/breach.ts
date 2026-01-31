@@ -1,18 +1,16 @@
 import { z } from 'zod';
 import { DocumentMetadataSchema } from './common';
 
-// Breach level (based on scale)
 export const BreachLevelSchema = z.enum([
-	'alpha',      // Minor, localized
-	'beta',       // Significant, contained to site
-	'gamma',      // Major, potential external exposure
-	'delta',      // Severe, confirmed external exposure
-	'epsilon',    // Critical, widespread threat
-	'omega'       // Catastrophic, potential K-class scenario
+	'alpha',
+	'beta',
+	'gamma',
+	'delta',
+	'epsilon',
+	'omega'
 ]);
 export type BreachLevel = z.infer<typeof BreachLevelSchema>;
 
-// Breach status
 export const BreachStatusSchema = z.enum([
 	'active',
 	'partially-contained',
@@ -22,7 +20,6 @@ export const BreachStatusSchema = z.enum([
 ]);
 export type BreachStatus = z.infer<typeof BreachStatusSchema>;
 
-// Response protocols
 export const ResponseProtocolSchema = z.enum([
 	'standard',
 	'lockdown',
@@ -34,56 +31,36 @@ export const ResponseProtocolSchema = z.enum([
 ]);
 export type ResponseProtocol = z.infer<typeof ResponseProtocolSchema>;
 
-// Main Containment Breach Report schema
 export const ContainmentBreachSchema = z.object({
 	metadata: DocumentMetadataSchema,
 	type: z.literal('breach'),
-
-	// Identification
 	breachId: z.string().min(1, 'Breach ID is required'),
 	scpNumber: z.string().min(1, 'SCP number is required'),
 	scpClass: z.string().optional(),
-
-	// Severity
 	breachLevel: BreachLevelSchema,
 	status: BreachStatusSchema,
 	responseProtocol: ResponseProtocolSchema,
-
-	// When and where
 	dateTime: z.string().min(1, 'Date/time is required'),
 	originalContainmentSite: z.string().min(1, 'Original containment site is required'),
 	currentLocation: z.string().optional(),
 	affectedAreas: z.string().optional(),
-
-	// What happened
 	breachDescription: z.string().min(1, 'Breach description is required'),
 	causeOfBreach: z.string().optional(),
 	anomalousBehavior: z.string().optional(),
-
-	// Response
 	initialResponse: z.string().optional(),
 	containmentEfforts: z.string().optional(),
 	respondingUnits: z.string().optional(),
-
-	// Casualties
 	personnelCasualties: z.number().default(0),
 	civilianExposure: z.number().default(0),
-
-	// Status
 	recontainmentStatus: z.string().optional(),
 	estimatedRecontainment: z.string().optional(),
-
-	// Authorization
 	reportingOfficer: z.string().optional(),
 	incidentCommander: z.string().optional(),
-
-	// Display options
 	showCasualties: z.boolean().default(true),
 	showUrgentBanner: z.boolean().default(true)
 });
 export type ContainmentBreach = z.infer<typeof ContainmentBreachSchema>;
 
-// Default values
 export const defaultContainmentBreach: ContainmentBreach = {
 	metadata: {
 		faction: 'foundation',
@@ -105,7 +82,6 @@ export const defaultContainmentBreach: ContainmentBreach = {
 	showUrgentBanner: true
 };
 
-// Labels for UI
 export const BREACH_LEVEL_INFO: Record<BreachLevel, { label: string; color: string; description: string }> = {
 	'alpha': { label: 'Alpha', color: '#cccc00', description: 'Minor, localized breach' },
 	'beta': { label: 'Beta', color: '#ff8800', description: 'Significant, contained to site' },

@@ -1,11 +1,4 @@
-/**
- * Name banks for NPC generation
- * Mix of canonical SCP wiki names and procedurally-friendly additions
- */
-
-// Researcher first names
 export const RESEARCHER_FIRST_NAMES = [
-	// Male names
 	'Alexander',
 	'Benjamin',
 	'Charles',
@@ -27,7 +20,6 @@ export const RESEARCHER_FIRST_NAMES = [
 	'Thomas',
 	'Victor',
 	'William',
-	// Female names
 	'Alice',
 	'Barbara',
 	'Catherine',
@@ -48,7 +40,6 @@ export const RESEARCHER_FIRST_NAMES = [
 	'Sarah',
 	'Teresa',
 	'Victoria',
-	// Gender-neutral names
 	'Alex',
 	'Cameron',
 	'Jordan',
@@ -57,9 +48,7 @@ export const RESEARCHER_FIRST_NAMES = [
 	'Taylor'
 ] as const;
 
-// Researcher last names (includes some canonical SCP researchers)
 export const RESEARCHER_LAST_NAMES = [
-	// Canonical
 	'Bright',
 	'Clef',
 	'Gears',
@@ -72,7 +61,6 @@ export const RESEARCHER_LAST_NAMES = [
 	'Iceberg',
 	'Light',
 	'Sorts',
-	// Additional
 	'Anderson',
 	'Baker',
 	'Chen',
@@ -101,7 +89,6 @@ export const RESEARCHER_LAST_NAMES = [
 	'Zhang'
 ] as const;
 
-// Researcher titles
 export const RESEARCHER_TITLES = [
 	'Dr.',
 	'Professor',
@@ -114,7 +101,6 @@ export const RESEARCHER_TITLES = [
 	'Department Head'
 ] as const;
 
-// MTF phonetic alphabet for callsigns
 export const NATO_PHONETIC = [
 	'Alpha',
 	'Bravo',
@@ -144,7 +130,6 @@ export const NATO_PHONETIC = [
 	'Zulu'
 ] as const;
 
-// MTF nicknames/callsigns
 export const MTF_NICKNAMES = [
 	'Ghost',
 	'Hammer',
@@ -178,10 +163,8 @@ export const MTF_NICKNAMES = [
 	'Crown'
 ] as const;
 
-// D-Class identifiers (format: D-XXXX)
 export const D_CLASS_PREFIX = 'D-';
 
-// Security personnel first names (more military style)
 export const SECURITY_FIRST_NAMES = [
 	'Marcus',
 	'Jake',
@@ -205,7 +188,6 @@ export const SECURITY_FIRST_NAMES = [
 	'Blake'
 ] as const;
 
-// Administrative staff names
 export const ADMIN_FIRST_NAMES = [
 	'Jennifer',
 	'Michelle',
@@ -229,7 +211,6 @@ export const ADMIN_FIRST_NAMES = [
 	'Brian'
 ] as const;
 
-// Medical staff names
 export const MEDICAL_FIRST_NAMES = [
 	'Elizabeth',
 	'Mary',
@@ -249,7 +230,6 @@ export const MEDICAL_FIRST_NAMES = [
 	'Michael'
 ] as const;
 
-// Departments
 export const DEPARTMENTS = [
 	'Containment',
 	'Research',
@@ -272,7 +252,6 @@ export const DEPARTMENTS = [
 	'Tactical Response'
 ] as const;
 
-// NPC backgrounds
 export const NPC_BACKGROUNDS = [
 	'Former military intelligence officer',
 	'Recruited from prestigious university research program',
@@ -296,7 +275,6 @@ export const NPC_BACKGROUNDS = [
 	'Physicist researching theoretical anomalies'
 ] as const;
 
-// NPC quirks/personality traits
 export const NPC_QUIRKS = [
 	'Always carries a lucky charm',
 	'Refuses to work after midnight',
@@ -324,7 +302,6 @@ export const NPC_QUIRKS = [
 	'Has unusual scars they refuse to explain'
 ] as const;
 
-// Specializations
 export const SPECIALIZATIONS = [
 	'Memetics',
 	'Antimemetics',
@@ -348,13 +325,11 @@ export const SPECIALIZATIONS = [
 	'Anomalous technology reverse-engineering'
 ] as const;
 
-// Generate D-Class designation
 export function generateDClassDesignation(): string {
 	const num = Math.floor(Math.random() * 9000) + 1000;
 	return `${D_CLASS_PREFIX}${num}`;
 }
 
-// Generate MTF callsign
 export function generateMTFCallsign(): string {
 	const letter = NATO_PHONETIC[Math.floor(Math.random() * NATO_PHONETIC.length)];
 	const num = Math.floor(Math.random() * 12) + 1;

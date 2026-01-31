@@ -6,15 +6,11 @@ import { existsSync } from 'fs';
 import { mkdir } from 'fs/promises';
 import { dirname } from 'path';
 
-// Use DejaVu Mono in Docker (Alpine), fall back to Courier for local dev
 const DOCKER_FONT = '/usr/share/fonts/dejavu/DejaVuSansMono.ttf';
 const fontSpec = existsSync(DOCKER_FONT)
 	? `fontfile=${DOCKER_FONT}`
 	: 'font=Courier';
 
-/**
- * Probe a video file to get metadata (duration, resolution, etc.).
- */
 export function probeVideo(inputPath: string): Promise<ffmpeg.FfprobeData> {
 	return new Promise((resolve, reject) => {
 		ffmpeg.ffprobe(inputPath, (err, data) => {
@@ -24,9 +20,6 @@ export function probeVideo(inputPath: string): Promise<ffmpeg.FfprobeData> {
 	});
 }
 
-/**
- * Extract video metadata from probe data.
- */
 export function extractVideoMeta(probeData: ffmpeg.FfprobeData) {
 	const videoStream = probeData.streams.find((s) => s.codec_type === 'video');
 	return {
@@ -39,19 +32,14 @@ export function extractVideoMeta(probeData: ffmpeg.FfprobeData) {
 	};
 }
 
-/**
- * Build the FFmpeg video filter string from VideoEffects config.
- */
 export function buildFilterChain(effects: VideoEffects): string {
 	const filters: string[] = [];
 
-	// 1. Noise
 	if (effects.noise) {
 		const strength = Math.round(effects.noiseIntensity * 60);
 		filters.push(`noise=alls=${strength}:allf=t`);
 	}
 
-	// 2. Color grading
 	switch (effects.colorGrade) {
 		case 'green':
 			filters.push('colorchannelmixer=.3:.4:.3:0:.3:.4:.3:0:.3:.4:.3:0');
@@ -69,24 +57,20 @@ export function buildFilterChain(effects: VideoEffects): string {
 			break;
 	}
 
-	// 3. Vignette
 	if (effects.vignette) {
 		const angle = (effects.vignetteIntensity * Math.PI) / 2;
 		filters.push(`vignette=angle=${angle.toFixed(4)}`);
 	}
 
-	// 4. Camera shake
 	if (effects.cameraShake) {
 		const amp = Math.round(effects.shakeIntensity * 20) + 2;
 		filters.push(`crop=iw-${amp * 2}:ih-${amp * 2}:${amp}*sin(t*10):${amp}*cos(t*8)`);
 	}
 
-	// 5. Scanlines (darken every other line using geq)
 	if (effects.scanlines) {
 		filters.push("geq=lum='if(mod(Y\\,2)\\,lum(X\\,Y)*0.85\\,lum(X\\,Y))':cb='cb(X\\,Y)':cr='cr(X\\,Y)'");
 	}
 
-	// 6. Facility ID
 	if (effects.facilityId) {
 		const escapedText = effects.facilityId.replace(/'/g, "\\'").replace(/:/g, '\\:');
 		filters.push(
@@ -94,14 +78,12 @@ export function buildFilterChain(effects: VideoEffects): string {
 		);
 	}
 
-	// 7. Timestamp
 	if (effects.timestamp) {
 		filters.push(
 			`drawtext=text='%{pts\\:hms}':x=w-200:y=20:fontsize=18:fontcolor=white@0.7:${fontSpec}:borderw=1:bordercolor=black@0.5`
 		);
 	}
 
-	// 8. REC indicator
 	if (effects.recIndicator) {
 		filters.push(
 			`drawtext=text='REC':x=20:y=h-40:fontsize=16:fontcolor=red@0.9:${fontSpec}:borderw=1:bordercolor=black@0.5:enable='lt(mod(t\\,2)\\,1.5)'`
@@ -114,17 +96,12 @@ export function buildFilterChain(effects: VideoEffects): string {
 	return filters.join(',');
 }
 
-/**
- * Process a video with SCP body cam effects.
- * Returns a promise that resolves when processing is complete.
- */
 export async function processVideo(
 	jobId: string,
 	inputPath: string,
 	outputPath: string,
 	effects: VideoEffects
 ): Promise<void> {
-	// Ensure output directory exists
 	const outDir = dirname(outputPath);
 	if (!existsSync(outDir)) {
 		await mkdir(outDir, { recursive: true });
@@ -136,7 +113,6 @@ export async function processVideo(
 
 		let command = ffmpeg(inputPath);
 
-		// Apply video filter chain
 		if (filterChain) {
 			command = command.videoFilters(filterChain);
 		}
@@ -146,8 +122,8 @@ export async function processVideo(
 				'-c:v', 'libx264',
 				'-crf', String(qualityInfo.crf),
 				'-preset', 'medium',
-				'-c:a', 'copy', // Keep original audio
-				'-movflags', '+faststart' // Optimize for web playback
+				'-c:a', 'copy',
+				'-movflags', '+faststart'
 			])
 			.on('start', (cmdline: string) => {
 				console.log(`[video-processor] Job ${jobId} started: ${cmdline}`);

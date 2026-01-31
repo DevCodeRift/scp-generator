@@ -73,18 +73,15 @@
 	const validTypes = ['scp', 'research', 'letter', 'interview', 'personnel', 'incident', 'mission', 'breach', 'anomaly-card', 'exploration', 'autopsy', 'directive', 'newspaper', 'avlog', 'id-badge'];
 
 	onMount(() => {
-		// Validate document type
 		if (!validTypes.includes(docType)) {
 			goto('/');
 			return;
 		}
 
-		// Try to load from localStorage or init new document
 		if (!documentStore.load(docType)) {
 			documentStore.initDocument(docType);
 		}
 
-		// Update faction in document when store changes
 		const unsubFaction = factionStore.subscribe(faction => {
 			documentStore.update(doc => {
 				if (doc) {
@@ -97,7 +94,6 @@
 			});
 		});
 
-		// Autosave on changes
 		const unsubDoc = documentStore.subscribe(() => {
 			documentStore.save();
 		});
@@ -109,7 +105,6 @@
 	});
 
 	function getExportFilename(extension: string): string {
-		// Try to get a meaningful name from the document
 		const doc = $documentStore;
 		if (doc) {
 			if ('staffId' in doc && doc.staffId) {
@@ -137,10 +132,8 @@
 		const originalScale = previewScale;
 
 		try {
-			// Set to full scale for accurate capture
 			previewScale = 1;
 
-			// Wait for DOM to update and fonts to load
 			await new Promise(resolve => setTimeout(resolve, 100));
 			await document.fonts.ready;
 
@@ -150,21 +143,18 @@
 				return;
 			}
 
-			// Dynamic import of html2pdf
 			const html2pdf = (await import('html2pdf.js')).default;
 
-			// Determine page format
 			let pageFormat: string = 'a4';
 			let customDimensions: number[] | null = null;
 
 			if (settings.format === 'letter') {
 				pageFormat = 'letter';
 			} else if (settings.format === 'fit') {
-				// Calculate dimensions based on content
 				const rect = previewElement.getBoundingClientRect();
-				const widthMm = (rect.width * 25.4) / 96; // px to mm
+				const widthMm = (rect.width * 25.4) / 96;
 				const heightMm = (rect.height * 25.4) / 96;
-				customDimensions = [widthMm + 20, heightMm + 20]; // Add margin
+				customDimensions = [widthMm + 20, heightMm + 20];
 			}
 
 			const opt = {
@@ -188,7 +178,6 @@
 			console.error('Export failed:', error);
 			alert('Export failed. Please try again.');
 		} finally {
-			// Restore original scale
 			previewScale = originalScale;
 			isExporting = false;
 		}
@@ -201,10 +190,8 @@
 		const originalScale = previewScale;
 
 		try {
-			// Set to full scale for accurate capture
 			previewScale = 1;
 
-			// Wait for DOM to update and fonts to load
 			await new Promise(resolve => setTimeout(resolve, 150));
 			await document.fonts.ready;
 
@@ -214,7 +201,6 @@
 				return;
 			}
 
-			// Use modern-screenshot for better CSS support
 			const { domToPng } = await import('modern-screenshot');
 
 			const dataUrl = await domToPng(previewElement, {
@@ -225,7 +211,6 @@
 				}
 			});
 
-			// Download the image
 			const link = document.createElement('a');
 			link.download = getExportFilename('png');
 			link.href = dataUrl;
@@ -234,7 +219,6 @@
 			console.error('Export failed:', error);
 			alert('Export failed. Please try again.');
 		} finally {
-			// Restore original scale
 			previewScale = originalScale;
 			isExporting = false;
 		}
@@ -269,7 +253,6 @@
 </svelte:head>
 
 <div class="min-h-screen flex flex-col">
-	<!-- Header -->
 	<header class="border-b border-[var(--color-border)] bg-[var(--color-surface)] sticky top-0 z-40">
 		<div class="max-w-[1800px] mx-auto px-4 py-3 flex items-center justify-between">
 			<div class="flex items-center gap-4">
@@ -298,9 +281,7 @@
 		</div>
 	</header>
 
-	<!-- Main Content -->
 	<main class="flex-1 flex">
-		<!-- Editor Panel -->
 		<div class="flex-1 overflow-y-auto p-4 {showPreview ? 'max-w-2xl' : 'max-w-4xl mx-auto'}">
 			<div class="mb-4">
 				<h1 class="text-xl font-bold crt-glow">
@@ -344,7 +325,6 @@
 			{/if}
 		</div>
 
-		<!-- Preview Panel -->
 		{#if showPreview}
 			<div class="w-1/2 border-l border-[var(--color-border)] bg-gray-800 overflow-y-auto">
 				<div class="sticky top-0 bg-gray-900 border-b border-gray-700 p-2 flex items-center justify-between z-10">
@@ -412,10 +392,8 @@
 	</main>
 </div>
 
-<!-- Fullscreen Preview Overlay -->
 {#if isFullscreen}
 	<div class="fixed inset-0 z-50 bg-gray-900 overflow-auto">
-		<!-- Close button -->
 		<button
 			class="fixed top-4 right-4 z-50 bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-lg shadow-lg flex items-center gap-2"
 			onclick={() => isFullscreen = false}
@@ -424,7 +402,6 @@
 			<span class="text-xs text-gray-400">(ESC)</span>
 		</button>
 
-		<!-- Centered document -->
 		<div class="min-h-screen flex items-start justify-center py-8 px-4">
 			{#if docType === 'scp'}
 				<SCPPreview scale={1} />

@@ -32,7 +32,6 @@
 	<div class="p-6">
 		{#if status === 'processing'}
 			<div class="space-y-4">
-				<!-- Status text -->
 				<div class="text-center">
 					<div class="text-[var(--color-accent)] font-mono text-lg animate-pulse">
 						{statusLabel}
@@ -42,7 +41,6 @@
 					</div>
 				</div>
 
-				<!-- Progress bar -->
 				<div class="w-full bg-gray-800 rounded-full h-4 overflow-hidden border border-gray-700">
 					<div
 						class="bg-[var(--color-accent)] h-full transition-all duration-500 rounded-full relative overflow-hidden"
@@ -52,7 +50,6 @@
 					</div>
 				</div>
 
-				<!-- Terminal-style log -->
 				<div class="bg-black/50 rounded p-3 font-mono text-xs text-green-400 space-y-1">
 					<div>> Initializing FFmpeg pipeline...</div>
 					{#if progress > 10}

@@ -1,7 +1,6 @@
 import { z } from 'zod';
 import { DocumentMetadataSchema } from './common';
 
-// Incident severity levels
 export const IncidentSeveritySchema = z.enum([
 	'minor',
 	'moderate',
@@ -11,7 +10,6 @@ export const IncidentSeveritySchema = z.enum([
 ]);
 export type IncidentSeverity = z.infer<typeof IncidentSeveritySchema>;
 
-// Incident status
 export const IncidentStatusSchema = z.enum([
 	'ongoing',
 	'contained',
@@ -21,7 +19,6 @@ export const IncidentStatusSchema = z.enum([
 ]);
 export type IncidentStatus = z.infer<typeof IncidentStatusSchema>;
 
-// Incident type
 export const IncidentTypeSchema = z.enum([
 	'containment-breach',
 	'security-breach',
@@ -34,7 +31,6 @@ export const IncidentTypeSchema = z.enum([
 ]);
 export type IncidentType = z.infer<typeof IncidentTypeSchema>;
 
-// Casualty info
 export const CasualtySchema = z.object({
 	fatalities: z.number().default(0),
 	injuries: z.number().default(0),
@@ -43,49 +39,33 @@ export const CasualtySchema = z.object({
 });
 export type Casualty = z.infer<typeof CasualtySchema>;
 
-// Main Incident Report schema
 export const IncidentReportSchema = z.object({
 	metadata: DocumentMetadataSchema,
 	type: z.literal('incident'),
-
-	// Identification
 	incidentNumber: z.string().min(1, 'Incident number is required'),
 	incidentType: IncidentTypeSchema,
 	severity: IncidentSeveritySchema,
 	status: IncidentStatusSchema,
-
-	// When and where
 	dateOccurred: z.string().min(1, 'Date is required'),
 	timeOccurred: z.string().optional(),
 	location: z.string().min(1, 'Location is required'),
-
-	// Related entities
 	relatedSCPs: z.string().optional(),
 	personnelInvolved: z.string().optional(),
 	respondingTeams: z.string().optional(),
-
-	// Report content
 	summary: z.string().min(1, 'Summary is required'),
 	timeline: z.string().optional(),
 	containmentActions: z.string().optional(),
 	damage: z.string().optional(),
 	casualties: CasualtySchema.default({ fatalities: 0, injuries: 0, missing: 0, amnesticized: 0 }),
-
-	// Follow-up
 	recommendations: z.string().optional(),
 	lessonsLearned: z.string().optional(),
-
-	// Report metadata
 	reportedBy: z.string().optional(),
 	approvedBy: z.string().optional(),
-
-	// Display options
 	showCasualties: z.boolean().default(true),
 	showTimeline: z.boolean().default(true)
 });
 export type IncidentReport = z.infer<typeof IncidentReportSchema>;
 
-// Default values
 export const defaultIncidentReport: IncidentReport = {
 	metadata: {
 		faction: 'foundation',
@@ -105,7 +85,6 @@ export const defaultIncidentReport: IncidentReport = {
 	showTimeline: true
 };
 
-// Labels for UI
 export const INCIDENT_SEVERITY_INFO: Record<IncidentSeverity, { label: string; color: string }> = {
 	'minor': { label: 'Minor', color: '#00aa00' },
 	'moderate': { label: 'Moderate', color: '#cccc00' },

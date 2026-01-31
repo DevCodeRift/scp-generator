@@ -53,9 +53,6 @@ export const PRESET_TEMPLATES: PresetTemplate[] = [
 	}
 ];
 
-/**
- * Fetch and parse a preset template by ID.
- */
 export async function loadPresetTemplate(id: string): Promise<DatDocument> {
 	const preset = PRESET_TEMPLATES.find((p) => p.id === id);
 	if (!preset) {

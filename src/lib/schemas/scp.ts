@@ -1,7 +1,6 @@
 import { z } from 'zod';
 import { DocumentMetadataSchema } from './common';
 
-// Object class enumeration
 export const ObjectClassSchema = z.enum([
 	'safe',
 	'euclid',
@@ -15,7 +14,6 @@ export const ObjectClassSchema = z.enum([
 ]);
 export type ObjectClass = z.infer<typeof ObjectClassSchema>;
 
-// Disruption class (ACS)
 export const DisruptionClassSchema = z.enum([
 	'dark',
 	'vlam',
@@ -25,7 +23,6 @@ export const DisruptionClassSchema = z.enum([
 ]);
 export type DisruptionClass = z.infer<typeof DisruptionClassSchema>;
 
-// Risk class (ACS)
 export const RiskClassSchema = z.enum([
 	'notice',
 	'caution',
@@ -35,7 +32,6 @@ export const RiskClassSchema = z.enum([
 ]);
 export type RiskClass = z.infer<typeof RiskClassSchema>;
 
-// Addendum types
 export const AddendumTypeSchema = z.enum([
 	'general',
 	'incident-report',
@@ -46,7 +42,6 @@ export const AddendumTypeSchema = z.enum([
 ]);
 export type AddendumType = z.infer<typeof AddendumTypeSchema>;
 
-// Addendum schema
 export const AddendumSchema = z.object({
 	id: z.string(),
 	type: AddendumTypeSchema,
@@ -56,32 +51,22 @@ export const AddendumSchema = z.object({
 });
 export type Addendum = z.infer<typeof AddendumSchema>;
 
-// Main SCP document schema
 export const SCPDocumentSchema = z.object({
 	metadata: DocumentMetadataSchema,
 	type: z.literal('scp'),
-
-	// Core fields
 	itemNumber: z.string().min(1, 'Item number is required'),
 	objectClass: ObjectClassSchema,
 	disruptionClass: DisruptionClassSchema.optional(),
 	riskClass: RiskClassSchema.optional(),
-
-	// Main content sections
 	containmentProcedures: z.string().min(1, 'Containment procedures are required'),
 	description: z.string().min(1, 'Description is required'),
-
-	// Optional sections
 	addenda: z.array(AddendumSchema).default([]),
-
-	// Display options
 	showACSModule: z.boolean().default(false),
 	showWarningBox: z.boolean().default(false),
 	warningMessage: z.string().optional()
 });
 export type SCPDocument = z.infer<typeof SCPDocumentSchema>;
 
-// Default values for new SCP document
 export const defaultSCPDocument: SCPDocument = {
 	metadata: {
 		faction: 'foundation',
@@ -98,7 +83,6 @@ export const defaultSCPDocument: SCPDocument = {
 	showWarningBox: false
 };
 
-// Object class descriptions for UI
 export const OBJECT_CLASS_INFO: Record<ObjectClass, { color: string; description: string }> = {
 	safe: {
 		color: '#00aa00',

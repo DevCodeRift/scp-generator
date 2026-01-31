@@ -7,7 +7,6 @@
 	import { OBJECT_CLASS_INFO, type SCPDocument, type Addendum, type AddendumType } from '$lib/schemas/scp';
 	import { v4 as uuid } from 'uuid';
 
-	// Use $state and sync from store via $effect
 	let doc = $state<SCPDocument | null>(null);
 
 	$effect(() => {
@@ -21,7 +20,6 @@
 		return unsub;
 	});
 
-	// Create options for object class select
 	const objectClassOptions = Object.entries(OBJECT_CLASS_INFO).map(([value, info]) => ({
 		value,
 		label: value.charAt(0).toUpperCase() + value.slice(1),
@@ -122,7 +120,6 @@
 
 {#if doc}
 	<div class="space-y-6">
-		<!-- Header Section -->
 		<div class="terminal-window">
 			<div class="terminal-header">DOCUMENT CLASSIFICATION</div>
 			<div class="p-4 grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -148,7 +145,6 @@
 			</div>
 		</div>
 
-		<!-- Item Number -->
 		<div class="terminal-window">
 			<div class="terminal-header">ITEM DESIGNATION</div>
 			<div class="p-4">
@@ -163,7 +159,6 @@
 			</div>
 		</div>
 
-		<!-- Containment Procedures -->
 		<div class="terminal-window">
 			<div class="terminal-header">SPECIAL CONTAINMENT PROCEDURES</div>
 			<div class="p-4">
@@ -178,7 +173,6 @@
 			</div>
 		</div>
 
-		<!-- Description -->
 		<div class="terminal-window">
 			<div class="terminal-header">DESCRIPTION</div>
 			<div class="p-4">
@@ -193,7 +187,6 @@
 			</div>
 		</div>
 
-		<!-- Addenda Section -->
 		<div class="terminal-window">
 			<div class="terminal-header flex items-center justify-between">
 				<span>ADDENDA</span>
@@ -249,7 +242,6 @@
 			</div>
 		</div>
 
-		<!-- Warning Box Options -->
 		<div class="terminal-window">
 			<div class="terminal-header">DISPLAY OPTIONS</div>
 			<div class="p-4 space-y-4">

@@ -1,5 +1,3 @@
-// Event Generation Data
-
 export const EVENT_TYPES = [
 	'containment-breach',
 	'anomalous-manifestation',

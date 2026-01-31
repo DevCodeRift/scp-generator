@@ -1,5 +1,3 @@
-// SCP Containment Procedure Data
-
 export const CONTAINMENT_LOCATIONS = [
 	'standard containment locker',
 	'reinforced steel containment chamber',

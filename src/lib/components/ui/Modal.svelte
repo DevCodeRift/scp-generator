@@ -35,7 +35,6 @@
 <svelte:window onkeydown={handleKeydown} />
 
 {#if open}
-	<!-- Backdrop -->
 	<div
 		class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
 		onclick={handleBackdropClick}
@@ -45,9 +44,7 @@
 		aria-labelledby="modal-title"
 		tabindex="-1"
 	>
-		<!-- Modal -->
 		<div class="terminal-window w-full {sizeClasses[size]} mx-4 max-h-[90vh] flex flex-col">
-			<!-- Header -->
 			<div class="terminal-header flex items-center justify-between">
 				<span id="modal-title" class="font-bold">{title}</span>
 				<button
@@ -66,12 +63,10 @@
 				</button>
 			</div>
 
-			<!-- Content -->
 			<div class="p-4 overflow-y-auto flex-1">
 				{@render children()}
 			</div>
 
-			<!-- Footer -->
 			{#if footer}
 				<div class="border-t border-[var(--color-border)] p-4 bg-[var(--color-surface)]">
 					{@render footer()}
@@ -82,7 +77,6 @@
 {/if}
 
 <style>
-	/* Modal entrance animation */
 	.terminal-window {
 		animation: modalIn 0.15s ease-out;
 	}

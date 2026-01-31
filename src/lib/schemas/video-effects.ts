@@ -7,37 +7,18 @@ export const OutputQualitySchema = z.enum(['low', 'medium', 'high']);
 export type OutputQuality = z.infer<typeof OutputQualitySchema>;
 
 export const VideoEffectsSchema = z.object({
-	// Scanlines overlay
 	scanlines: z.boolean().default(true),
-
-	// Running timestamp display
 	timestamp: z.boolean().default(true),
-
-	// Camera / facility label (top-left)
 	facilityId: z.string().default('CAM-07 // SITE-19'),
-
-	// Vignette (darkened edges)
 	vignette: z.boolean().default(true),
 	vignetteIntensity: z.number().min(0).max(1).default(0.5),
-
-	// Color grading preset
 	colorGrade: ColorGradeSchema.default('green'),
-
-	// Film grain / static noise
 	noise: z.boolean().default(true),
 	noiseIntensity: z.number().min(0).max(1).default(0.3),
-
-	// Blinking REC indicator
 	recIndicator: z.boolean().default(true),
-
-	// Subtle camera shake
 	cameraShake: z.boolean().default(false),
 	shakeIntensity: z.number().min(0).max(1).default(0.2),
-
-	// SCP Foundation watermark logo
 	scpWatermark: z.boolean().default(false),
-
-	// Output encoding quality
 	outputQuality: OutputQualitySchema.default('medium')
 });
 export type VideoEffects = z.infer<typeof VideoEffectsSchema>;
@@ -58,7 +39,6 @@ export const defaultVideoEffects: VideoEffects = {
 	outputQuality: 'medium'
 };
 
-// Preset configurations
 export const VIDEO_EFFECT_PRESETS: Record<string, { label: string; effects: Partial<VideoEffects> }> = {
 	bodycam: {
 		label: 'Standard Body Cam',

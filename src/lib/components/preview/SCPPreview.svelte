@@ -3,7 +3,6 @@
 	import { factionStore, FACTIONS } from '$lib/stores/faction';
 	import { OBJECT_CLASS_INFO, type SCPDocument } from '$lib/schemas/scp';
 
-	// Import logos
 	import foundationLogo from '$lib/assets/logos/foundation.svg';
 	import chaosInsurgencyLogo from '$lib/assets/logos/chaos-insurgency.svg';
 	import gocLogo from '$lib/assets/logos/goc.svg';
@@ -22,7 +21,6 @@
 		'wondertainment': wondertainmentLogo
 	};
 
-	// Use $state with $effect to sync from stores
 	let doc = $state<SCPDocument | null>(null);
 	let currentFaction = $state('foundation');
 
@@ -61,7 +59,6 @@
 		style="transform: scale({scale}); transform-origin: top center;"
 		id="document-preview"
 	>
-		<!-- Warning Box -->
 		{#if doc.showWarningBox && doc.warningMessage}
 			<div class="bg-red-900/20 border-2 border-red-600 p-4 mb-6 text-center">
 				<div class="text-red-600 font-bold text-lg mb-2">WARNING</div>
@@ -69,7 +66,6 @@
 			</div>
 		{/if}
 
-		<!-- Document Header -->
 		<div class="document-header">
 			{#if logo}
 				<img src={logo} alt="{faction?.name} Logo" class="document-logo" />
@@ -86,12 +82,10 @@
 			</div>
 		</div>
 
-		<!-- Item Number -->
 		<div class="text-center mb-6">
 			<h2 class="text-3xl font-bold tracking-wide">{doc.itemNumber}</h2>
 		</div>
 
-		<!-- Object Class -->
 		<div class="document-section">
 			<div class="document-section-title">Object Class</div>
 			<div class="flex items-center gap-2">
@@ -103,7 +97,6 @@
 			</div>
 		</div>
 
-		<!-- Containment Procedures -->
 		<div class="document-section">
 			<div class="document-section-title">Special Containment Procedures</div>
 			<div class="whitespace-pre-wrap leading-relaxed">
@@ -111,7 +104,6 @@
 			</div>
 		</div>
 
-		<!-- Description -->
 		<div class="document-section">
 			<div class="document-section-title">Description</div>
 			<div class="whitespace-pre-wrap leading-relaxed">
@@ -119,7 +111,6 @@
 			</div>
 		</div>
 
-		<!-- Addenda -->
 		{#if doc.addenda.length > 0}
 			{#each doc.addenda as addendum, i}
 				<div class="document-section">
@@ -139,7 +130,6 @@
 			{/each}
 		{/if}
 
-		<!-- Footer -->
 		<div class="mt-8 pt-4 border-t border-gray-400 text-xs text-gray-500 text-center">
 			<p>This document is the property of the {faction?.name || 'SCP Foundation'}.</p>
 			<p>Unauthorized access or distribution is strictly prohibited.</p>
@@ -153,7 +143,6 @@
 
 <style>
 	.document-container {
-		/* Override theme colors for document */
 		background-color: #f5f5f0;
 		color: #1a1a1a;
 		font-family: 'Courier Prime', 'Courier New', monospace;

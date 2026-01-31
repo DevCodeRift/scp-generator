@@ -30,7 +30,7 @@ function createDatEditorStore() {
 			newHistory.push(JSON.parse(JSON.stringify(doc)));
 			return {
 				...state,
-				history: newHistory.slice(-50), // Keep last 50 states
+				history: newHistory.slice(-50),
 				historyIndex: newHistory.length - 1
 			};
 		});
@@ -39,7 +39,6 @@ function createDatEditorStore() {
 	return {
 		subscribe,
 
-		// Load a document into the editor
 		loadDocument(doc: DatDocument) {
 			const cloned = JSON.parse(JSON.stringify(doc));
 			set({
@@ -53,7 +52,6 @@ function createDatEditorStore() {
 			});
 		},
 
-		// Create a new blank document
 		newDocument() {
 			const doc: DatDocument = {
 				type: 'foundation_research_study',
@@ -82,7 +80,6 @@ function createDatEditorStore() {
 			this.loadDocument(doc);
 		},
 
-		// Update document and mark dirty
 		updateDocument(updater: (doc: DatDocument) => DatDocument) {
 			update(state => {
 				if (!state.document) return state;
@@ -96,7 +93,6 @@ function createDatEditorStore() {
 			});
 		},
 
-		// Select a page
 		selectPage(index: number) {
 			update(state => ({
 				...state,
@@ -105,7 +101,6 @@ function createDatEditorStore() {
 			}));
 		},
 
-		// Select an element
 		selectElement(index: number | null) {
 			update(state => ({
 				...state,
@@ -113,7 +108,6 @@ function createDatEditorStore() {
 			}));
 		},
 
-		// Add a new page
 		addPage() {
 			this.updateDocument(doc => {
 				doc.pages.push({
@@ -128,7 +122,6 @@ function createDatEditorStore() {
 			}));
 		},
 
-		// Delete a page
 		deletePage(index: number) {
 			this.updateDocument(doc => {
 				if (doc.pages.length > 1) {
@@ -142,7 +135,6 @@ function createDatEditorStore() {
 			}));
 		},
 
-		// Duplicate a page
 		duplicatePage(index: number) {
 			this.updateDocument(doc => {
 				const page = JSON.parse(JSON.stringify(doc.pages[index]));
@@ -151,7 +143,6 @@ function createDatEditorStore() {
 			});
 		},
 
-		// Move page
 		movePage(fromIndex: number, toIndex: number) {
 			this.updateDocument(doc => {
 				const [page] = doc.pages.splice(fromIndex, 1);
@@ -164,7 +155,6 @@ function createDatEditorStore() {
 			}));
 		},
 
-		// Add element to current page
 		addElement(type: DatElementType, afterIndex?: number) {
 			this.updateDocument(doc => {
 				const page = doc.pages[get({ subscribe }).selectedPageIndex];
@@ -205,7 +195,6 @@ function createDatEditorStore() {
 			});
 		},
 
-		// Update an element
 		updateElement(pageIndex: number, elementIndex: number, updates: Partial<DatElement>) {
 			this.updateDocument(doc => {
 				const element = doc.pages[pageIndex]?.elements[elementIndex];
@@ -216,7 +205,6 @@ function createDatEditorStore() {
 			});
 		},
 
-		// Delete an element
 		deleteElement(pageIndex: number, elementIndex: number) {
 			this.updateDocument(doc => {
 				doc.pages[pageIndex]?.elements.splice(elementIndex, 1);
@@ -228,7 +216,6 @@ function createDatEditorStore() {
 			}));
 		},
 
-		// Move element within page
 		moveElement(pageIndex: number, fromIndex: number, toIndex: number) {
 			this.updateDocument(doc => {
 				const page = doc.pages[pageIndex];
@@ -240,7 +227,6 @@ function createDatEditorStore() {
 			});
 		},
 
-		// Copy element to clipboard
 		copyElement(pageIndex: number, elementIndex: number) {
 			update(state => {
 				const element = state.document?.pages[pageIndex]?.elements[elementIndex];
@@ -251,7 +237,6 @@ function createDatEditorStore() {
 			});
 		},
 
-		// Paste element from clipboard
 		pasteElement(pageIndex: number, afterIndex?: number) {
 			const state = get({ subscribe });
 			if (!state.clipboard) return;
@@ -260,7 +245,6 @@ function createDatEditorStore() {
 				const page = doc.pages[pageIndex];
 				if (page) {
 					const element = JSON.parse(JSON.stringify(state.clipboard));
-					// Generate new UID for signatures
 					if (element.type === 'signature') {
 						element.uid = Math.floor(Math.random() * 999999999);
 					}
@@ -271,7 +255,6 @@ function createDatEditorStore() {
 			});
 		},
 
-		// Undo
 		undo() {
 			update(state => {
 				if (state.historyIndex > 0) {
@@ -287,7 +270,6 @@ function createDatEditorStore() {
 			});
 		},
 
-		// Redo
 		redo() {
 			update(state => {
 				if (state.historyIndex < state.history.length - 1) {
@@ -303,7 +285,6 @@ function createDatEditorStore() {
 			});
 		},
 
-		// Update document fields
 		updateFields(fields: Partial<DatDocument['fields']>) {
 			this.updateDocument(doc => {
 				doc.fields = { ...doc.fields, ...fields };
@@ -311,7 +292,6 @@ function createDatEditorStore() {
 			});
 		},
 
-		// Update document settings
 		updateSettings(settings: Partial<DatDocument['settings']>) {
 			this.updateDocument(doc => {
 				doc.settings = { ...doc.settings, ...settings };
@@ -319,17 +299,14 @@ function createDatEditorStore() {
 			});
 		},
 
-		// Mark as saved
 		markSaved() {
 			update(state => ({ ...state, isDirty: false }));
 		},
 
-		// Get current document
 		getDocument(): DatDocument | null {
 			return get({ subscribe }).document;
 		},
 
-		// Reset editor
 		reset() {
 			set(initialState);
 		}
@@ -338,7 +315,6 @@ function createDatEditorStore() {
 
 export const datEditorStore = createDatEditorStore();
 
-// Derived stores for convenience
 export const currentPage = derived(datEditorStore, $state =>
 	$state.document?.pages[$state.selectedPageIndex] || null
 );

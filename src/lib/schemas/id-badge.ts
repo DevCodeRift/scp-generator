@@ -1,7 +1,6 @@
 import { z } from 'zod';
 import { DocumentMetadataSchema } from './common';
 
-// Clearance levels for badges
 export const BadgeClearanceSchema = z.enum([
 	'level-0',
 	'level-1',
@@ -13,7 +12,6 @@ export const BadgeClearanceSchema = z.enum([
 ]);
 export type BadgeClearance = z.infer<typeof BadgeClearanceSchema>;
 
-// Badge types
 export const BadgeTypeSchema = z.enum([
 	'standard',
 	'temporary',
@@ -24,7 +22,6 @@ export const BadgeTypeSchema = z.enum([
 ]);
 export type BadgeType = z.infer<typeof BadgeTypeSchema>;
 
-// Badge style
 export const BadgeStyleSchema = z.enum([
 	'modern',
 	'classic',
@@ -33,34 +30,21 @@ export const BadgeStyleSchema = z.enum([
 ]);
 export type BadgeStyle = z.infer<typeof BadgeStyleSchema>;
 
-// Main ID Badge schema
 export const IDBadgeSchema = z.object({
 	metadata: DocumentMetadataSchema,
 	type: z.literal('id-badge'),
-
-	// Identity
 	staffId: z.string().min(1, 'Staff ID is required'),
 	fullName: z.string().min(1, 'Full name is required'),
 	title: z.string().optional(),
-
-	// Assignment
 	department: z.string().optional(),
 	site: z.string().optional(),
 	clearanceLevel: BadgeClearanceSchema,
 	badgeType: BadgeTypeSchema,
-
-	// Validity
 	issueDate: z.string().optional(),
 	expiryDate: z.string().optional(),
-
-	// Photo
 	photoUrl: z.string().optional(),
-
-	// Access
 	accessZones: z.string().optional(),
 	restrictions: z.string().optional(),
-
-	// Display options
 	badgeStyle: BadgeStyleSchema,
 	showBarcode: z.boolean().default(true),
 	showPhoto: z.boolean().default(true),
@@ -69,7 +53,6 @@ export const IDBadgeSchema = z.object({
 });
 export type IDBadge = z.infer<typeof IDBadgeSchema>;
 
-// Default values
 export const defaultIDBadge: IDBadge = {
 	metadata: {
 		faction: 'foundation',
@@ -88,7 +71,6 @@ export const defaultIDBadge: IDBadge = {
 	showExpiry: true
 };
 
-// Labels for UI
 export const BADGE_CLEARANCE_INFO: Record<BadgeClearance, { label: string; color: string; bgColor: string }> = {
 	'level-0': { label: 'LEVEL 0', color: '#ffffff', bgColor: '#666666' },
 	'level-1': { label: 'LEVEL 1', color: '#ffffff', bgColor: '#228b22' },

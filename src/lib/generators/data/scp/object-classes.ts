@@ -1,5 +1,3 @@
-// SCP Object Classes and Classification Data
-
 export const OBJECT_CLASSES = ['Safe', 'Euclid', 'Keter', 'Thaumiel', 'Neutralized', 'Apollyon', 'Archon'] as const;
 export type ObjectClass = typeof OBJECT_CLASSES[number];
 

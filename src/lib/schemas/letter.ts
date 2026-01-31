@@ -1,7 +1,6 @@
 import { z } from 'zod';
 import { DocumentMetadataSchema } from './common';
 
-// Letter types
 export const LetterTypeSchema = z.enum([
 	'internal-memo',
 	'formal-letter',
@@ -12,7 +11,6 @@ export const LetterTypeSchema = z.enum([
 ]);
 export type LetterType = z.infer<typeof LetterTypeSchema>;
 
-// Person schema for from/to fields
 export const PersonSchema = z.object({
 	name: z.string().min(1, 'Name is required'),
 	title: z.string().optional(),
@@ -21,29 +19,21 @@ export const PersonSchema = z.object({
 });
 export type Person = z.infer<typeof PersonSchema>;
 
-// Letter schema
 export const LetterSchema = z.object({
 	metadata: DocumentMetadataSchema,
 	type: z.literal('letter'),
 	letterType: LetterTypeSchema,
-
-	// Header
 	date: z.string(),
 	from: PersonSchema,
 	to: PersonSchema,
 	cc: z.array(z.string()).default([]),
-
-	// Content
 	subject: z.string().min(1, 'Subject is required'),
 	body: z.string().min(1, 'Body is required'),
-
-	// Signature
 	includeSignature: z.boolean().default(true),
 	includeStamp: z.boolean().default(false)
 });
 export type Letter = z.infer<typeof LetterSchema>;
 
-// Default values for new letter
 export const defaultLetter: Letter = {
 	metadata: {
 		faction: 'foundation',
@@ -72,7 +62,6 @@ export const defaultLetter: Letter = {
 	includeStamp: false
 };
 
-// Letter type display info
 export const LETTER_TYPE_INFO: Record<LetterType, { label: string; description: string }> = {
 	'internal-memo': {
 		label: 'Internal Memo',
@@ -100,7 +89,6 @@ export const LETTER_TYPE_INFO: Record<LetterType, { label: string; description: 
 	}
 };
 
-// Common sites
 export const COMMON_SITES = [
 	'Site-01',
 	'Site-06',

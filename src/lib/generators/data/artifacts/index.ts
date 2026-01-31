@@ -1,5 +1,3 @@
-// Artifact Generation Data
-
 export const ARTIFACT_FORMS = [
 	'pocket watch',
 	'ring',

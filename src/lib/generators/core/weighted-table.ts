@@ -1,38 +1,21 @@
-/**
- * Weighted random selection utilities
- * For tables where some options are more likely than others
- */
-
 import type { RandomGenerator } from './random';
 import { createRandom } from './random';
 
-/**
- * A weighted item with value and weight
- */
 export interface WeightedItem<T> {
 	value: T;
 	weight: number;
 }
 
-/**
- * A weighted table for random selection
- */
 export interface WeightedTable<T> {
 	items: WeightedItem<T>[];
 	totalWeight: number;
 }
 
-/**
- * Create a weighted table from items
- */
 export function createWeightedTable<T>(items: WeightedItem<T>[]): WeightedTable<T> {
 	const totalWeight = items.reduce((sum, item) => sum + item.weight, 0);
 	return { items, totalWeight };
 }
 
-/**
- * Create a weighted table from a record of value -> weight
- */
 export function createTableFromRecord<T extends string>(
 	record: Record<T, number>
 ): WeightedTable<T> {
@@ -43,9 +26,6 @@ export function createTableFromRecord<T extends string>(
 	return createWeightedTable(items);
 }
 
-/**
- * Pick a random item from a weighted table
- */
 export function pickFromTable<T>(table: WeightedTable<T>, rng?: RandomGenerator): T {
 	const random = rng ?? createRandom();
 	let roll = random.float(0, table.totalWeight);
@@ -57,13 +37,9 @@ export function pickFromTable<T>(table: WeightedTable<T>, rng?: RandomGenerator)
 		}
 	}
 
-	// Fallback to last item (shouldn't happen with proper weights)
 	return table.items[table.items.length - 1].value;
 }
 
-/**
- * Pick multiple items from a weighted table (with replacement)
- */
 export function pickMultipleFromTable<T>(
 	table: WeightedTable<T>,
 	count: number,
@@ -76,10 +52,6 @@ export function pickMultipleFromTable<T>(
 	return results;
 }
 
-/**
- * Pick multiple unique items from a weighted table (without replacement)
- * Note: Weights are recalculated after each pick
- */
 export function pickUniqueFromTable<T>(
 	table: WeightedTable<T>,
 	count: number,
@@ -98,7 +70,6 @@ export function pickUniqueFromTable<T>(
 		const picked = pickFromTable(tempTable, random);
 		results.push(picked);
 
-		// Remove picked item from remaining
 		const index = remaining.findIndex((item) => item.value === picked);
 		if (index !== -1) {
 			remaining.splice(index, 1);
@@ -108,11 +79,6 @@ export function pickUniqueFromTable<T>(
 	return results;
 }
 
-/**
- * Pre-built weighted tables for common SCP generation needs
- */
-
-// Object class distribution (based on SCP wiki statistics)
 export const OBJECT_CLASS_WEIGHTS = createTableFromRecord({
 	safe: 35,
 	euclid: 45,
@@ -122,7 +88,6 @@ export const OBJECT_CLASS_WEIGHTS = createTableFromRecord({
 	explained: 1
 });
 
-// Anomaly type distribution
 export const ANOMALY_TYPE_WEIGHTS = createTableFromRecord({
 	object: 40,
 	entity: 30,
@@ -131,7 +96,6 @@ export const ANOMALY_TYPE_WEIGHTS = createTableFromRecord({
 	concept: 5
 });
 
-// NPC role distribution
 export const NPC_ROLE_WEIGHTS = createTableFromRecord({
 	researcher: 35,
 	security: 20,
@@ -141,7 +105,6 @@ export const NPC_ROLE_WEIGHTS = createTableFromRecord({
 	medical: 5
 });
 
-// Event severity distribution
 export const EVENT_SEVERITY_WEIGHTS = createTableFromRecord({
 	minor: 40,
 	moderate: 35,
@@ -149,7 +112,6 @@ export const EVENT_SEVERITY_WEIGHTS = createTableFromRecord({
 	critical: 5
 });
 
-// Containment difficulty distribution
 export const CONTAINMENT_DIFFICULTY_WEIGHTS = createTableFromRecord({
 	minimal: 25,
 	standard: 40,
@@ -157,7 +119,6 @@ export const CONTAINMENT_DIFFICULTY_WEIGHTS = createTableFromRecord({
 	extreme: 10
 });
 
-// Room type distribution for facility generation
 export const ROOM_TYPE_WEIGHTS = createTableFromRecord({
 	corridor: 25,
 	office: 15,

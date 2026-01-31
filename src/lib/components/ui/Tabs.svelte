@@ -33,7 +33,6 @@
 </script>
 
 <div class="tabs-container {className}">
-	<!-- Tab List -->
 	<div class="tab-list" role="tablist">
 		{#each tabs as tab}
 			<button
@@ -54,7 +53,6 @@
 		{/each}
 	</div>
 
-	<!-- Tab Panels -->
 	{#if children}
 		<div class="tab-content">
 			{@render children()}

@@ -2,7 +2,6 @@
 	import FactionSelector from '$lib/components/ui/FactionSelector.svelte';
 	import { factionStore, FACTIONS } from '$lib/stores/faction';
 
-	// All document types organized by category
 	const categories = [
 		{
 			id: 'personnel',
@@ -70,7 +69,6 @@
 </script>
 
 <div class="min-h-screen flex flex-col bg-[var(--color-background)]">
-	<!-- Header -->
 	<header class="border-b border-[var(--color-border)] bg-[var(--color-surface)] sticky top-0 z-50">
 		<div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
 			<div class="flex items-center gap-4">
@@ -88,7 +86,6 @@
 
 	<main class="flex-1">
 		<div class="max-w-7xl mx-auto px-6 py-8">
-			<!-- Quick Stats Bar -->
 			<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
 				<div class="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-4 text-center">
 					<div class="text-3xl font-bold text-[var(--color-accent)]">15</div>
@@ -109,7 +106,6 @@
 			</div>
 
 			<div class="grid lg:grid-cols-[1fr_300px] gap-8">
-				<!-- Main Document Categories -->
 				<div class="space-y-6">
 					<div class="flex items-center justify-between">
 						<h2 class="text-lg font-bold flex items-center gap-2">
@@ -120,7 +116,6 @@
 
 					{#each categories as category}
 						<div class="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg overflow-hidden">
-							<!-- Category Header -->
 							<button
 								class="w-full p-4 flex items-center justify-between hover:bg-[var(--color-primary)] transition-colors text-left"
 								onclick={() => activeCategory = activeCategory === category.id ? null : category.id}
@@ -145,7 +140,6 @@
 								</div>
 							</button>
 
-							<!-- Category Items -->
 							{#if activeCategory === category.id}
 								<div class="border-t border-[var(--color-border)] bg-[var(--color-primary)]/50">
 									<div class="grid sm:grid-cols-2 gap-2 p-4">
@@ -177,9 +171,7 @@
 					{/each}
 				</div>
 
-				<!-- Sidebar -->
 				<div class="space-y-6">
-					<!-- Quick Access -->
 					<div class="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-4">
 						<h3 class="font-bold mb-4 flex items-center gap-2 text-sm uppercase tracking-wide">
 							<span class="text-[var(--color-accent)]">//</span> Quick Access
@@ -204,7 +196,6 @@
 						</div>
 					</div>
 
-					<!-- Generators -->
 					<div class="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-4">
 						<h3 class="font-bold mb-4 flex items-center gap-2 text-sm uppercase tracking-wide">
 							<span class="text-[var(--color-accent)]">//</span> Generators
@@ -222,7 +213,6 @@
 						</div>
 					</div>
 
-					<!-- Tools -->
 					<div class="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-4">
 						<h3 class="font-bold mb-4 flex items-center gap-2 text-sm uppercase tracking-wide">
 							<span class="text-[var(--color-accent)]">//</span> Tools
@@ -240,7 +230,6 @@
 						</div>
 					</div>
 
-					<!-- Current Faction Info -->
 					<div class="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-4">
 						<h3 class="font-bold mb-3 flex items-center gap-2 text-sm uppercase tracking-wide">
 							<span class="text-[var(--color-accent)]">//</span> Active Faction
@@ -255,7 +244,6 @@
 						</div>
 					</div>
 
-					<!-- Info -->
 					<div class="text-xs text-[var(--color-text-muted)] text-center space-y-1">
 						<p>All documents are for creative/RP purposes only.</p>
 						<p>SCP content is licensed under CC BY-SA 3.0.</p>
@@ -265,7 +253,6 @@
 		</div>
 	</main>
 
-	<!-- Footer -->
 	<footer class="border-t border-[var(--color-border)] bg-[var(--color-surface)] py-3">
 		<div class="max-w-7xl mx-auto px-6 flex items-center justify-between text-xs text-[var(--color-text-muted)]">
 			<span class="font-mono">SCP://DOCGEN v1.0.0</span>

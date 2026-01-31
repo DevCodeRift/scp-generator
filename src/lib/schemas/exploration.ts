@@ -1,7 +1,6 @@
 import { z } from 'zod';
 import { DocumentMetadataSchema } from './common';
 
-// Exploration status
 export const ExplorationStatusSchema = z.enum([
 	'in-progress',
 	'completed',
@@ -11,7 +10,6 @@ export const ExplorationStatusSchema = z.enum([
 ]);
 export type ExplorationStatus = z.infer<typeof ExplorationStatusSchema>;
 
-// Environment type
 export const EnvironmentTypeSchema = z.enum([
 	'extradimensional',
 	'subterranean',
@@ -27,7 +25,6 @@ export const EnvironmentTypeSchema = z.enum([
 ]);
 export type EnvironmentType = z.infer<typeof EnvironmentTypeSchema>;
 
-// Waypoint entry
 export const WaypointSchema = z.object({
 	id: z.string(),
 	timestamp: z.string(),
@@ -39,45 +36,31 @@ export const WaypointSchema = z.object({
 });
 export type Waypoint = z.infer<typeof WaypointSchema>;
 
-// Main Exploration Log schema
 export const ExplorationLogSchema = z.object({
 	metadata: DocumentMetadataSchema,
 	type: z.literal('exploration'),
-
-	// Mission info
 	logNumber: z.string().min(1, 'Log number is required'),
 	missionTitle: z.string().optional(),
 	relatedSCP: z.string().optional(),
 	environmentType: EnvironmentTypeSchema,
 	status: ExplorationStatusSchema,
-
-	// Team
 	teamDesignation: z.string().min(1, 'Team designation is required'),
 	teamLeader: z.string().optional(),
 	teamMembers: z.string().optional(),
 	equipmentList: z.string().optional(),
-
-	// Mission details
 	missionDate: z.string().optional(),
 	entryPoint: z.string().optional(),
 	objectives: z.string().optional(),
-
-	// Log entries / waypoints
 	waypoints: z.array(WaypointSchema).default([]),
-
-	// Outcome
 	finalNotes: z.string().optional(),
 	recoveredMaterials: z.string().optional(),
 	recommendedActions: z.string().optional(),
-
-	// Display options
 	showHandwrittenStyle: z.boolean().default(true),
 	showDamageEffects: z.boolean().default(false),
 	showTimestamps: z.boolean().default(true)
 });
 export type ExplorationLog = z.infer<typeof ExplorationLogSchema>;
 
-// Default values
 export const defaultExplorationLog: ExplorationLog = {
 	metadata: {
 		faction: 'foundation',
@@ -95,7 +78,6 @@ export const defaultExplorationLog: ExplorationLog = {
 	showTimestamps: true
 };
 
-// Info labels
 export const EXPLORATION_STATUS_INFO: Record<ExplorationStatus, { label: string; color: string }> = {
 	'in-progress': { label: 'In Progress', color: '#0088cc' },
 	'completed': { label: 'Completed', color: '#00aa00' },

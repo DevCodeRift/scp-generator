@@ -13,7 +13,6 @@ export const POST: RequestHandler = async ({ request }) => {
 			throw error(400, 'Missing or invalid jobId');
 		}
 
-		// Validate effects
 		const parseResult = VideoEffectsSchema.safeParse(rawEffects);
 		if (!parseResult.success) {
 			const issues = parseResult.error.issues
@@ -37,7 +36,6 @@ export const POST: RequestHandler = async ({ request }) => {
 			throw error(500, 'Job has no output path configured');
 		}
 
-		// Update status and kick off processing (async, don't await)
 		updateJob(jobId, { status: 'processing', progress: 0 });
 
 		processVideo(jobId, job.inputPath, job.outputPath, effects).catch((err) => {

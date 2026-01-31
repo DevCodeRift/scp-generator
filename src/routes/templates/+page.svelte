@@ -16,7 +16,6 @@
 	let presetError = $state<string | null>(null);
 	let editMode = $state(false);
 
-	// Derived selected document
 	let selectedDoc = $derived(selectedDocIndex !== null ? importedDocs[selectedDocIndex]?.doc : null);
 
 	function handleImport(doc: DatDocument, title: string) {
@@ -72,7 +71,6 @@
 </svelte:head>
 
 <div class="min-h-screen flex flex-col bg-[var(--color-background)]">
-	<!-- Header -->
 	<header class="border-b border-[var(--color-border)] bg-[var(--color-surface)] sticky top-0 z-40">
 		<div class="max-w-[1800px] mx-auto px-4 py-3 flex items-center justify-between">
 			<div class="flex items-center gap-4">
@@ -88,9 +86,7 @@
 
 	<main class="flex-1">
 		{#if editMode && selectedDoc && selectedDocIndex !== null}
-			<!-- Full-width Edit Mode (Google Docs style) -->
 			<div class="edit-mode-container">
-				<!-- Sticky Toolbar -->
 				<div class="edit-toolbar">
 					<div class="edit-toolbar-inner">
 						<div class="flex items-center gap-4">
@@ -116,7 +112,6 @@
 					</div>
 				</div>
 
-				<!-- Editor Content -->
 				<div class="edit-content">
 					<DatEditor
 						bind:document={importedDocs[selectedDocIndex].doc}
@@ -126,12 +121,9 @@
 				</div>
 			</div>
 		{:else}
-			<!-- Normal two-column layout -->
 			<div class="max-w-[1800px] mx-auto px-4 py-6">
 				<div class="grid lg:grid-cols-[1fr_1fr] gap-6">
-					<!-- Left: Import & List -->
 					<div class="space-y-6">
-					<!-- Preset Templates -->
 					<div class="terminal-window">
 						<div class="terminal-header bg-gray-900">PRESET TEMPLATES</div>
 						<div class="p-4">
@@ -163,7 +155,6 @@
 						</div>
 					</div>
 
-					<!-- Import Zone -->
 					<div class="terminal-window">
 						<div class="terminal-header bg-gray-900">IMPORT .DAT TEMPLATE</div>
 						<div class="p-4">
@@ -171,7 +162,6 @@
 						</div>
 					</div>
 
-					<!-- Imported Templates List -->
 					{#if importedDocs.length > 0}
 						<div class="terminal-window">
 							<div class="terminal-header bg-gray-900">
@@ -234,18 +224,15 @@
 						</div>
 					{/if}
 
-					<!-- Info -->
 					<div class="text-xs text-[var(--color-text-muted)] space-y-1 p-4">
 						<p>DAT files are JSON-formatted document templates used by Gmod SCP RP addons.</p>
 						<p>Import .dat files to view their structure, or export app documents to .dat format from the editor.</p>
 					</div>
 				</div>
 
-				<!-- Right: Preview/Editor -->
 				<div class="space-y-4">
 					{#if selectedDoc && selectedDocIndex !== null}
 						<div class="sticky top-16">
-							<!-- Controls -->
 							<div class="bg-gray-900 border border-gray-700 rounded-t-lg p-2 flex items-center justify-between">
 								<div class="flex items-center gap-3">
 									<span class="text-xs text-gray-400 uppercase tracking-wide">
@@ -285,7 +272,6 @@
 									</Button>
 								</div>
 							</div>
-							<!-- Content -->
 							<div class="bg-gray-800 border border-t-0 border-gray-700 rounded-b-lg p-4 overflow-auto max-h-[80vh]">
 								{#if editMode}
 									<DatEditor
@@ -341,7 +327,6 @@
 		padding: 2rem 1rem 4rem;
 	}
 
-	/* Override DatEditor styles for full-width mode */
 	.edit-content :global(.dat-editor) {
 		max-width: 100%;
 	}

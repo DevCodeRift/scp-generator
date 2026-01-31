@@ -10,11 +10,9 @@
 	import type { GeneratedArtifact, GeneratedContent } from '$lib/generators/types';
 	import { generateSeed } from '$lib/generators/core/random';
 
-	// Configuration state
 	let includeDrawbacks = $state(true);
 	let generateCount = $state(1);
 
-	// Generated results
 	let results = $state<GeneratedContent<GeneratedArtifact>[]>([]);
 	let isGenerating = $state(false);
 
@@ -51,7 +49,6 @@
 </script>
 
 <div class="artifact-generator">
-	<!-- Configuration Panel -->
 	<div class="terminal-window mb-6">
 		<div class="terminal-header">CONFIGURATION</div>
 		<div class="p-4 space-y-4">
@@ -87,7 +84,6 @@
 		</div>
 	</div>
 
-	<!-- Results -->
 	{#if results.length > 0}
 		<div class="space-y-4">
 			{#each results as result, i}
@@ -98,7 +94,6 @@
 						<Badge variant="accent" size="sm">ANOMALOUS</Badge>
 					</div>
 					<div class="p-4">
-						<!-- Name and Form -->
 						<div class="mb-4">
 							<h3 class="text-xl font-bold text-[var(--color-accent)] mb-1">
 								{artifact.name}
@@ -108,7 +103,6 @@
 							</p>
 						</div>
 
-						<!-- Primary Effect -->
 						<div class="mb-4">
 							<span class="text-sm font-bold text-[var(--color-text-muted)]">Effect:</span>
 							<p class="mt-1 text-sm bg-[var(--color-primary)] p-3 border border-[var(--color-border)]">
@@ -116,7 +110,6 @@
 							</p>
 						</div>
 
-						<!-- Activation -->
 						<div class="mb-4">
 							<span class="text-sm font-bold text-[var(--color-text-muted)]">Activation:</span>
 							<p class="mt-1 text-sm">
@@ -124,7 +117,6 @@
 							</p>
 						</div>
 
-						<!-- Drawback -->
 						{#if artifact.drawback}
 							<div class="mb-4">
 								<span class="text-sm font-bold text-[var(--color-warning)]">Drawback:</span>
@@ -134,7 +126,6 @@
 							</div>
 						{/if}
 
-						<!-- Origin -->
 						{#if artifact.origin}
 							<div class="mb-4">
 								<span class="text-sm font-bold text-[var(--color-text-muted)]">Origin:</span>
@@ -144,7 +135,6 @@
 							</div>
 						{/if}
 
-						<!-- Seed -->
 						<div class="mt-4 pt-4 border-t border-[var(--color-border)]">
 							<span class="text-xs text-[var(--color-text-muted)]">
 								Seed: {result.seed}

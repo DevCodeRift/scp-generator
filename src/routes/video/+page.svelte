@@ -58,8 +58,7 @@
 				throw new Error(body.message || `Server error (${res.status})`);
 			}
 
-			// Start polling for status
-			startPolling();
+				startPolling();
 		} catch (e) {
 			processingStatus = 'error';
 			processingError = e instanceof Error ? e.message : 'Failed to start processing';
@@ -87,7 +86,6 @@
 					stopPolling();
 				}
 			} catch {
-				// Ignore polling errors, will retry next interval
 			}
 		}, 1000);
 	}
@@ -141,7 +139,6 @@
 </svelte:head>
 
 <div class="min-h-screen flex flex-col bg-[var(--color-background)]">
-	<!-- Header -->
 	<header class="border-b border-[var(--color-border)] bg-[var(--color-surface)] sticky top-0 z-40">
 		<div class="max-w-[1400px] mx-auto px-4 py-3 flex items-center justify-between">
 			<div class="flex items-center gap-4">
@@ -157,7 +154,6 @@
 
 	<main class="flex-1">
 		<div class="max-w-[1400px] mx-auto px-4 py-6">
-			<!-- Step indicator -->
 			<div class="flex items-center gap-2 mb-6 text-sm font-mono">
 				<span class="px-3 py-1 rounded {step === 'upload' ? 'bg-[var(--color-accent)] text-white' : 'bg-[var(--color-surface)] text-[var(--color-text-muted)]'}">
 					1. UPLOAD
@@ -173,7 +169,6 @@
 			</div>
 
 			{#if step === 'upload'}
-				<!-- Step 1: Upload -->
 				<div class="max-w-2xl mx-auto space-y-6">
 					<div class="text-center space-y-2">
 						<h1 class="text-2xl font-bold crt-glow">
@@ -187,11 +182,8 @@
 				</div>
 
 			{:else if step === 'configure'}
-				<!-- Step 2: Configure Effects -->
 				<div class="grid lg:grid-cols-[1fr_350px] gap-6">
-					<!-- Left: Video info + process button -->
 					<div class="space-y-6">
-						<!-- Upload info -->
 						{#if uploadInfo}
 							<div class="terminal-window">
 								<div class="terminal-header bg-gray-900">UPLOADED VIDEO</div>
@@ -222,7 +214,6 @@
 							</div>
 						{/if}
 
-						<!-- Effect Summary & Process -->
 						<div class="terminal-window">
 							<div class="terminal-header bg-gray-900">EFFECT SUMMARY</div>
 							<div class="p-4 space-y-3">
@@ -273,14 +264,12 @@
 						</div>
 					</div>
 
-					<!-- Right: Effects Configurator -->
 					<div>
 						<EffectsConfigurator {effects} onchange={(e) => (effects = e)} />
 					</div>
 				</div>
 
 			{:else if step === 'processing'}
-				<!-- Step 3: Processing -->
 				<div class="max-w-xl mx-auto">
 					{#if jobId}
 						<ProcessingStatus

@@ -1,8 +1,3 @@
-/**
- * Mobile Task Force units database
- * Based on canonical SCP wiki MTF units
- */
-
 export interface MTFUnit {
 	designation: string;
 	name: string;
@@ -12,7 +7,6 @@ export interface MTFUnit {
 	threatLevel: 'standard' | 'high' | 'extreme' | 'classified';
 }
 
-// Canonical MTF units
 export const MTF_UNITS: MTFUnit[] = [
 	{
 		designation: 'Alpha-1',
@@ -329,23 +323,18 @@ export const MTF_UNITS: MTFUnit[] = [
 	}
 ];
 
-// Get MTF by designation
 export function getMTFByDesignation(designation: string): MTFUnit | undefined {
 	return MTF_UNITS.find((m) => m.designation === designation);
 }
 
-// Get MTFs by specialty
 export function getMTFsBySpecialty(specialty: string): MTFUnit[] {
 	return MTF_UNITS.filter((m) => m.specialty.toLowerCase().includes(specialty.toLowerCase()));
 }
 
-// Get MTFs by threat level
 export function getMTFsByThreatLevel(level: MTFUnit['threatLevel']): MTFUnit[] {
 	return MTF_UNITS.filter((m) => m.threatLevel === level);
 }
 
-// MTF designations for quick reference
 export const MTF_DESIGNATIONS = MTF_UNITS.map((m) => m.designation);
 
-// MTF names for quick reference
 export const MTF_NAMES = MTF_UNITS.map((m) => m.name);

@@ -1,7 +1,6 @@
 import { z } from 'zod';
 import { DocumentMetadataSchema } from './common';
 
-// Clearance levels for personnel
 export const PersonnelClearanceSchema = z.enum([
 	'level-0',
 	'level-1',
@@ -13,7 +12,6 @@ export const PersonnelClearanceSchema = z.enum([
 ]);
 export type PersonnelClearance = z.infer<typeof PersonnelClearanceSchema>;
 
-// Personnel status
 export const PersonnelStatusSchema = z.enum([
 	'active',
 	'inactive',
@@ -28,7 +26,6 @@ export const PersonnelStatusSchema = z.enum([
 ]);
 export type PersonnelStatus = z.infer<typeof PersonnelStatusSchema>;
 
-// Personnel type/role category
 export const PersonnelTypeSchema = z.enum([
 	'researcher',
 	'security',
@@ -42,50 +39,34 @@ export const PersonnelTypeSchema = z.enum([
 ]);
 export type PersonnelType = z.infer<typeof PersonnelTypeSchema>;
 
-// Main Personnel File schema
 export const PersonnelFileSchema = z.object({
 	metadata: DocumentMetadataSchema,
 	type: z.literal('personnel'),
-
-	// Identity
 	staffId: z.string().min(1, 'Staff ID is required'),
 	fullName: z.string().min(1, 'Full name is required'),
 	aliases: z.string().optional(),
 	dateOfBirth: z.string().optional(),
 	nationality: z.string().optional(),
-
-	// Photo placeholder
 	photoUrl: z.string().optional(),
-
-	// Position
 	personnelType: PersonnelTypeSchema,
 	clearanceLevel: PersonnelClearanceSchema,
 	department: z.string().optional(),
 	site: z.string().optional(),
 	supervisor: z.string().optional(),
-
-	// Status
 	status: PersonnelStatusSchema,
 	dateJoined: z.string().optional(),
-
-	// Background
 	education: z.string().optional(),
 	specializations: z.string().optional(),
 	languages: z.string().optional(),
 	previousAssignments: z.string().optional(),
-
-	// Notes
 	psychProfile: z.string().optional(),
 	medicalNotes: z.string().optional(),
 	notes: z.string().optional(),
-
-	// Display options
 	showPhoto: z.boolean().default(true),
 	showRedactedSections: z.boolean().default(false)
 });
 export type PersonnelFile = z.infer<typeof PersonnelFileSchema>;
 
-// Default values
 export const defaultPersonnelFile: PersonnelFile = {
 	metadata: {
 		faction: 'foundation',
@@ -102,7 +83,6 @@ export const defaultPersonnelFile: PersonnelFile = {
 	showRedactedSections: false
 };
 
-// Labels for UI
 export const PERSONNEL_CLEARANCE_INFO: Record<PersonnelClearance, { label: string; color: string }> = {
 	'level-0': { label: 'Level 0 (Public)', color: '#888888' },
 	'level-1': { label: 'Level 1 (Official Use)', color: '#00aa00' },

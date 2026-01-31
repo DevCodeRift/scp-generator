@@ -1,8 +1,3 @@
-/**
- * NPC Generator Engine
- * Generates random Foundation personnel, D-Class, MTF operatives, etc.
- */
-
 import { createRandom, type RandomGenerator } from '../core/random';
 import { pickFromTable, NPC_ROLE_WEIGHTS } from '../core/weighted-table';
 import {
@@ -24,7 +19,6 @@ import { SITE_DESIGNATIONS } from '../data/sites';
 import { MTF_UNITS } from '../data/mtf-units';
 import type { NPCConfig, GeneratedNPC, NPCRole, GeneratedContent } from '../types';
 
-// Default configuration
 export const defaultNPCConfig: NPCConfig = {
 	role: 'researcher',
 	includeBackground: true,
@@ -32,9 +26,6 @@ export const defaultNPCConfig: NPCConfig = {
 	clearanceLevel: undefined
 };
 
-/**
- * Generate a random researcher name
- */
 function generateResearcherName(rng: RandomGenerator): { name: string; title: string } {
 	const firstName = rng.pick(RESEARCHER_FIRST_NAMES);
 	const lastName = rng.pick(RESEARCHER_LAST_NAMES);
@@ -45,27 +36,18 @@ function generateResearcherName(rng: RandomGenerator): { name: string; title: st
 	};
 }
 
-/**
- * Generate a random security personnel name
- */
 function generateSecurityName(rng: RandomGenerator): string {
 	const firstName = rng.pick(SECURITY_FIRST_NAMES);
 	const lastName = rng.pick(RESEARCHER_LAST_NAMES);
 	return `${firstName} ${lastName}`;
 }
 
-/**
- * Generate a random administrative staff name
- */
 function generateAdminName(rng: RandomGenerator): string {
 	const firstName = rng.pick(ADMIN_FIRST_NAMES);
 	const lastName = rng.pick(RESEARCHER_LAST_NAMES);
 	return `${firstName} ${lastName}`;
 }
 
-/**
- * Generate a random medical staff name
- */
 function generateMedicalName(rng: RandomGenerator): { name: string; title: string } {
 	const firstName = rng.pick(MEDICAL_FIRST_NAMES);
 	const lastName = rng.pick(RESEARCHER_LAST_NAMES);
@@ -75,33 +57,21 @@ function generateMedicalName(rng: RandomGenerator): { name: string; title: strin
 	};
 }
 
-/**
- * Generate a D-Class designation
- */
 function generateDClassDesignation(rng: RandomGenerator): string {
 	const num = rng.int(1000, 9999);
 	return `${D_CLASS_PREFIX}${num}`;
 }
 
-/**
- * Generate an MTF callsign
- */
 function generateMTFCallsign(rng: RandomGenerator): string {
 	const letter = rng.pick(NATO_PHONETIC);
 	const num = rng.int(1, 12);
 	return `${letter}-${num}`;
 }
 
-/**
- * Generate an MTF nickname
- */
 function generateMTFNickname(rng: RandomGenerator): string {
 	return rng.pick(MTF_NICKNAMES);
 }
 
-/**
- * Get clearance level based on role
- */
 function getClearanceForRole(role: NPCRole, rng: RandomGenerator, specified?: number): number {
 	if (specified !== undefined) return specified;
 
@@ -123,9 +93,6 @@ function getClearanceForRole(role: NPCRole, rng: RandomGenerator, specified?: nu
 	}
 }
 
-/**
- * Get department based on role
- */
 function getDepartmentForRole(role: NPCRole, rng: RandomGenerator): string {
 	const roleDepartments: Record<NPCRole, string[]> = {
 		researcher: ['Research', 'Containment', 'Anomalous Materials', 'Memetics Division', 'Biological Research', 'Paranormal Studies', 'Temporal Anomalies'],
@@ -140,17 +107,12 @@ function getDepartmentForRole(role: NPCRole, rng: RandomGenerator): string {
 	return rng.pick(options);
 }
 
-/**
- * Generate NPC based on configuration
- */
 export function generateNPC(config: Partial<NPCConfig> = {}, seed?: number): GeneratedContent<GeneratedNPC> {
 	const rng = createRandom(seed);
 	const fullConfig = { ...defaultNPCConfig, ...config };
 
-	// Determine role (random if not specified)
 	const role = fullConfig.role || pickFromTable(NPC_ROLE_WEIGHTS, rng);
 
-	// Generate name and designation based on role
 	let name: string;
 	let designation: string;
 
@@ -198,29 +160,24 @@ export function generateNPC(config: Partial<NPCConfig> = {}, seed?: number): Gen
 		}
 	}
 
-	// Generate other attributes
 	const clearanceLevel = getClearanceForRole(role, rng, fullConfig.clearanceLevel);
 	const department = getDepartmentForRole(role, rng);
 	const site = rng.pick(SITE_DESIGNATIONS);
 
-	// Optional background
 	const background = fullConfig.includeBackground ? rng.pick(NPC_BACKGROUNDS) : undefined;
 
-	// Optional quirks (1-3 quirks)
 	let quirks: string[] | undefined;
 	if (fullConfig.includeQuirks) {
 		const quirkCount = rng.int(1, 3);
 		quirks = rng.pickMultiple(NPC_QUIRKS, quirkCount);
 	}
 
-	// Specializations for researchers and medical staff
 	let specializations: string[] | undefined;
 	if (role === 'researcher' || role === 'medical') {
 		const specCount = rng.int(1, 2);
 		specializations = rng.pickMultiple(SPECIALIZATIONS, specCount);
 	}
 
-	// For MTF, add unit info
 	let mtfUnit: string | undefined;
 	if (role === 'mtf' && rng.chance(0.7)) {
 		const unit = rng.pick(MTF_UNITS);
@@ -239,7 +196,6 @@ export function generateNPC(config: Partial<NPCConfig> = {}, seed?: number): Gen
 		specializations
 	};
 
-	// Add MTF unit to department if applicable
 	if (mtfUnit) {
 		npc.department = mtfUnit;
 	}
@@ -251,9 +207,6 @@ export function generateNPC(config: Partial<NPCConfig> = {}, seed?: number): Gen
 	};
 }
 
-/**
- * Generate multiple NPCs
- */
 export function generateNPCs(
 	count: number,
 	config: Partial<NPCConfig> = {},
@@ -269,9 +222,6 @@ export function generateNPCs(
 	return results;
 }
 
-/**
- * Get display label for role
- */
 export function getRoleLabel(role: NPCRole): string {
 	const labels: Record<NPCRole, string> = {
 		researcher: 'Researcher',
@@ -284,9 +234,6 @@ export function getRoleLabel(role: NPCRole): string {
 	return labels[role] || role;
 }
 
-/**
- * Get clearance level label
- */
 export function getClearanceLabel(level: number): string {
 	const labels: Record<number, string> = {
 		0: 'Level 0 (Unrestricted)',

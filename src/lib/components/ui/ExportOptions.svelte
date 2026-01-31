@@ -62,7 +62,6 @@
 		<div class="absolute right-0 top-full mt-1 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg shadow-xl z-50 w-64 p-4">
 			<div class="text-xs font-bold uppercase text-[var(--color-text-muted)] mb-3">Export Settings</div>
 
-			<!-- Scale/Quality -->
 			<div class="mb-3">
 				<label class="text-xs text-[var(--color-text-muted)] block mb-1">
 					Quality
@@ -78,7 +77,6 @@
 				</label>
 			</div>
 
-			<!-- Format/Size -->
 			<div class="mb-3">
 				<label class="text-xs text-[var(--color-text-muted)] block mb-1">
 					Page Size (PDF only)
@@ -93,7 +91,6 @@
 				</label>
 			</div>
 
-			<!-- Transparent Background (PNG only) -->
 			<div class="mb-4">
 				<label class="flex items-center gap-2 cursor-pointer">
 					<input
@@ -105,7 +102,6 @@
 				</label>
 			</div>
 
-			<!-- Export Buttons -->
 			<div class="flex gap-2">
 				<button
 					class="flex-1 bg-[var(--color-accent)] text-white text-sm font-bold py-2 px-3 rounded hover:opacity-90 transition-opacity"

@@ -12,7 +12,6 @@
 	import type { ObjectClass, AnomalyCategory, GeneratedSCP, GeneratedContent } from '$lib/generators/types';
 	import { generateSeed } from '$lib/generators/core/random';
 
-	// Configuration state
 	let selectedObjectClass = $state<ObjectClass | 'random'>('random');
 	let selectedCategory = $state<AnomalyCategory | 'random'>('random');
 	let complexity = $state<'minimal' | 'standard' | 'detailed'>('standard');
@@ -21,7 +20,6 @@
 	let includeSpecialRequirements = $state(true);
 	let generateCount = $state(1);
 
-	// Generated results
 	let results = $state<GeneratedContent<GeneratedSCP>[]>([]);
 	let isGenerating = $state(false);
 
@@ -70,7 +68,6 @@
 	function handleGenerate() {
 		isGenerating = true;
 
-		// Small delay for visual feedback
 		setTimeout(() => {
 			const config = {
 				objectClass: selectedObjectClass === 'random' ? undefined : selectedObjectClass as ObjectClass,
@@ -123,7 +120,6 @@
 </script>
 
 <div class="scp-generator">
-	<!-- Configuration Panel -->
 	<div class="terminal-window mb-6">
 		<div class="terminal-header">CONFIGURATION</div>
 		<div class="p-4 space-y-4">
@@ -197,7 +193,6 @@
 		</div>
 	</div>
 
-	<!-- Results -->
 	{#if results.length > 0}
 		<div class="space-y-4">
 			{#each results as result, i}
@@ -215,7 +210,6 @@
 						</div>
 					</div>
 					<div class="p-4">
-						<!-- Classification Grid -->
 						<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4 text-sm">
 							<div>
 								<span class="text-[var(--color-text-muted)]">Object Class:</span>
@@ -237,7 +231,6 @@
 							</div>
 						</div>
 
-						<!-- Containment Procedures -->
 						<div class="mb-4">
 							<h4 class="text-sm font-bold text-[var(--color-accent)] mb-2">
 								SPECIAL CONTAINMENT PROCEDURES:
@@ -249,7 +242,6 @@
 							</div>
 						</div>
 
-						<!-- Description -->
 						<div class="mb-4">
 							<h4 class="text-sm font-bold text-[var(--color-accent)] mb-2">
 								DESCRIPTION:
@@ -259,7 +251,6 @@
 							</div>
 						</div>
 
-						<!-- Additional Notes -->
 						{#if scp.additionalNotes && scp.additionalNotes.length > 0}
 							<div class="mb-4">
 								<h4 class="text-sm font-bold text-[var(--color-accent)] mb-2">
@@ -273,7 +264,6 @@
 							</div>
 						{/if}
 
-						<!-- Seed -->
 						<div class="mt-4 pt-4 border-t border-[var(--color-border)]">
 							<span class="text-xs text-[var(--color-text-muted)]">
 								Seed: {result.seed}

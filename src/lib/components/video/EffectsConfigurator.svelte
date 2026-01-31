@@ -44,7 +44,6 @@
 </script>
 
 <div class="space-y-4" class:opacity-50={disabled} class:pointer-events-none={disabled}>
-	<!-- Presets -->
 	<div class="terminal-window">
 		<div class="terminal-header bg-gray-900">PRESETS</div>
 		<div class="p-3 flex flex-wrap gap-2">
@@ -65,11 +64,9 @@
 		</div>
 	</div>
 
-	<!-- Visual Effects -->
 	<div class="terminal-window">
 		<div class="terminal-header bg-gray-900">VISUAL EFFECTS</div>
 		<div class="p-4 space-y-4">
-			<!-- Scanlines -->
 			<label class="flex items-center justify-between cursor-pointer">
 				<span class="text-sm">CRT Scanlines</span>
 				<input
@@ -80,7 +77,6 @@
 				/>
 			</label>
 
-			<!-- Vignette -->
 			<div class="space-y-1">
 				<label class="flex items-center justify-between cursor-pointer">
 					<span class="text-sm">Vignette (Dark Edges)</span>
@@ -107,7 +103,6 @@
 				{/if}
 			</div>
 
-			<!-- Noise -->
 			<div class="space-y-1">
 				<label class="flex items-center justify-between cursor-pointer">
 					<span class="text-sm">Static / Noise</span>
@@ -134,7 +129,6 @@
 				{/if}
 			</div>
 
-			<!-- Camera Shake -->
 			<div class="space-y-1">
 				<label class="flex items-center justify-between cursor-pointer">
 					<span class="text-sm">Camera Shake</span>
@@ -161,7 +155,6 @@
 				{/if}
 			</div>
 
-			<!-- Color Grade -->
 			<div class="space-y-1">
 				<label class="text-sm block">Color Grade</label>
 				<select
@@ -177,11 +170,9 @@
 		</div>
 	</div>
 
-	<!-- Overlay Text -->
 	<div class="terminal-window">
 		<div class="terminal-header bg-gray-900">OVERLAY TEXT</div>
 		<div class="p-4 space-y-4">
-			<!-- Facility ID -->
 			<div class="space-y-1">
 				<label class="text-sm block">Camera / Facility Label</label>
 				<input
@@ -193,7 +184,6 @@
 				/>
 			</div>
 
-			<!-- Timestamp -->
 			<label class="flex items-center justify-between cursor-pointer">
 				<span class="text-sm">Running Timestamp</span>
 				<input
@@ -204,7 +194,6 @@
 				/>
 			</label>
 
-			<!-- REC Indicator -->
 			<label class="flex items-center justify-between cursor-pointer">
 				<span class="text-sm">Blinking REC Indicator</span>
 				<input
@@ -215,7 +204,6 @@
 				/>
 			</label>
 
-			<!-- SCP Watermark -->
 			<label class="flex items-center justify-between cursor-pointer">
 				<span class="text-sm">SCP Foundation Watermark</span>
 				<input
@@ -228,7 +216,6 @@
 		</div>
 	</div>
 
-	<!-- Output Quality -->
 	<div class="terminal-window">
 		<div class="terminal-header bg-gray-900">OUTPUT</div>
 		<div class="p-4">

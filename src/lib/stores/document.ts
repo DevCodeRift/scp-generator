@@ -19,7 +19,6 @@ import { defaultIDBadge } from '$lib/schemas/id-badge';
 export type Document = SCPDocument | ResearchReport | Letter | InterviewLog | PersonnelFile | IncidentReport | MissionBriefing | ContainmentBreach | AnomalyCard | ExplorationLog | AutopsyReport | Directive | NewspaperClipping | AVLog | IDBadge;
 export type DocumentType = 'scp' | 'research' | 'letter' | 'interview' | 'personnel' | 'incident' | 'mission' | 'breach' | 'anomaly-card' | 'exploration' | 'autopsy' | 'directive' | 'newspaper' | 'avlog' | 'id-badge';
 
-// Create the document store
 function createDocumentStore() {
 	const { subscribe, set, update } = writable<Document | null>(null);
 
@@ -28,7 +27,6 @@ function createDocumentStore() {
 		set,
 		update,
 
-		// Initialize a new document of a specific type
 		initDocument(type: DocumentType): void {
 			switch (type) {
 				case 'scp':
@@ -79,12 +77,10 @@ function createDocumentStore() {
 			}
 		},
 
-		// Clear the current document
 		clear(): void {
 			set(null);
 		},
 
-		// Save to localStorage (reads current value without triggering update loop)
 		save(): void {
 			let currentDoc: Document | null = null;
 			const unsub = subscribe(d => { currentDoc = d; });
@@ -97,7 +93,6 @@ function createDocumentStore() {
 			}
 		},
 
-		// Load from localStorage
 		load(type: DocumentType): boolean {
 			if (typeof localStorage !== 'undefined') {
 				const key = `scp-doc-${type}`;
@@ -119,7 +114,6 @@ function createDocumentStore() {
 
 export const documentStore = createDocumentStore();
 
-// Derived store to check if document is valid (basic check)
 export const isDocumentValid = derived(documentStore, ($doc) => {
 	if (!$doc) return false;
 

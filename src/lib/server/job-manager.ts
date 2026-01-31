@@ -9,7 +9,7 @@ export interface VideoJob {
 	status: JobStatus;
 	inputPath: string;
 	outputPath?: string;
-	progress: number; // 0-100
+	progress: number;
 	error?: string;
 	createdAt: number;
 	filename?: string;
@@ -21,12 +21,9 @@ export interface VideoJob {
 const jobs = new Map<string, VideoJob>();
 
 const TEMP_DIR = process.env.VIDEO_TEMP_DIR || '/tmp/video-processing';
-const JOB_EXPIRY_MS = 60 * 60 * 1000; // 1 hour
-const CLEANUP_INTERVAL_MS = 15 * 60 * 1000; // 15 minutes
+const JOB_EXPIRY_MS = 60 * 60 * 1000;
+const CLEANUP_INTERVAL_MS = 15 * 60 * 1000;
 
-/**
- * Create a new video processing job.
- */
 export function createJob(originalFilename: string): VideoJob {
 	const id = randomUUID();
 	const ext = originalFilename.split('.').pop() || 'mp4';
@@ -47,16 +44,10 @@ export function createJob(originalFilename: string): VideoJob {
 	return job;
 }
 
-/**
- * Get a job by ID.
- */
 export function getJob(id: string): VideoJob | undefined {
 	return jobs.get(id);
 }
 
-/**
- * Update a job's properties.
- */
 export function updateJob(id: string, updates: Partial<VideoJob>): VideoJob | undefined {
 	const job = jobs.get(id);
 	if (!job) return undefined;
@@ -66,14 +57,10 @@ export function updateJob(id: string, updates: Partial<VideoJob>): VideoJob | un
 	return updated;
 }
 
-/**
- * Delete a job and clean up its temp files.
- */
 export async function deleteJob(id: string): Promise<void> {
 	const job = jobs.get(id);
 	if (!job) return;
 
-	// Clean up temp files
 	try {
 		if (existsSync(job.inputPath)) await unlink(job.inputPath);
 	} catch { /* ignore */ }
@@ -84,9 +71,6 @@ export async function deleteJob(id: string): Promise<void> {
 	jobs.delete(id);
 }
 
-/**
- * Clean up expired jobs and their temp files.
- */
 async function cleanupExpiredJobs(): Promise<void> {
 	const now = Date.now();
 	const expiredIds: string[] = [];
@@ -106,20 +90,15 @@ async function cleanupExpiredJobs(): Promise<void> {
 	}
 }
 
-/**
- * Get the temp directory path.
- */
 export function getTempDir(): string {
 	return TEMP_DIR;
 }
 
-// Start periodic cleanup
 let cleanupTimer: ReturnType<typeof setInterval> | null = null;
 
 export function startCleanup(): void {
 	if (cleanupTimer) return;
 	cleanupTimer = setInterval(cleanupExpiredJobs, CLEANUP_INTERVAL_MS);
-	// Don't prevent process exit
 	if (cleanupTimer && typeof cleanupTimer === 'object' && 'unref' in cleanupTimer) {
 		cleanupTimer.unref();
 	}
@@ -132,5 +111,4 @@ export function stopCleanup(): void {
 	}
 }
 
-// Auto-start cleanup
 startCleanup();

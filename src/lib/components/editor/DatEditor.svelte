@@ -10,7 +10,6 @@
 
 	let { document: doc = $bindable(), scale = 1, onUpdate }: Props = $props();
 
-	// Element type labels for the toolbar
 	const elementTypes = [
 		{ type: 'header', label: 'H1', title: 'Header 1' },
 		{ type: 'header2', label: 'H2', title: 'Header 2' },
@@ -43,13 +42,11 @@
 		const element = newPages[pageIndex].elements[elementIndex];
 
 		if (element.type === 'checkbox') {
-			// For checkboxes, update the args.text field
 			newPages[pageIndex].elements[elementIndex] = {
 				...element,
 				args: { ...element.args, text: content }
 			};
 		} else {
-			// For other elements, update the content field
 			newPages[pageIndex].elements[elementIndex] = {
 				...element,
 				content
@@ -148,7 +145,6 @@
 	}
 </script>
 
-<!-- Toolbar -->
 <div class="dat-toolbar">
 	<div class="toolbar-section">
 		<span class="toolbar-label">Add:</span>
@@ -167,7 +163,6 @@
 	</div>
 </div>
 
-<!-- Editor -->
 <div
 	class="dat-editor"
 	style="transform: scale({scale}); transform-origin: top center;"
@@ -182,7 +177,6 @@
 			onclick={() => selectedPageIndex = pageIndex}
 			onkeydown={(e) => e.key === 'Enter' && (selectedPageIndex = pageIndex)}
 		>
-			<!-- Page header -->
 			<div class="page-header">
 				<span class="page-label">Page {pageIndex + 1}</span>
 				{#if doc.pages.length > 1}
@@ -199,7 +193,6 @@
 					onclick={(e) => { e.stopPropagation(); selectedPageIndex = pageIndex; selectedElementIndex = elementIndex; }}
 					onkeydown={(e) => e.key === 'Enter' && (selectedElementIndex = elementIndex)}
 				>
-					<!-- Element controls -->
 					{#if selectedPageIndex === pageIndex && selectedElementIndex === elementIndex}
 						<div class="element-controls">
 							<button onclick={() => moveElement(pageIndex, elementIndex, 'up')} title="Move up">↑</button>

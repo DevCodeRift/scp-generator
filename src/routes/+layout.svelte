@@ -6,7 +6,6 @@
 
 	let { children } = $props();
 
-	// Apply faction to document root for CSS custom properties
 	$effect(() => {
 		if (browser) {
 			document.documentElement.setAttribute('data-faction', $factionStore);

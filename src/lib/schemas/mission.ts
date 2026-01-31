@@ -1,7 +1,6 @@
 import { z } from 'zod';
 import { DocumentMetadataSchema } from './common';
 
-// Mission priority levels
 export const MissionPrioritySchema = z.enum([
 	'low',
 	'standard',
@@ -11,7 +10,6 @@ export const MissionPrioritySchema = z.enum([
 ]);
 export type MissionPriority = z.infer<typeof MissionPrioritySchema>;
 
-// Mission status
 export const MissionStatusSchema = z.enum([
 	'planning',
 	'briefed',
@@ -23,7 +21,6 @@ export const MissionStatusSchema = z.enum([
 ]);
 export type MissionStatus = z.infer<typeof MissionStatusSchema>;
 
-// Mission type
 export const MissionTypeSchema = z.enum([
 	'containment',
 	'recovery',
@@ -37,7 +34,6 @@ export const MissionTypeSchema = z.enum([
 ]);
 export type MissionType = z.infer<typeof MissionTypeSchema>;
 
-// Team member
 export const TeamMemberSchema = z.object({
 	callsign: z.string(),
 	role: z.string(),
@@ -45,57 +41,37 @@ export const TeamMemberSchema = z.object({
 });
 export type TeamMember = z.infer<typeof TeamMemberSchema>;
 
-// Main Mission Briefing schema
 export const MissionBriefingSchema = z.object({
 	metadata: DocumentMetadataSchema,
 	type: z.literal('mission'),
-
-	// Mission identification
 	missionCode: z.string().min(1, 'Mission code is required'),
 	missionName: z.string().optional(),
 	missionType: MissionTypeSchema,
 	priority: MissionPrioritySchema,
 	status: MissionStatusSchema,
-
-	// Assignment
 	assignedTeam: z.string().min(1, 'Assigned team is required'),
 	teamLeader: z.string().optional(),
 	teamMembers: z.array(TeamMemberSchema).default([]),
-
-	// Timing
 	dateIssued: z.string().optional(),
 	deploymentDate: z.string().optional(),
 	expectedDuration: z.string().optional(),
-
-	// Location
 	operationArea: z.string().min(1, 'Operation area is required'),
 	insertionPoint: z.string().optional(),
 	extractionPoint: z.string().optional(),
-
-	// Mission details
 	objective: z.string().min(1, 'Objective is required'),
 	secondaryObjectives: z.string().optional(),
 	backgroundIntel: z.string().optional(),
 	threatAssessment: z.string().optional(),
-
-	// Equipment and rules
 	authorizedEquipment: z.string().optional(),
 	rulesOfEngagement: z.string().optional(),
 	contingencyProtocols: z.string().optional(),
-
-	// Related entities
 	relatedSCPs: z.string().optional(),
-
-	// Authorization
 	authorizedBy: z.string().optional(),
-
-	// Display options
 	showTeamRoster: z.boolean().default(true),
 	showThreatLevel: z.boolean().default(true)
 });
 export type MissionBriefing = z.infer<typeof MissionBriefingSchema>;
 
-// Default values
 export const defaultMissionBriefing: MissionBriefing = {
 	metadata: {
 		faction: 'foundation',
@@ -115,7 +91,6 @@ export const defaultMissionBriefing: MissionBriefing = {
 	showThreatLevel: true
 };
 
-// Labels for UI
 export const MISSION_PRIORITY_INFO: Record<MissionPriority, { label: string; color: string }> = {
 	'low': { label: 'Low Priority', color: '#00aa00' },
 	'standard': { label: 'Standard', color: '#cccc00' },

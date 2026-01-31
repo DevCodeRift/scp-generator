@@ -34,7 +34,6 @@
 		onchange(Number(target.value));
 	}
 
-	// Calculate percentage for custom styling
 	let percentage = $derived(((value - min) / (max - min)) * 100);
 </script>
 
@@ -105,7 +104,13 @@
 		appearance: none;
 		width: 100%;
 		height: 8px;
-		background: var(--color-primary);
+		background: linear-gradient(
+			to right,
+			var(--color-accent) 0%,
+			var(--color-accent) var(--percentage),
+			var(--color-primary) var(--percentage),
+			var(--color-primary) 100%
+		);
 		border: 1px solid var(--color-border);
 		border-radius: 4px;
 		outline: none;
@@ -117,18 +122,6 @@
 		cursor: not-allowed;
 	}
 
-	/* Track fill */
-	.slider-input {
-		background: linear-gradient(
-			to right,
-			var(--color-accent) 0%,
-			var(--color-accent) var(--percentage),
-			var(--color-primary) var(--percentage),
-			var(--color-primary) 100%
-		);
-	}
-
-	/* Webkit thumb */
 	.slider-input::-webkit-slider-thumb {
 		-webkit-appearance: none;
 		appearance: none;
@@ -149,7 +142,6 @@
 		box-shadow: 0 0 0 3px var(--color-glow);
 	}
 
-	/* Firefox thumb */
 	.slider-input::-moz-range-thumb {
 		width: 18px;
 		height: 18px;

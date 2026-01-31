@@ -4,7 +4,6 @@ export default {
 	theme: {
 		extend: {
 			colors: {
-				// SCP Foundation colors
 				scp: {
 					black: '#0a0a0a',
 					dark: '#1a1a1a',

@@ -30,9 +30,9 @@
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
 		border: 1px solid transparent;
+		border-radius: 0.25rem;
 	}
 
-	/* Sizes */
 	.sm {
 		padding: 0.125rem 0.375rem;
 		font-size: 0.625rem;
@@ -48,16 +48,10 @@
 		font-size: 0.875rem;
 	}
 
-	/* Shapes */
-	.badge {
-		border-radius: 0.25rem;
-	}
-
 	.badge.pill {
 		border-radius: 9999px;
 	}
 
-	/* Variants */
 	.default {
 		background: var(--color-primary);
 		color: var(--color-text-muted);
